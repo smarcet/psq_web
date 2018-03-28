@@ -1,0 +1,8 @@
+{
+  "superAdmin": {
+      "dashboard" : {
+        "registeredUsersTitle": "Registered Users" ,
+        "registeredDevicesTitle": "Registered Devices"
+      }
+  }
+}
