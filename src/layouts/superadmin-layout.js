@@ -6,6 +6,7 @@ import SuperAdminDevices from "../views/Pages/SuperAdmin/devices";
 import SuperAdminAdminUsers from "../views/Pages/SuperAdmin/admin-users";
 import SuperAdminNewAdminUser from "../views/Pages/SuperAdmin/new-admin-user";
 import SuperAdminNewDevice from "../views/Pages/SuperAdmin/new-device";
+import SuperAdminEditAdminUser from "../views/Pages/SuperAdmin/edit-admin-user";
 
 class SuperAdminLayout extends Component {
     render() {
@@ -16,6 +17,7 @@ class SuperAdminLayout extends Component {
                     <Route exact path="/auth/super-admin/devices/new" component={SuperAdminNewDevice}></Route>
                     <Route path="/auth/super-admin/devices" component={SuperAdminDevices}></Route>
                     <Route exact path="/auth/super-admin/admin-users/new" component={SuperAdminNewAdminUser}></Route>
+                    <Route exact path="/auth/super-admin/admin-users/:user_id" component={SuperAdminEditAdminUser}></Route>
                     <Route path="/auth/super-admin/admin-users" component={SuperAdminAdminUsers}></Route>
                     <Route path="/auth/super-admin/settings" component={UserSettings}></Route>
                     <Redirect from="/auth/super-admin" to="/auth/super-admin/dashboard"/>

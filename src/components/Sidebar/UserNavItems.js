@@ -7,6 +7,24 @@ export default {
 
         },
         {
+            name: 'Exams',
+            url: '/auth/user/exams',
+            icon: 'icon-badge',
+
+        },
+        {
+            name: 'Statistics',
+            url: '/auth/user/statistics',
+            icon: 'icon-graph',
+
+        },
+        {
+            name: 'Videos',
+            url: '/auth/user/videos',
+            icon: 'icon-camrecorder',
+
+        },
+        {
             name: 'Settings',
             url: '/auth/user/settings',
             icon: 'icon-settings',

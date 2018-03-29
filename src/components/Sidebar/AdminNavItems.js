@@ -7,20 +7,32 @@ export default {
 
         },
         {
-            name: 'Devices',
-            url: '/auth/admin/devices',
-            icon: 'icon-camrecorder',
-
-        },
-        {
             name: 'Users',
             url: '/auth/admin/users',
             icon: 'icon-people',
 
         },
         {
+            name: 'Exercises',
+            url: '/auth/admin/exercises',
+            icon: 'icon-book-open',
+
+        },
+        {
+            name: 'Exams',
+            url: '/auth/admin/exams',
+            icon: 'icon-badge',
+
+        },
+        {
+            name: 'News',
+            url: '/auth/admin/news',
+            icon: 'icon-bell',
+
+        },
+        {
             name: 'Settings',
-            url: '/auth/admin/settings',
+            url: '/auth/super-admin/settings',
             icon: 'icon-settings',
 
         },

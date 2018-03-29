@@ -26,7 +26,7 @@ class UserSettings extends Component {
     render(){
         return(
             <Row>
-                <Col xs="12" md="6">
+                <Col xs="12" md="12">
                     <Card>
                         <CardHeader>
                             <strong>Edit Your Profile</strong>
@@ -39,7 +39,7 @@ class UserSettings extends Component {
                                         <Label htmlFor="text-input">First Name</Label>
                                     </Col>
                                     <Col xs="12" md="9">
-                                        <Input type="text" id="text-input" name="text-input" placeholder="First Name"/>
+                                        <Input type="text" id="fname-input" name="fname-input" placeholder="First Name"/>
                                     </Col>
                                 </FormGroup>
                                 <FormGroup row>
@@ -47,7 +47,7 @@ class UserSettings extends Component {
                                         <Label htmlFor="text-input">Surname</Label>
                                     </Col>
                                     <Col xs="12" md="9">
-                                        <Input type="text" id="text-input" name="text-input" placeholder="Surname"/>
+                                        <Input type="text" id="lname-input" name="lname-input" placeholder="Surname"/>
                                     </Col>
                                 </FormGroup>
                                 <FormGroup row>

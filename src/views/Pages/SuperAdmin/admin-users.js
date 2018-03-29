@@ -26,7 +26,36 @@ class SuperAdminAdminUsers extends Component {
         event.preventDefault();
     }
 
+    onClickEditAdminUser(event, user){
+        this.props.history.push(`/auth/super-admin/admin-users/${user.id}`);
+        event.preventDefault();
+    }
+
+    onClickDeleteAdminUser(event, user){
+
+    }
+
     render(){
+        let users = [
+            {
+                id:1,
+                first_name: 'Juan',
+                last_name: 'Perez',
+                active: true
+            },
+            {
+                id:2,
+                first_name: 'Jose',
+                last_name: 'Perez',
+                active: false
+            },
+            {
+                id:3,
+                first_name: 'Sebastian',
+                last_name: 'Perez',
+                active: true
+            },
+        ];
         return (
             <div className="animated fadeIn">
                 <Row>
@@ -60,30 +89,31 @@ class SuperAdminAdminUsers extends Component {
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>John</td>
-                                        <td>Doe</td>
-                                        <td>
-                                            <Badge color="success">Active</Badge>
-                                        </td>
-                                        <td>
-                                            <Button color="secondary">Edit</Button>{' '}
-                                            <Button color="danger">Delete</Button>{' '}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Richard</td>
-                                        <td>Drumon</td>
-                                        <td>
-                                            <Badge color="secondary">Inactive</Badge>
-                                        </td>
-                                        <td>
-                                            <Button color="secondary">Edit</Button>{' '}
-                                            <Button color="danger">Delete</Button>{' '}
-                                        </td>
-                                    </tr>
+
+                                    {users.map((user,i) => {
+
+                                        return (
+                                            <tr key={user.id}>
+                                                <td>{user.id}</td>
+                                                <td>{user.first_name}</td>
+                                                <td>{user.last_name}</td>
+                                                <td>
+                                                    {
+                                                        user.active &&
+                                                        <Badge color="success">Active</Badge>
+                                                    }
+                                                    {
+                                                        !user.active &&
+                                                        <Badge color="secondary">Inactive</Badge>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    <Button color="secondary" onClick={(e) => this.onClickEditAdminUser(e, user)}>Edit</Button>{' '}
+                                                    <Button color="danger" onClick={(e) => this.onClickDeleteAdminUser(e, user)}>Delete</Button>{' '}
+                                                </td>
+                                            </tr>
+                                        );
+                                    })}
 
                                     </tbody>
                                 </Table>
