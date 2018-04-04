@@ -4,11 +4,8 @@ import URI from "urijs";
 let http = request;
 import 'sweetalert2/dist/sweetalert2.css';
 import swal from 'sweetalert2';
-
-export const apiBaseUrl         = process.env['API_BASE_URL'];
 export const VALIDATE           = 'VALIDATE';
 const LOGOUT_USER               = 'LOGOUT_USER';
-export const GENERIC_ERROR = "Yikes. Something seems to be broken. Our web team has been notified, and we apologize for the inconvenience.";
 export const START_LOADING = 'START_LOADING';
 export const STOP_LOADING  = 'STOP_LOADING';
 
@@ -23,8 +20,6 @@ export const defaultErrorHandler = (err, res) => (dispatch) => {
     }
     swal(res.statusText, text, "error");
 }
-
-
 
 export const createAction = type => payload => ({
     type,
@@ -256,8 +251,11 @@ export const authErrorHandler = (err, res) => (dispatch) => {
         case 403:
             swal("ERROR", T.translate("errors.user_not_authz"), "warning");
             break;
+        case 400:
+            swal("ERROR", T.translate("errors.invalid_user"), "warning");
+            break;
         case 401:
-            swal("ERROR", T.translate("errors.session_expired"), "error");
+            swal("ERROR", T.translate("errors.user_not_auth"), "error");
             dispatch({
                 type: LOGOUT_USER,
                 payload: {

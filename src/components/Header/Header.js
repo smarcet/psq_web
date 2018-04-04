@@ -37,6 +37,7 @@ class Header extends Component {
   }
 
   render() {
+    let { currentUser } = this.props;
     return (
       <header className="app-header navbar">
         <NavbarToggler className="d-lg-none" onClick={this.mobileSidebarToggle}>
@@ -52,7 +53,7 @@ class Header extends Component {
           </NavItem>
         </Nav>
         <Nav className="ml-auto" navbar>
-          <HeaderDropdown/>
+          <HeaderDropdown currentUser={currentUser}/>
         </Nav>
 
       </header>

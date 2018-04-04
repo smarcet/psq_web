@@ -1,8 +1,31 @@
 {
   "superAdmin": {
-      "dashboard" : {
-        "registeredUsersTitle": "Registered Users" ,
-        "registeredDevicesTitle": "Registered Devices"
-      }
+    "dashboard" : {
+      "registeredUsersTitle": "Registered Admin Users" ,
+      "registeredDevicesTitle": "Registered Devices"
+    },
+    "devices": {
+      "IdColTitle" : "Id",
+      "SerialNbrColTitle" : "Serial #",
+      "FriendlyNameColTitle" : "Friendly Name",
+      "StatusColTitle" : "Status"
+    },
+    "adminUsers": {
+      "IdColTitle" : "Id",
+      "FirstNameColTitle" : "First Name",
+      "SurNameColTitle" : "Surname",
+      "StatusColTitle" : "Status"
+    }
+  },
+  "loginPage": {
+    "title": "Login",
+    "subTitle": "Sign In to your account",
+    "forgotPassword" : "Forgot password?"
+  },
+  "errors": {
+    "user_not_authz" : "User is not Authorized",
+    "user_not_auth" : "User is not Authenticated",
+    "server_error" : "Server Error",
+    "invalid_user": "User does not exist or credentials are invalid"
   }
 }

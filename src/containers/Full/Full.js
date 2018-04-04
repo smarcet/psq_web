@@ -10,13 +10,14 @@ import Logout from '../../components/logout';
 import SuperAdminLayout from '../../layouts/superadmin-layout';
 import AdminLayout from '../../layouts/admin-layout';
 import UserLayout from '../../layouts/user-layout';
+import {SUPERVISOR, TEACHER} from "../../constants";
 
 class Full extends Component {
   render() {
-    let { currentMember } = this.props;
+    let { currentUser } = this.props;
     return (
       <div className="app">
-        <Header/>
+        <Header currentUser={currentUser}/>
         <div className="app-body">
           <Sidebar {...this.props}/>
           <main className="main">
@@ -28,7 +29,7 @@ class Full extends Component {
                 <Route path="/auth/admin" component={AdminLayout} />
                 <Route path="/auth/user" component={UserLayout} />
                 <Route path="/auth" render={ props => {
-                   if(currentMember.role == 'superadmin'){
+                   if(currentUser.role == SUPERVISOR){
                        return (<Redirect
                            exact
                            to={{
@@ -37,7 +38,7 @@ class Full extends Component {
                            }}
                        />)
                    }
-                   if(currentMember.role == 'admin'){
+                   if(currentUser.role == TEACHER){
                         return (<Redirect
                             exact
                             to={{
@@ -46,22 +47,15 @@ class Full extends Component {
                             }}
                         />)
                    }
-                   if(currentMember.role == 'user'){
-                        return (<Redirect
+
+                   return (<Redirect
                             exact
                             to={{
                                 pathname: '/auth/user',
                                 state: { from: props.location }
                             }}
                         />)
-                    }
-                   return (<Redirect
-                        exact
-                        to={{
-                            pathname: '/404',
-                            state: { from: props.location }
-                        }}
-                    />)
+
                 }} />
               </Switch>
             </Container>

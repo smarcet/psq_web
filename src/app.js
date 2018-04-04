@@ -32,7 +32,7 @@ class App extends React.PureComponent {
                     <Switch>
                         <AuthorizedRoute isLoggedUser={this.props.isLoggedUser}
                                          path='/auth'
-                                         currentMember={this.props.member}
+                                         currentUser={this.props.currentUser}
                                          component={Full} />
                         <Route path="/404" component={Page404} />
                         <DefaultRoute isLoggedUser={this.props.isLoggedUser} component={Login} doLogin={this.props.doLogin}/>
@@ -45,7 +45,7 @@ class App extends React.PureComponent {
 
 const mapStateToProps = ({ loggedUserState }) => ({
     isLoggedUser: loggedUserState.isLoggedUser,
-    member: loggedUserState.member,
+    currentUser: loggedUserState.currentUser,
 });
 
 export default connect(mapStateToProps, {

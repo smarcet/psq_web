@@ -29,7 +29,7 @@ var plugins = [
     // https://github.com/jantimon/html-webpack-plugin
     new HtmlWebpackPlugin(
         {
-            title: 'Custom template',
+            title: 'PSQ',
             template: './src/index.ejs'
         }
     ),

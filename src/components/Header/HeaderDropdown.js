@@ -6,6 +6,7 @@ import {
   DropdownToggle,
   Dropdown
 } from 'reactstrap';
+import {STUDENT, SUPERVISOR, TEACHER} from "../../constants";
 
 class HeaderDropdown extends Component {
 
@@ -24,11 +25,34 @@ class HeaderDropdown extends Component {
     });
   }
 
+  getUserDetail(){
+      let { currentUser } = this.props;
+      let detail = '';
+      if(currentUser.first_name != '' && currentUser.last_name != '' )
+          detail = `${currentUser.first_name }, ${currentUser.last_name}`;
+      else
+          detail = currentUser.email;
+
+      switch (currentUser.role){
+          case SUPERVISOR:
+            detail += ' (SUPERVISOR)';
+          break;
+          case TEACHER:
+              detail += ' (TEACHER)';
+              break;
+          case STUDENT:
+              detail += ' (STUDENT)';
+              break;
+      }
+      return detail;
+  }
   dropAccnt() {
-    return (
+
+      return (
       <Dropdown nav isOpen={this.state.dropdownOpen} toggle={this.toggle}>
         <DropdownToggle nav>
-          <img src={'/img/avatars/1.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com"/>
+            <span>Welcome {this.getUserDetail()}</span>
+            <img src='/img/generic-avatar-icon.png' className="img-avatar" alt={this.props.currentUser.email}/>
         </DropdownToggle>
         <DropdownMenu right>
           <DropdownItem header tag="div" className="text-center"><strong>Account</strong></DropdownItem>

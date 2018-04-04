@@ -9,6 +9,7 @@ import SidebarFooter from './../SidebarFooter';
 import SidebarForm from './../SidebarForm';
 import SidebarHeader from './../SidebarHeader';
 import SidebarMinimizer from './../SidebarMinimizer';
+import {SUPERVISOR, TEACHER} from "../../constants";
 
 class Sidebar extends Component {
 
@@ -147,13 +148,13 @@ class Sidebar extends Component {
     };
 
     let navItems = null;
-    if(this.props.currentMember.role == 'superadmin'){
+    if(this.props.currentUser.role == SUPERVISOR){
         navItems = SuperAdminNavItems;
     }
-    if(this.props.currentMember.role == 'admin'){
+    else if(this.props.currentUser.role == TEACHER){
        navItems = AdminNavItems;
     }
-    if(this.props.currentMember.role == 'user'){
+    else{
        navItems = UserNavItems;
     }
     // sidebar-nav root

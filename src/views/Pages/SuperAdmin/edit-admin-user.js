@@ -1,7 +1,13 @@
 import React, {Component} from 'react';
-import {Badge, Row, Col, TabContent, TabPane, Nav, NavItem, NavLink} from 'reactstrap';
+import {Badge, Row, Col, TabContent, TabPane, Nav, NavItem, NavLink,  Table,
+    Pagination,
+    PaginationItem,
+    PaginationLink,
+    ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem,
+    Button} from 'reactstrap';
 import SuperAdminNewAdminUser from "./new-admin-user";
 import classnames from 'classnames';
+import T from "i18n-react/dist/i18n-react";
 
 class SuperAdminEditAdminUser extends Component {
 
@@ -10,14 +16,24 @@ class SuperAdminEditAdminUser extends Component {
         console.log(this.props.match.params.user_id);
         this.toggle = this.toggle.bind(this);
         this.state = {
-            activeTab: '1'
+            activeTab: '1',
+            isOpenDropDown: false
         };
+        this.toggleDropDown = this.toggleDropDown.bind(this);
+    }
+
+
+    toggleDropDown() {
+        this.setState({ ...this.state,
+            isOpenDropDown: !this.state.isOpenDropDown
+        });
     }
 
     toggle(tab) {
         if (this.state.activeTab !== tab) {
             this.setState({
-                activeTab: tab
+                    ...this.state,
+                    activeTab: tab
             });
         }
     }
@@ -42,7 +58,7 @@ class SuperAdminEditAdminUser extends Component {
                                 className={classnames({ active: this.state.activeTab === '2' })}
                                 onClick={() => { this.toggle('2'); }}>
                                 <i className="icon-camrecorder"></i>
-                                <span className={ this.state.activeTab === '2' ? "" : "d-none"}> Devices </span>{'\u00A0'}
+                                <span className={ this.state.activeTab === '2' ? "" : "d-none"}> Owned Devices </span>{'\u00A0'}
                                 <Badge pill color="success">10</Badge>
                             </NavLink>
                         </NavItem>
@@ -53,11 +69,72 @@ class SuperAdminEditAdminUser extends Component {
                             <SuperAdminNewAdminUser />
                         </TabPane>
                         <TabPane tabId="2">
-                            2. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
-                            et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                            aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-                            dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-                            officia deserunt mollit anim id est laborum.
+                            <Row>
+                                <Col md="2">
+                                    <ButtonDropdown isOpen={ this.state.isOpenDropDown} toggle={() => { this.toggleDropDown(); }}>
+                                        <DropdownToggle caret>
+                                            -- SELECT A DEVICE --
+                                        </DropdownToggle>
+                                        <DropdownMenu right>
+                                            <DropdownItem>device#3</DropdownItem>
+                                            <DropdownItem>device#4</DropdownItem>
+                                        </DropdownMenu>
+                                    </ButtonDropdown>
+                                </Col>
+                                <Col md="3">
+                                    <Button color="primary" className="add-entity-button"><i className="fa fa-link"></i>{'\u00A0'} Link Device</Button>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col md="12">
+                                    <Table responsive striped>
+                                        <thead>
+                                        <tr>
+                                            <th>{T.translate("superAdmin.devices.IdColTitle")}</th>
+                                            <th>{T.translate("superAdmin.devices.SerialNbrColTitle")}</th>
+                                            <th>{T.translate("superAdmin.devices.FriendlyNameColTitle")}</th>
+                                            <th>{T.translate("superAdmin.devices.StatusColTitle")}</th>
+                                            <th>&nbsp;</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>123456789</td>
+                                            <td>Device #1</td>
+                                            <td>
+                                                <Badge color="success">Active</Badge>
+                                            </td>
+                                            <td>
+                                                <Button color="danger">Unlink</Button>{' '}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>123456789</td>
+                                            <td>Device #2</td>
+                                            <td>
+                                                <Badge color="secondary">Inactive</Badge>
+                                            </td>
+                                            <td>
+                                                <Button color="danger">Unlink</Button>{' '}
+                                            </td>
+                                        </tr>
+
+                                        </tbody>
+                                    </Table>
+                                    <Pagination>
+                                        <PaginationItem disabled><PaginationLink previous href="#">Prev</PaginationLink></PaginationItem>
+                                        <PaginationItem active>
+                                            <PaginationLink href="#">1</PaginationLink>
+                                        </PaginationItem>
+                                        <PaginationItem><PaginationLink href="#">2</PaginationLink></PaginationItem>
+                                        <PaginationItem><PaginationLink href="#">3</PaginationLink></PaginationItem>
+                                        <PaginationItem><PaginationLink href="#">4</PaginationLink></PaginationItem>
+                                        <PaginationItem><PaginationLink next href="#">Next</PaginationLink></PaginationItem>
+                                    </Pagination>
+                                </Col>
+                            </Row>
                         </TabPane>
 
                     </TabContent>

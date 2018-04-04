@@ -1,17 +1,17 @@
-import { LOGOUT_USER , SET_LOGGED_USER, RECEIVE_USER_INFO} from '../actions/auth-actions';
+import { LOGOUT_USER , SET_LOGGED_USER, RECEIVE_USER_INFO, RECEIVE_AUTH} from '../actions/auth-actions';
 
 const DEFAULT_STATE = {
     isLoggedUser: false,
-    accessToken: null,
-    member: null,
+    token: null,
+    currentUser: null,
 };
 
 const loggedUserReducer = (state = DEFAULT_STATE, action) => {
 
-    if (action.type === SET_LOGGED_USER) {
-        let { accessToken, member } = action.payload;
-        window.accessToken = accessToken;
-        return {...state, isLoggedUser:true, accessToken, member };
+    if (action.type === RECEIVE_AUTH) {
+        let { response } = action.payload;
+        window.token = response.token;
+        return {...state, token: response.token };
     }
     if(action.type === LOGOUT_USER){
         window.accessToken = null;
@@ -19,7 +19,7 @@ const loggedUserReducer = (state = DEFAULT_STATE, action) => {
     }
     if(action.type === RECEIVE_USER_INFO){
         let { response } = action.payload;
-        return {...state, member: response};
+        return {...state, isLoggedUser:true, currentUser: response};
     }
     return state
 }
