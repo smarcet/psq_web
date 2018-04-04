@@ -17,6 +17,29 @@
       "StatusColTitle" : "Status"
     }
    },
+  "admin":{
+    "exercises": {
+      "Title": "Exercises",
+      "IdColTitle": "Id",
+      "TitleColTitle": "Title",
+      "DevicesColTitle": "# Devices",
+      "CreatorColTitle": "Author",
+      "TakersColTitle": "# Takes",
+      "AddExerciseButton": "Add Exercise"
+    },
+    "exams": {
+      "Title": "Exams",
+      "IdColTitle": "Id",
+      "ExerciseColTitle": "Exercise",
+      "TakerFirstNameColTitle": "FName",
+      "TakerLastNameColTitle": "LName",
+      "DateColTitle": "Date",
+      "TimeColTitle": "Time",
+      "EvaluatorColTitle":"Evaluator",
+      "EvaluationStatusColTitle":"Status",
+      "NotesColTitle":"Notes"
+    }
+  },
   "loginPage": {
     "title": "Login",
     "subTitle": "Sign In to your account",
