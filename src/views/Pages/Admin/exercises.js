@@ -81,9 +81,9 @@ class AdminExams extends Component {
                                                 <td>{exercise.author}</td>
                                                 <td>{exercise.takers}</td>
                                                 <td>
-                                                    <Button color="primary"><i className="fa fa-edit"></i>&nbsp;Edit</Button>{' '}
-                                                    <Button color="danger"><i className="fa fa-trash"></i>&nbsp;Delete</Button>{' '}
-                                                    <Button color="warning"><i className="fa fa-share-alt"></i>&nbsp;Share</Button>{' '}
+                                                    <Button color="primary" outline><i className="fa fa-edit"></i>&nbsp;Edit</Button>{' '}
+                                                    <Button color="danger" outline><i className="fa fa-trash"></i>&nbsp;Delete</Button>{' '}
+                                                    <Button color="warning" outline><i className="fa fa-share-alt"></i>&nbsp;Share</Button>{' '}
                                                 </td>
                                             </tr>
                                         );

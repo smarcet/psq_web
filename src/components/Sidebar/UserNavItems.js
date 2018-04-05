@@ -19,7 +19,7 @@ export default {
 
         },
         {
-            name: 'Videos',
+            name: 'Video Library',
             url: '/auth/user/videos',
             icon: 'icon-camrecorder',
 

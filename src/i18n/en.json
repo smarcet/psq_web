@@ -31,13 +31,33 @@
       "Title": "Exams",
       "IdColTitle": "Id",
       "ExerciseColTitle": "Exercise",
-      "TakerFirstNameColTitle": "FName",
-      "TakerLastNameColTitle": "LName",
+      "TakerFirstNameColTitle": "First Name",
+      "TakerLastNameColTitle": "Surname",
       "DateColTitle": "Date",
       "TimeColTitle": "Time",
       "EvaluatorColTitle":"Evaluator",
       "EvaluationStatusColTitle":"Status",
       "NotesColTitle":"Notes"
+    }
+  },
+  "user":{
+    "dashboard": {
+      "newsTitle": "NEWS",
+      "examFeedbackTitle": "NEW EXAMS FEEDBACK"
+    },
+    "exams": {
+      "Title": "Exams",
+      "IdColTitle": "Id",
+      "ExerciseColTitle": "Exercise",
+      "DateColTitle": "Date",
+      "TimeColTitle": "Time",
+      "EvaluatorColTitle":"Evaluator",
+      "EvaluationStatusColTitle":"Status",
+      "NotesColTitle":"Notes",
+      "viewButton": "View"
+    },
+    "videos":{
+      "Title": "Video Library"
     }
   },
   "loginPage": {

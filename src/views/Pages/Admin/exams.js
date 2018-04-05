@@ -112,7 +112,7 @@ class AdminExercises extends Component {
                                                 <td>{exam.notes}</td>
                                                 <td>
                                                     { !exam.evaluated &&
-                                                    <Button color="warning"><i className="fa fa-pencil"></i>&nbsp;Evaluate</Button>
+                                                    <Button color="warning" outline><i className="fa fa-pencil"></i>&nbsp;Evaluate</Button>
                                                     }
                                                 </td>
                                             </tr>
