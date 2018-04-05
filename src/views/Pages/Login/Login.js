@@ -50,7 +50,7 @@ class Login extends Component {
             <div className="app flex-row align-items-center">
                 <Container>
                     <Row className="justify-content-center">
-                        <Col md="4">
+                        <Col sm="8" md="8" lg="5">
                             <CardGroup>
                                 <Card className="p-4">
                                     <CardBody>
