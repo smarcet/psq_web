@@ -28,7 +28,6 @@ class App extends React.PureComponent {
     render() {
         return (
             <BrowserRouter>
-                <div>
                     <Switch>
                         <AuthorizedRoute isLoggedUser={this.props.isLoggedUser}
                                          path='/auth'
@@ -37,7 +36,6 @@ class App extends React.PureComponent {
                         <Route path="/404" component={Page404} />
                         <DefaultRoute isLoggedUser={this.props.isLoggedUser} component={Login} doLogin={this.props.doLogin}/>
                     </Switch>
-                </div>
             </BrowserRouter>
         );
     }

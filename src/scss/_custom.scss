@@ -10,3 +10,13 @@
   border: solid 1px gainsboro;
   margin-right: 10px;
 }
+.header-dropdown-user-info{
+  font-size: 14px;
+}
+
+@include media-breakpoint-down(md){
+  .header-dropdown-user-info{
+    display: none;
+  }
+}
+

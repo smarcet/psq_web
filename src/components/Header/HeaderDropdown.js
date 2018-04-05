@@ -51,7 +51,7 @@ class HeaderDropdown extends Component {
       return (
       <Dropdown nav isOpen={this.state.dropdownOpen} toggle={this.toggle}>
         <DropdownToggle nav>
-            <span>Welcome {this.getUserDetail()}</span>
+            <span className="header-dropdown-user-info">Welcome {this.getUserDetail()}</span>
             <img src='/img/generic-avatar-icon.png' className="img-avatar" alt={this.props.currentUser.email}/>
         </DropdownToggle>
         <DropdownMenu right>
