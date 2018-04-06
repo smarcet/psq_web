@@ -98,6 +98,7 @@ class SuperAdminDevices extends Component {
                                         <th>{T.translate("superAdmin.devices.SlotsColTitle")}</th>
                                         <th>{T.translate("superAdmin.devices.StatusColTitle")}</th>
                                         <th>&nbsp;</th>
+                                        <th>&nbsp;</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -122,8 +123,10 @@ class SuperAdminDevices extends Component {
                                                         <Badge color="secondary">Disabled</Badge>
                                                     }
                                                 </td>
-                                                <td>
+                                                <td className="col-button">
                                                     <Button outline color="primary" onClick={(e) => this.onClickEditDevice(e, device)}><i className="fa fa-edit"></i>&nbsp;{T.translate("superAdmin.devices.EditButton")}</Button>{' '}
+                                                </td>
+                                                <td className="col-button">
                                                     <Button outline color="danger" onClick={(e) => this.onClickDeleteDevice(e, device)}><i className="fa fa-trash"></i>&nbsp;{T.translate("superAdmin.devices.DeleteButton")}</Button>{' '}
                                                 </td>
                                             </tr>

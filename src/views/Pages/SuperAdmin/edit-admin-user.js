@@ -80,9 +80,9 @@ class SuperAdminEditAdminUser extends Component {
                             <SuperAdminNewAdminUser />
                         </TabPane>
                         <TabPane tabId="2">
-                            <Row>
-                                <Col md="2">
-                                    <ButtonDropdown isOpen={ this.state.isOpenDropDown} toggle={() => { this.toggleDropDown(); }}>
+                            <Row className="search-container">
+                                <Col xs="12" md="4">
+                                    <ButtonDropdown className="dropdown-add" isOpen={ this.state.isOpenDropDown} toggle={() => { this.toggleDropDown(); }}>
                                         <DropdownToggle caret>
                                             -- SELECT A DEVICE --
                                         </DropdownToggle>
@@ -92,8 +92,8 @@ class SuperAdminEditAdminUser extends Component {
                                         </DropdownMenu>
                                     </ButtonDropdown>
                                 </Col>
-                                <Col md="3">
-                                    <Button color="primary" className="add-entity-button"><i className="fa fa-link"></i>{'\u00A0'} Link Device</Button>
+                                <Col xs="12" md="3">
+                                    <Button color="primary" className="button-add"><i className="fa fa-link"></i>{'\u00A0'} Link Device</Button>
                                 </Col>
                             </Row>
                             <Row>
@@ -117,7 +117,7 @@ class SuperAdminEditAdminUser extends Component {
                                                 <Badge color="success">Active</Badge>
                                             </td>
                                             <td>
-                                                <Button color="danger">Unlink</Button>{' '}
+                                                <Button outline color="danger">Unlink</Button>{' '}
                                             </td>
                                         </tr>
                                         <tr>
@@ -128,7 +128,7 @@ class SuperAdminEditAdminUser extends Component {
                                                 <Badge color="secondary">Inactive</Badge>
                                             </td>
                                             <td>
-                                                <Button color="danger">Unlink</Button>{' '}
+                                                <Button outline color="danger">Unlink</Button>{' '}
                                             </td>
                                         </tr>
 

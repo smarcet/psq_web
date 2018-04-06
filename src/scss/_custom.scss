@@ -24,3 +24,35 @@
   margin-bottom: 10px;
 }
 
+.filter-search{
+  position: relative;
+  z-index: 1;
+  left: 0.5em !important;
+  top: -28px !important;
+  color: #7B7B7B;
+  cursor:pointer;
+  width: 0;
+}
+
+.input-search{
+  padding-left: 1.5em;
+}
+
+.button-add{
+  width: 100% !important;
+}
+
+.col-button{
+  width: 5%;
+}
+
+.dropdown-add {
+  width: 100% !important;
+  .btn {
+    width: 100% !important;
+  }
+}
+
+.search-container{
+  padding-bottom: 10px;
+}

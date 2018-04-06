@@ -65,17 +65,15 @@ class SuperAdminAdminUsers extends Component {
                                 <i className="fa fa-align-justify"></i> Admin Users
                             </CardHeader>
                             <CardBody>
-                                <Row style={{marginBottom:'10px'}}>
-                                    <Col xs="4">
-                                        <InputGroup>
-                                            <InputGroupAddon addonType="prepend">
-                                                <Button type="button" color="primary"><i className="fa fa-search"></i> Search</Button>
-                                            </InputGroupAddon>
-                                            <Input type="text" id="input1-group2" name="input1-group2" placeholder="Search User"/>
-                                        </InputGroup>
+                                <Row className="search-container">
+                                    <Col xs="12" sm="4" lg="4" >
+                                        <Input type="text" className="input-search" id="input1-group2" name="input1-group2" placeholder="Search User"/>
+                                        <i className="fa fa-search filter-search"></i>
                                     </Col>
-                                    <Col xs="4">
-                                        <Button onClick={(e) => this.onClickAddNewAdminUser(e)} color="primary"><i className="fa fa-plus-circle"></i>{'\u00A0'} Add Admin User</Button>
+                                    <Col xs="12" sm="4" lg="3" >
+                                        <Button onClick={(e) => this.onClickAddNewAdminUser(e)} className="button-add" color="primary">
+                                            <i className="fa fa-plus-circle"></i>{'\u00A0'} Add Admin User
+                                        </Button>
                                     </Col>
                                 </Row>
                                 <Table responsive striped>
@@ -85,6 +83,7 @@ class SuperAdminAdminUsers extends Component {
                                         <th>{T.translate("superAdmin.adminUsers.FirstNameColTitle")}</th>
                                         <th>{T.translate("superAdmin.adminUsers.SurNameColTitle")}</th>
                                         <th>{T.translate("superAdmin.adminUsers.StatusColTitle")}</th>
+                                        <th>&nbsp;</th>
                                         <th>&nbsp;</th>
                                     </tr>
                                     </thead>
@@ -107,8 +106,10 @@ class SuperAdminAdminUsers extends Component {
                                                         <Badge color="secondary">Inactive</Badge>
                                                     }
                                                 </td>
-                                                <td>
+                                                <td className="col-button">
                                                     <Button color="primary" outline onClick={(e) => this.onClickEditAdminUser(e, user)}><i className="fa fa-edit"></i>&nbsp;Edit</Button>{' '}
+                                                </td>
+                                                <td className="col-button">
                                                     <Button color="danger" outline onClick={(e) => this.onClickDeleteAdminUser(e, user)}><i className="fa fa-trash"></i>&nbsp;Delete</Button>{' '}
                                                 </td>
                                             </tr>

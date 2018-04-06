@@ -74,17 +74,15 @@ class SuperAdminEditDevice extends Component {
                             <SuperAdminNewDevice />
                         </TabPane>
                         <TabPane tabId="2">
-                            <Row>
-                                <Col md="4">
-                                    <InputGroup>
-                                        <InputGroupAddon addonType="prepend">
-                                            <Button type="button" color="primary"><i className="fa fa-search"></i> Search</Button>
-                                        </InputGroupAddon>
-                                        <Input type="text" id="input1-group2" name="input1-group2" placeholder="Search User"/>
-                                    </InputGroup>
+                            <Row className="search-container">
+                                <Col xs="12" sm="4" lg="4" >
+                                    <Input type="text" className="input-search" id="input1-group2" name="input1-group2" placeholder="Search User"/>
+                                    <i className="fa fa-search filter-search"></i>
                                 </Col>
-                                <Col md="3">
-                                    <Button color="primary" className="add-entity-button"><i className="fa fa-link"></i>{'\u00A0'} Link User</Button>
+                                <Col xs="12" sm="4" lg="3" >
+                                    <Button onClick={(e) => this.onClickAddNewAdminUser(e)} className="button-add" color="primary">
+                                        <i className="fa fa-link"></i>{'\u00A0'}Link User
+                                    </Button>
                                 </Col>
                             </Row>
                             <Row className="available-slots-container">
@@ -111,7 +109,7 @@ class SuperAdminEditDevice extends Component {
                                             <td>Jose</td>
                                             <td>Perez</td>
                                             <td>
-                                                <Button color="danger">Unlink</Button>{' '}
+                                                <Button outline color="danger">Unlink</Button>{' '}
                                             </td>
                                         </tr>
                                         </tbody>
