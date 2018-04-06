@@ -8,7 +8,11 @@
       "IdColTitle" : "Id",
       "SerialNbrColTitle" : "Serial #",
       "FriendlyNameColTitle" : "Friendly Name",
-      "StatusColTitle" : "Status"
+      "StatusColTitle" : "Status",
+      "OwnerColTitle": "Owner",
+      "SlotsColTitle": "Available Slots",
+      "EditButton": "Edit",
+      "DeleteButton": "Delete"
     },
     "adminUsers": {
       "IdColTitle" : "Id",

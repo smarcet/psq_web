@@ -108,8 +108,8 @@ class SuperAdminAdminUsers extends Component {
                                                     }
                                                 </td>
                                                 <td>
-                                                    <Button color="secondary" onClick={(e) => this.onClickEditAdminUser(e, user)}>Edit</Button>{' '}
-                                                    <Button color="danger" onClick={(e) => this.onClickDeleteAdminUser(e, user)}>Delete</Button>{' '}
+                                                    <Button color="primary" outline onClick={(e) => this.onClickEditAdminUser(e, user)}><i className="fa fa-edit"></i>&nbsp;Edit</Button>{' '}
+                                                    <Button color="danger" outline onClick={(e) => this.onClickDeleteAdminUser(e, user)}><i className="fa fa-trash"></i>&nbsp;Delete</Button>{' '}
                                                 </td>
                                             </tr>
                                         );

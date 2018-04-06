@@ -6,6 +6,7 @@ import {
   DropdownToggle,
   Dropdown
 } from 'reactstrap';
+import { NavLink } from 'react-router-dom'
 import {STUDENT, SUPERVISOR, TEACHER} from "../../constants";
 
 class HeaderDropdown extends Component {
@@ -46,8 +47,25 @@ class HeaderDropdown extends Component {
       }
       return detail;
   }
-  dropAccnt() {
 
+  getRoutePartByUser(){
+      let { currentUser } = this.props;
+      switch (currentUser.role){
+          case SUPERVISOR:
+              return 'super-admin';
+              break;
+          case TEACHER:
+              return 'admin';
+              break;
+          case STUDENT:
+              return 'user';
+              break;
+      }
+  }
+
+  dropAccnt() {
+      let userType = this.getRoutePartByUser();
+      let settingsRoute = `/auth/${userType}/settings`;
       return (
       <Dropdown nav isOpen={this.state.dropdownOpen} toggle={this.toggle}>
         <DropdownToggle nav>
@@ -58,9 +76,9 @@ class HeaderDropdown extends Component {
           <DropdownItem header tag="div" className="text-center"><strong>Account</strong></DropdownItem>
           <DropdownItem><i className="fa fa-bell-o"></i> News<Badge color="info">42</Badge></DropdownItem>
           <DropdownItem header tag="div" className="text-center"><strong>Settings</strong></DropdownItem>
-          <DropdownItem><i className="fa fa-user"></i> Profile</DropdownItem>
+          <DropdownItem><i className="fa fa-user"></i><NavLink to={settingsRoute}>Profile</NavLink></DropdownItem>
           <DropdownItem divider/>
-          <DropdownItem><i className="fa fa-lock"></i> Logout</DropdownItem>
+          <DropdownItem><i className="fa fa-lock"></i><NavLink to='/auth/logout'>Logout</NavLink></DropdownItem>
         </DropdownMenu>
       </Dropdown>
     );

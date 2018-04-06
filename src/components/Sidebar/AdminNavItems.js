@@ -7,6 +7,18 @@ export default {
 
         },
         {
+            name: 'Devices',
+            url: '/auth/admin/devices',
+            icon: 'icon-camrecorder',
+
+        },
+        {
+            name: 'User Groups',
+            url: '/auth/admin/user-groups',
+            icon: 'icon-people',
+
+        },
+        {
             name: 'Users',
             url: '/auth/admin/users',
             icon: 'icon-people',

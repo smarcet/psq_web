@@ -12,8 +12,10 @@ import {
     PaginationLink,
     Button
 } from 'reactstrap';
-import {Bar, Line} from 'react-chartjs-2';
+
 import T from 'i18n-react';
+import 'sweetalert2/dist/sweetalert2.css';
+import swal from 'sweetalert2';
 
 class SuperAdminDevices extends Component {
 
@@ -22,7 +24,60 @@ class SuperAdminDevices extends Component {
         event.preventDefault();
     }
 
+    onClickDeleteDevice(event, device){
+
+        swal({
+            title: 'Are you sure?',
+            text: 'You will not be able to recover this device!',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, keep it'
+        }).then((result) => {
+            if (result.value) {
+                swal(
+                    'Deleted!',
+                    'Your device has been deleted.',
+                    'success'
+                )
+            }
+        })
+        event.preventDefault();
+    }
+
+    onClickEditDevice(event, device){
+        this.props.history.push(`/auth/super-admin/devices/${device.id}`);
+        event.preventDefault();
+    }
+
     render(){
+
+        let devices = [
+            {
+                id:1,
+                serial:'12345',
+                friendly_name: 'Device#1',
+                active:true,
+                owner: 'Jose Perez',
+                slots: 3,
+            },
+            {
+                id:2,
+                serial:'45678',
+                friendly_name: 'Device#2',
+                active:true,
+                owner: 'Jose Perez',
+                slots: 6,
+            },
+            {
+                id:3,
+                serial:'555555',
+                friendly_name: 'Device#3',
+                active:false,
+                owner: 'N/A',
+                slots: 0,
+            },
+        ];
         return (
             <div className="animated fadeIn">
                 <Row>
@@ -39,36 +94,41 @@ class SuperAdminDevices extends Component {
                                         <th>{T.translate("superAdmin.devices.IdColTitle")}</th>
                                         <th>{T.translate("superAdmin.devices.SerialNbrColTitle")}</th>
                                         <th>{T.translate("superAdmin.devices.FriendlyNameColTitle")}</th>
+                                        <th>{T.translate("superAdmin.devices.OwnerColTitle")}</th>
+                                        <th>{T.translate("superAdmin.devices.SlotsColTitle")}</th>
                                         <th>{T.translate("superAdmin.devices.StatusColTitle")}</th>
                                         <th>&nbsp;</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>123456789</td>
-                                        <td>Device #1</td>
-                                        <td>
-                                            <Badge color="success">Active</Badge>
-                                        </td>
-                                        <td>
-                                            <Button color="secondary">Edit</Button>{' '}
-                                            <Button color="danger">Delete</Button>{' '}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>123456789</td>
-                                        <td>Device #2</td>
-                                        <td>
-                                            <Badge color="secondary">Inactive</Badge>
-                                        </td>
-                                        <td>
-                                            <Button color="secondary">Edit</Button>{' '}
-                                            <Button color="danger">Delete</Button>{' '}
-                                        </td>
-                                    </tr>
 
+                                    { devices.map((device, i) => {
+
+                                        return (
+
+                                            <tr key={device.id}>
+                                                <td>{device.id}</td>
+                                                <td>{device.serial}</td>
+                                                <td>{device.friendly_name}</td>
+                                                <td>{device.owner}</td>
+                                                <td>{device.slots}</td>
+                                                <td>
+                                                    {
+                                                        device.active &&
+                                                        <Badge color="success">Active</Badge>
+                                                    }
+                                                    {
+                                                        !device.active &&
+                                                        <Badge color="secondary">Disabled</Badge>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    <Button outline color="primary" onClick={(e) => this.onClickEditDevice(e, device)}><i className="fa fa-edit"></i>&nbsp;{T.translate("superAdmin.devices.EditButton")}</Button>{' '}
+                                                    <Button outline color="danger" onClick={(e) => this.onClickDeleteDevice(e, device)}><i className="fa fa-trash"></i>&nbsp;{T.translate("superAdmin.devices.DeleteButton")}</Button>{' '}
+                                                </td>
+                                            </tr>
+                                        );
+                                    })}
                                     </tbody>
                                 </Table>
                                 <Pagination>
