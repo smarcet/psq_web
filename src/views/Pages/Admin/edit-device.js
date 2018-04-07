@@ -14,11 +14,25 @@ import {
     PaginationLink,
     Input,
     Button} from 'reactstrap';
+
+import {
+
+    Card,
+    CardHeader,
+    CardFooter,
+    CardBody,
+    Form,
+    FormGroup,
+    FormText,
+    Label,
+
+} from 'reactstrap';
 import T from "i18n-react/dist/i18n-react";
-import SuperAdminNewDevice from "./new-device";
+import 'sweetalert2/dist/sweetalert2.css';
+import swal from 'sweetalert2';
 import classnames from 'classnames';
 
-class SuperAdminEditDevice extends Component {
+class AdminEditDevice extends Component {
 
     constructor(props) {
         super(props);
@@ -27,7 +41,6 @@ class SuperAdminEditDevice extends Component {
             activeTab: '1',
         };
     }
-
 
     toggleTab(tab) {
         if (this.state.activeTab !== tab) {
@@ -38,15 +51,36 @@ class SuperAdminEditDevice extends Component {
         }
     }
 
+    onClickUnlinkUser(event, user){
+        swal({
+            title: 'Are you sure?',
+            text: 'You are about to disassociate this user with current device',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, unlink it!',
+            cancelButtonText: 'No, keep it'
+        }).then((result) => {
+            if (result.value) {
+                swal(
+                    'Deleted!',
+                    'Your user has been unlinked.',
+                    'success'
+                )
+            }
+        })
+        event.preventDefault();
+    }
+
     render(){
         let deviceId = this.props.match.params.device_id;
+        let deviceTitle = `Edit Device # ${deviceId}`;
         let linkedUsers = [
             {
                 id: 1,
                 first_name: 'Juan',
                 last_name: 'Perez',
                 user_name: 'juanperez@gmail.com',
-
+                role: 'STUDENT',
             }
         ];
         return(
@@ -75,7 +109,58 @@ class SuperAdminEditDevice extends Component {
                     </Nav>
                     <TabContent activeTab={this.state.activeTab}>
                         <TabPane tabId="1">
-                            <SuperAdminNewDevice deviceId={deviceId}/>
+                            <Row>
+                                <Col xs="12" md="12" lg="12">
+                                    <Card>
+                                        <CardHeader>
+                                            <strong>{deviceTitle}</strong>
+                                        </CardHeader>
+                                        <CardBody>
+                                            <Form action="" method="post" encType="multipart/form-data" className="form-horizontal">
+                                                <FormGroup row>
+                                                    <Col md="3">
+                                                        <Label htmlFor="text-input">Serial #</Label>
+                                                    </Col>
+                                                    <Col xs="12" md="9">
+                                                        <Input type="text" id="text-input" name="text-input" value="123456" readOnly={true}/>
+                                                    </Col>
+                                                </FormGroup>
+                                                <FormGroup row>
+                                                    <Col md="3">
+                                                        <Label htmlFor="text-input">Friendly Name</Label>
+                                                    </Col>
+                                                    <Col xs="12" md="9">
+                                                        <Input type="text" id="text-input" name="text-input" placeholder="Friendly Name" defaultValue="DEVICE#1"/>
+                                                    </Col>
+                                                </FormGroup>
+                                                <FormGroup row>
+                                                    <Col md="3">
+                                                        <Label htmlFor="email-input">Available Slots #</Label>
+                                                    </Col>
+                                                    <Col xs="12" md="9">
+                                                        <Input type="number" id="email-input" name="email-input" value="3" readOnly={true}/>
+                                                        <FormText className="help-block"># Users to associate with device</FormText>
+                                                    </Col>
+                                                </FormGroup>
+                                                <FormGroup row>
+                                                    <Col md="3">
+                                                        <Label>Is Enable?</Label>
+                                                    </Col>
+                                                    <Col md="9">
+                                                        <FormGroup check inline>
+                                                            <Input className="form-check-input" type="checkbox" id="inline-checkbox1" name="inline-checkbox1" value="option1"/>
+                                                        </FormGroup>
+                                                    </Col>
+                                                </FormGroup>
+                                            </Form>
+                                        </CardBody>
+                                        <CardFooter>
+                                            <Button type="submit" size="sm" color="primary"><i className="fa fa-dot-circle-o"></i> Create</Button>{' '}
+                                            <Button type="reset" size="sm" color="danger"><i className="fa fa-ban"></i> Cancel</Button>
+                                        </CardFooter>
+                                    </Card>
+                                </Col>
+                            </Row>
                         </TabPane>
                         <TabPane tabId="2">
                             <Row className="search-container">
@@ -103,6 +188,7 @@ class SuperAdminEditDevice extends Component {
                                             <th>{T.translate("superAdmin.editDevice.linkedUsers.UserNameTitle")}</th>
                                             <th>{T.translate("superAdmin.editDevice.linkedUsers.FirstNameTitle")}</th>
                                             <th>{T.translate("superAdmin.editDevice.linkedUsers.SurnameTitle")}</th>
+                                            <th>Role</th>
                                             <th>&nbsp;</th>
                                         </tr>
                                         </thead>
@@ -115,8 +201,9 @@ class SuperAdminEditDevice extends Component {
                                                     <td>{user.user_name}</td>
                                                     <td>{user.first_name}</td>
                                                     <td>{user.last_name}</td>
+                                                    <td>{user.role}</td>
                                                     <td>
-                                                        <Button outline color="danger">{T.translate("superAdmin.editDevice.linkedUsers.UnlinkButton")}</Button>{' '}
+                                                        <Button onClick={(e) => { this.onClickUnlinkUser(e, user); }} outline color="danger">{T.translate("superAdmin.editDevice.linkedUsers.UnlinkButton")}</Button>{' '}
                                                     </td>
                                                 </tr>
                                             );
@@ -144,4 +231,4 @@ class SuperAdminEditDevice extends Component {
     }
 }
 
-export default SuperAdminEditDevice;
+export default AdminEditDevice;

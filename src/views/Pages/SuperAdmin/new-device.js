@@ -23,13 +23,17 @@ import {
 } from 'reactstrap';
 
 class SuperAdminNewDevice extends Component {
+
     render(){
+        let deviceId = this.props.hasOwnProperty('deviceId') ? this.props.deviceId : null;
+        let deviceTitle = deviceId != null ? `Device # ${deviceId}` : 'New Device';
+
         return(
             <Row>
-                <Col xs="12" md="6">
+                <Col xs="12" md="12" lg="12">
                     <Card>
                         <CardHeader>
-                            <strong>New Device</strong>
+                            <strong>{deviceTitle}</strong>
                         </CardHeader>
                         <CardBody>
                             <Form action="" method="post" encType="multipart/form-data" className="form-horizontal">

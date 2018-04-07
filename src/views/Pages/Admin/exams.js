@@ -11,13 +11,18 @@ import {
     PaginationItem,
     PaginationLink,
     Button,
-    InputGroup,
-    InputGroupAddon,
     Input
 } from 'reactstrap';
+
 import T from "i18n-react/dist/i18n-react";
 
 class AdminExercises extends Component {
+
+    onClickEvaluateExam(e, exam){
+        this.props.history.push(`/auth/admin/exams/${exam.id}/evaluate`);
+        event.preventDefault();
+    }
+
     render(){
         let exams = [
             {
@@ -54,17 +59,13 @@ class AdminExercises extends Component {
                                 <i className="fa fa-align-justify"></i> {T.translate("admin.exams.Title")}
                             </CardHeader>
                             <CardBody>
-                                <Row style={{marginBottom:'10px'}}>
-                                    <Col xs="4">
-                                        <InputGroup>
-                                            <InputGroupAddon addonType="prepend">
-                                                <Button type="button" color="primary"><i className="fa fa-search"></i> Search</Button>
-                                            </InputGroupAddon>
-                                            <Input type="text" id="input1-group2" name="input1-group2" placeholder="Search Exam"/>
-                                        </InputGroup>
+                                <Row className="search-container">
+                                    <Col xs="12" sm="4" lg="4" >
+                                        <Input type="text" className="input-search" id="input1-group2" name="input1-group2" placeholder="Search Exam"/>
+                                        <i className="fa fa-search filter-search"></i>
                                     </Col>
-                                    <Col xs="4">
-
+                                    <Col xs="12" sm="4" lg="3" >
+                                        &nbsp;
                                     </Col>
                                 </Row>
                                 <Table responsive striped>
@@ -112,7 +113,7 @@ class AdminExercises extends Component {
                                                 <td>{exam.notes}</td>
                                                 <td>
                                                     { !exam.evaluated &&
-                                                    <Button color="warning" outline><i className="fa fa-pencil"></i>&nbsp;Evaluate</Button>
+                                                    <Button color="warning" onClick={(e) => this.onClickEvaluateExam(e, exam)}outline><i className="fa fa-pencil"></i>&nbsp;Evaluate</Button>
                                                     }
                                                 </td>
                                             </tr>

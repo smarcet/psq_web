@@ -8,6 +8,12 @@ import AdminNews from "../views/Pages/Admin/news";
 import AdminUsers from "../views/Pages/Admin/users";
 import AdminDevices from "../views/Pages/Admin/devices";
 import AdminUserGroups from "../views/Pages/Admin/user-groups";
+import AdmimEvaluateExam from "../views/Pages/Admin/evaluate-exam";
+import AdminEditExercise from "../views/Pages/Admin/edit-exercise";
+import AdminEditDevice from "../views/Pages/Admin/edit-device";
+import AdminEditNewsItem from "../views/Pages/Admin/edit-news";
+import AdminEditUser from "../views/Pages/Admin/edit-user";
+import AdminEditUserGroup from "../views/Pages/Admin/edit-user-group";
 
 class AdminLayout extends Component {
     render() {
@@ -15,11 +21,21 @@ class AdminLayout extends Component {
             <div>
                 <Switch>
                     <Route path="/auth/admin/dashboard" component={AdminDashBoard}></Route>
+                    <Route path="/auth/admin/exams/:exam_id/evaluate" component={AdmimEvaluateExam}></Route>
                     <Route path="/auth/admin/exams" component={AdminExams}></Route>
+                    <Route path="/auth/admin/exercises/new" component={AdminEditExercise}></Route>
+                    <Route path="/auth/admin/exercises/:exercise_id" component={AdminEditExercise}></Route>
                     <Route path="/auth/admin/exercises" component={AdminExercises}></Route>
+                    <Route path="/auth/admin/news/new" component={AdminEditNewsItem}></Route>
+                    <Route path="/auth/admin/news/:news_item_id" component={AdminEditNewsItem}></Route>
                     <Route path="/auth/admin/news" component={AdminNews}></Route>
+                    <Route path="/auth/admin/users/new" component={AdminEditUser}></Route>
+                    <Route path="/auth/admin/users/:user_id" component={AdminEditUser}></Route>
                     <Route path="/auth/admin/users" component={AdminUsers}></Route>
+                    <Route path="/auth/admin/devices/:device_id" component={AdminEditDevice}></Route>
                     <Route path="/auth/admin/devices" component={AdminDevices}></Route>
+                    <Route path="/auth/admin/user-groups/new" component={AdminEditUserGroup}></Route>
+                    <Route path="/auth/admin/user-groups/:group_id" component={AdminEditUserGroup}></Route>
                     <Route path="/auth/admin/user-groups" component={AdminUserGroups}></Route>
                     <Route path="/auth/admin/settings" component={UserSettings}></Route>
                     <Redirect from="/auth/admin" to="/auth/admin/dashboard"/>

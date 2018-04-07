@@ -8,6 +8,7 @@ import {
 } from 'reactstrap';
 import { NavLink } from 'react-router-dom'
 import {STUDENT, SUPERVISOR, TEACHER} from "../../constants";
+import T from "i18n-react/dist/i18n-react";
 
 class HeaderDropdown extends Component {
 
@@ -36,13 +37,13 @@ class HeaderDropdown extends Component {
 
       switch (currentUser.role){
           case SUPERVISOR:
-            detail += ' (SUPERVISOR)';
+            detail += ` (${T.translate("header.profile.supervisor")})`;
           break;
           case TEACHER:
-              detail += ' (TEACHER)';
+              detail += ` (${T.translate("header.profile.teacher")})`;
               break;
           case STUDENT:
-              detail += ' (STUDENT)';
+              detail += ` (${T.translate("header.profile.student")})`;
               break;
       }
       return detail;

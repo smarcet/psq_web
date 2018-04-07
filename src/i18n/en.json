@@ -1,5 +1,21 @@
 {
+  "header":{
+    "profile": {
+      "supervisor": "SUPERVISOR",
+      "teacher": "TEACHER",
+      "student": "STUDENT"
+    }
+  },
   "superAdmin": {
+    "sideBar":{
+      "navLinks":{
+        "dashboard" : "Dashboard",
+        "devices" : "Devices",
+        "adminUsers" : "Admin Users",
+        "settings" : "Settings",
+        "logout": "Logout"
+      }
+    },
     "dashboard" : {
       "registeredUsersTitle": "Registered Admin Users" ,
       "registeredDevicesTitle": "Registered Devices"
@@ -14,6 +30,18 @@
       "EditButton": "Edit",
       "DeleteButton": "Delete"
     },
+    "editDevice":{
+      "MainTab": "Device Data",
+      "UsersTab": "Users",
+      "linkedUsers": {
+        "IdColTitle" : "Id",
+        "UserNameTitle" : "Username",
+        "FirstNameTitle" : "FirstName",
+        "SurnameTitle" : "Surname",
+        "UnlinkButton" : "Unlink",
+        "AvailableSlots": "Available Slots #"
+      }
+    },
     "adminUsers": {
       "IdColTitle" : "Id",
       "FirstNameColTitle" : "First Name",
@@ -22,6 +50,12 @@
     }
    },
   "admin":{
+    "news":{
+      "Title": "News"
+    },
+    "userGroups":{
+      "Title": "User Groups"
+    },
     "exercises": {
       "Title": "Exercises",
       "IdColTitle": "Id",

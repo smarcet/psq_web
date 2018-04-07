@@ -1,31 +1,34 @@
+import T from "i18n-react/dist/i18n-react";
+import '../../i18n';
+
 export default {
   items: [
     {
-      name: 'Dashboard',
+      name: T.translate("superAdmin.sideBar.navLinks.dashboard"),
       url: '/auth/super-admin/dashboard',
       icon: 'icon-speedometer',
 
     },
     {
-        name: 'Devices',
+        name: T.translate("superAdmin.sideBar.navLinks.devices"),
         url: '/auth/super-admin/devices',
         icon: 'icon-camrecorder',
 
     },
       {
-          name: 'Admin Users',
+          name: T.translate("superAdmin.sideBar.navLinks.adminUsers"),
           url: '/auth/super-admin/admin-users',
           icon: 'icon-people',
 
       },
       {
-          name: 'Settings',
+          name: T.translate("superAdmin.sideBar.navLinks.settings"),
           url: '/auth/super-admin/settings',
           icon: 'icon-settings',
 
       },
       {
-          name: 'Logout',
+          name: T.translate("superAdmin.sideBar.navLinks.logout"),
           url: '/auth/logout',
           icon: 'icon-logout',
 

@@ -16,10 +16,47 @@ import {
     Input
 } from 'reactstrap';
 import T from "i18n-react/dist/i18n-react";
-
+import 'sweetalert2/dist/sweetalert2.css';
+import swal from 'sweetalert2';
 
 class AdminExams extends Component {
+
+    onClickAddNewExercise(e){
+        this.props.history.push("/auth/admin/exercises/new");
+    }
+
+    onClickDeleteExercise(event, exercise){
+
+        swal({
+            title: 'Are you sure?',
+            text: 'You will not be able to recover this exercise!',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, keep it'
+        }).then((result) => {
+            if (result.value) {
+                swal(
+                    'Deleted!',
+                    'Your exercise has been deleted.',
+                    'success'
+                )
+            }
+        })
+        event.preventDefault();
+    }
+
+    onClickEditExercise(event, exercise){
+        this.props.history.push(`/auth/admin/exercises/${exercise.id}`);
+        event.preventDefault();
+    }
+
+    onClickShareExercise(event, exercise){
+        event.preventDefault();
+    }
+
     render(){
+
         let exercises = [
             {
                 id:1,
@@ -36,26 +73,25 @@ class AdminExams extends Component {
                 takers: 100
             },
         ];
+
         return (
             <div className="animated fadeIn">
                 <Row>
                     <Col xs="12" lg="12">
                         <Card>
                             <CardHeader>
-                                <i className="fa fa-align-justify"></i> {T.translate("admin.exams.Title")}
+                                <i className="fa fa-align-justify"></i> {T.translate("admin.exercises.Title")}
                             </CardHeader>
                             <CardBody>
-                                <Row style={{marginBottom:'10px'}}>
-                                    <Col xs="4">
-                                        <InputGroup>
-                                            <InputGroupAddon addonType="prepend">
-                                                <Button type="button" color="primary"><i className="fa fa-search"></i> Search</Button>
-                                            </InputGroupAddon>
-                                            <Input type="text" id="input1-group2" name="input1-group2" placeholder="Search Exercise"/>
-                                        </InputGroup>
+                                <Row className="search-container">
+                                    <Col xs="12" sm="4" lg="4" >
+                                        <Input type="text" className="input-search" id="input1-group2" name="input1-group2" placeholder="Search Exercise"/>
+                                        <i className="fa fa-search filter-search"></i>
                                     </Col>
-                                    <Col xs="4">
-                                        <Button color="primary"><i className="fa fa-plus-circle"></i>{'\u00A0'} {T.translate("admin.exercises.AddExerciseButton")}</Button>
+                                    <Col xs="12" sm="4" lg="3" >
+                                        <Button onClick={(e) => this.onClickAddNewExercise(e)} className="button-add" color="primary">
+                                            <i className="fa fa-plus-circle"></i>{'\u00A0'} Add Exercise
+                                        </Button>
                                     </Col>
                                 </Row>
                                 <Table responsive striped>
@@ -66,6 +102,8 @@ class AdminExams extends Component {
                                         <th>{T.translate("admin.exercises.DevicesColTitle")}</th>
                                         <th>{T.translate("admin.exercises.CreatorColTitle")}</th>
                                         <th>{T.translate("admin.exercises.TakersColTitle")}</th>
+                                        <th>&nbsp;</th>
+                                        <th>&nbsp;</th>
                                         <th>&nbsp;</th>
                                     </tr>
                                     </thead>
@@ -80,10 +118,14 @@ class AdminExams extends Component {
                                                 <td>{exercise.devices}</td>
                                                 <td>{exercise.author}</td>
                                                 <td>{exercise.takers}</td>
-                                                <td>
-                                                    <Button color="primary" outline><i className="fa fa-edit"></i>&nbsp;Edit</Button>{' '}
-                                                    <Button color="danger" outline><i className="fa fa-trash"></i>&nbsp;Delete</Button>{' '}
-                                                    <Button color="warning" outline><i className="fa fa-share-alt"></i>&nbsp;Share</Button>{' '}
+                                                <td className="col-button">
+                                                    <Button color="primary" onClick={(e) => this.onClickEditExercise(e, exercise)}outline><i className="fa fa-edit"></i>&nbsp;Edit</Button>
+                                                </td>
+                                                <td className="col-button">
+                                                    <Button color="danger" onClick={(e) => this.onClickDeleteExercise(e, exercise)} outline><i className="fa fa-trash"></i>&nbsp;Delete</Button>
+                                                </td>
+                                                <td className="col-button">
+                                                    <Button color="warning" onClick={(e) => this.onClickShareExercise(e, exercise)}outline><i className="fa fa-share-alt"></i>&nbsp;Share</Button>
                                                 </td>
                                             </tr>
                                         );

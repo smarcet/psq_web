@@ -1,3 +1,6 @@
+import T from "i18n-react/dist/i18n-react";
+import '../../i18n';
+
 export default {
     items: [
         {
