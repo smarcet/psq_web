@@ -17,6 +17,7 @@ const routes = {
 
   '/auth/user/settings'  : 'Settings',
   '/auth/user/exams'  : 'Exams',
+  '/auth/user/news'  : 'News',
   '/auth/user/videos'  : 'Video Library',
   '/auth/user/statistics'  : 'Statistics'
 };

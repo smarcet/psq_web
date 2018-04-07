@@ -113,7 +113,7 @@ class AdminExercises extends Component {
                                                 <td>{exam.notes}</td>
                                                 <td>
                                                     { !exam.evaluated &&
-                                                    <Button color="warning" onClick={(e) => this.onClickEvaluateExam(e, exam)}outline><i className="fa fa-pencil"></i>&nbsp;Evaluate</Button>
+                                                    <Button color="warning" onClick={(e) => this.onClickEvaluateExam(e, exam)} outline><i className="fa fa-pencil"></i>&nbsp;Evaluate</Button>
                                                     }
                                                 </td>
                                             </tr>

@@ -96,6 +96,9 @@
     },
     "videos":{
       "Title": "Video Library"
+    },
+    "news":{
+      "Title": "News"
     }
   },
   "loginPage": {

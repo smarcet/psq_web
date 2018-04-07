@@ -18,6 +18,12 @@ import {
 import T from "i18n-react/dist/i18n-react";
 
 class UserExams extends Component {
+
+    onClickViewExam(e, exam){
+        this.props.history.push(`/auth/user/exams/${exam.id}`);
+        event.preventDefault();
+    }
+
     render(){
         let exams = [
             {
@@ -107,7 +113,7 @@ class UserExams extends Component {
                                                 </td>
                                                 <td>{exam.notes}</td>
                                                 <td>
-                                                    <Button outline color="primary"><i className="fa fa-search"></i>&nbsp;{T.translate("user.exams.viewButton")}</Button>
+                                                    <Button onClick={(e) => this.onClickViewExam(e, exam)} outline color="primary"><i className="fa fa-search"></i>&nbsp;{T.translate("user.exams.viewButton")}</Button>
                                                 </td>
                                             </tr>
                                         );
