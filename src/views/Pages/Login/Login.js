@@ -18,10 +18,16 @@ class Login extends Component {
 
     constructor(props) {
         super(props);
-
+        this.handleKeyPress = this.handleKeyPress.bind(this);
         this.state = {
             invalidUserName: false,
             invalidPassword: false,
+        }
+    }
+
+    handleKeyPress(event){
+        if (event.charCode == 13) {
+            this.onLoginClick()
         }
     }
 
@@ -33,7 +39,7 @@ class Login extends Component {
         return usernameValue != '';
     }
 
-    onLoginClick(event) {
+    onLoginClick() {
 
         let validUsername = this.validateUserName(this.username.value);
         let validPassword = this.validatePassword(this.password.value);
@@ -41,7 +47,7 @@ class Login extends Component {
         this.setState({...this.state, invalidUserName: !validUsername , invalidPassword: !validPassword});
         if(!validUsername || !validPassword) return;
         this.props.doLogin(this.username.value, this.password.value);
-        event.preventDefault();
+
     }
 
     render() {
@@ -62,7 +68,7 @@ class Login extends Component {
                                                     <i className="icon-user"></i>
                                                 </InputGroupText>
                                             </InputGroupAddon>
-                                            <Input type="text" placeholder="Username" invalid={this.state.invalidUserName}  innerRef={(input) => {
+                                            <Input onKeyPress={this.handleKeyPress}  type="text" placeholder="Username" invalid={this.state.invalidUserName}  innerRef={(input) => {
                                                 this.username = input;
                                             }}/>
                                         </InputGroup>
@@ -72,7 +78,7 @@ class Login extends Component {
                                                     <i className="icon-lock"></i>
                                                 </InputGroupText>
                                             </InputGroupAddon>
-                                            <Input type="password" placeholder="Password" invalid={this.state.invalidPassword} innerRef={(input) => {
+                                            <Input onKeyPress={this.handleKeyPress} type="password" placeholder="Password" invalid={this.state.invalidPassword} innerRef={(input) => {
                                                 this.password = input;
                                             }}/>
                                         </InputGroup>
