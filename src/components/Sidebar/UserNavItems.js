@@ -4,40 +4,45 @@ import '../../i18n';
 export default {
     items: [
         {
-            name: 'Dashboard',
+            name: T.translate("user.sideBar.navLinks.dashboard"),
             url: '/auth/user/dashboard',
             icon: 'icon-speedometer',
 
         },
         {
-            name: 'Exams',
+            name: T.translate("user.sideBar.navLinks.exercises"),
+            url: '/auth/user/exercises',
+            icon: 'icon-book-open',
+
+        },
+        {
+            name: T.translate("user.sideBar.navLinks.exams"),
             url: '/auth/user/exams',
             icon: 'icon-badge',
 
         },
         {
-            name: 'Statistics',
+            name: T.translate("user.sideBar.navLinks.statistics"),
             url: '/auth/user/statistics',
             icon: 'icon-graph',
 
         },
         {
-            name: 'Video Library',
+            name: T.translate("user.sideBar.navLinks.videos"),
             url: '/auth/user/videos',
             icon: 'icon-camrecorder',
 
         },
         {
-            name: 'Settings',
+            name: T.translate("user.sideBar.navLinks.settings"),
             url: '/auth/user/settings',
             icon: 'icon-settings',
 
         },
         {
-            name: 'Logout',
+            name: T.translate("user.sideBar.navLinks.logout"),
             url: '/auth/logout',
             icon: 'icon-logout',
-
-        },
+        }
     ]
 };

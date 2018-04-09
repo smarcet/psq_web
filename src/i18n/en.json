@@ -79,6 +79,17 @@
     }
   },
   "user":{
+    "sideBar":{
+      "navLinks": {
+        "dashboard": "Dashboard",
+        "exercises": "Exercises",
+        "exams": "Exams",
+        "statistics" : "Statistics",
+        "videos": "Video Library",
+        "settings" : "Settings",
+        "logout" : "Logout"
+      }
+    },
     "dashboard": {
       "newsTitle": "NEWS",
       "examFeedbackTitle": "NEW EXAMS FEEDBACK"
@@ -99,6 +110,16 @@
     },
     "news":{
       "Title": "News"
+    },
+    "exercises":{
+      "Title": "Exercises",
+      "IdColTitle":  "Id",
+      "TitleColTitle":  "Title",
+      "DescColTitle":  "Desc",
+      "AuthorColTitle": "Author",
+      "DevicesColTitle": "Available Devices",
+      "TakesColTitle": "# Takes",
+      "viewButton": "View"
     }
   },
   "loginPage": {
