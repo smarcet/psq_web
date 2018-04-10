@@ -73,7 +73,7 @@ class UserViewExam extends Component {
                                             <Label htmlFor="email-input">Video</Label>
                                         </Col>
                                         <Col xs="12" md="9">
-                                            <img src="/img/video_thumbnail_generic.png" title="play it"/>
+                                            <img className="video-thumbnail" src="/img/video_thumbnail_generic.png" title="play it"/>
                                         </Col>
                                     </FormGroup>
                                     <FormGroup row>

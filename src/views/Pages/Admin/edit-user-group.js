@@ -47,11 +47,18 @@ class AdminEditUserGroup extends Component {
                                         <Label htmlFor="select">Users</Label>
                                     </Col>
                                     <Col xs="12" md="9">
-                                        <Input type="select" name="select" id="select" multiple>
-                                            <option value="1">josegomez@gmail.com</option>
-                                            <option value="2">jgongalvez@gmail.com</option>
-                                            <option value="3">mmartinez@gmail.com</option>
-                                        </Input>
+                                        <FormGroup check inline>
+                                            <Input className="form-check-input" type="checkbox" id="inline-checkbox1" name="inline-checkbox1" value="option1"/>
+                                            <Label className="form-check-label" check htmlFor="inline-checkbox1">User#1</Label>
+                                        </FormGroup>
+                                        <FormGroup check inline>
+                                            <Input className="form-check-input" type="checkbox" id="inline-checkbox2" name="inline-checkbox2" value="option2"/>
+                                            <Label className="form-check-label" check htmlFor="inline-checkbox2">User#2</Label>
+                                        </FormGroup>
+                                        <FormGroup check inline>
+                                            <Input className="form-check-input" type="checkbox" id="inline-checkbox3" name="inline-checkbox3" value="option3"/>
+                                            <Label className="form-check-label" check htmlFor="inline-checkbox3">User#3</Label>
+                                        </FormGroup>
                                         <FormText className="help-block">Please select users that will belong to this group.</FormText>
                                     </Col>
                                 </FormGroup>

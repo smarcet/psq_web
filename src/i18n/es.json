@@ -29,18 +29,7 @@
       "SlotsColTitle": "Available Slots",
       "EditButton": "Edit",
       "DeleteButton": "Delete"
-    },
-    "editDevice":{
-      "MainTab": "Device Data",
-      "UsersTab": "Users",
-      "linkedUsers": {
-        "IdColTitle" : "Id",
-        "UserNameTitle" : "Username",
-        "FirstNameTitle" : "FirstName",
-        "SurnameTitle" : "Surname",
-        "UnlinkButton" : "Unlink",
-        "AvailableSlots": "Available Slots #"
-      }
+
     },
     "adminUsers": {
       "IdColTitle" : "Id",
@@ -50,6 +39,19 @@
     }
   },
   "admin":{
+    "sideBar":{
+      "navLinks":{
+        "dashboard" : "Dashboard",
+        "devices" : "Devices",
+        "userGroups" : "User Groups",
+        "users" : "Users",
+        "exercises" : "Exercises",
+        "exams": "Exams",
+        "news" : "News",
+        "settings" : "Settings",
+        "logout": "Logout"
+      }
+    },
     "news":{
       "Title": "News"
     },
@@ -65,6 +67,10 @@
       "TakersColTitle": "# Takes",
       "AddExerciseButton": "Add Exercise"
     },
+    "devices":{
+      "transferButton": "Transfer Ownership",
+      "editButton" : "Edit"
+    },
     "exams": {
       "Title": "Exams",
       "IdColTitle": "Id",
@@ -79,6 +85,17 @@
     }
   },
   "user":{
+    "sideBar":{
+      "navLinks": {
+        "dashboard": "Dashboard",
+        "exercises": "Exercises",
+        "exams": "Exams",
+        "statistics" : "Statistics",
+        "videos": "Video Library",
+        "settings" : "Settings",
+        "logout" : "Logout"
+      }
+    },
     "dashboard": {
       "newsTitle": "NEWS",
       "examFeedbackTitle": "NEW EXAMS FEEDBACK"
@@ -99,12 +116,35 @@
     },
     "news":{
       "Title": "News"
+    },
+    "exercises":{
+      "Title": "Exercises",
+      "IdColTitle":  "Id",
+      "TitleColTitle":  "Title",
+      "DescColTitle":  "Desc",
+      "AuthorColTitle": "Author",
+      "DevicesColTitle": "Available Devices",
+      "TakesColTitle": "# Takes",
+      "viewButton": "View"
     }
   },
   "loginPage": {
     "title": "Login",
     "subTitle": "Sign In to your account",
     "forgotPassword" : "Forgot password?"
+  },
+  "editDevice":{
+    "mainTab": "Device Data",
+    "usersTab": "Users",
+    "adminUsersTab": "Admin Users",
+    "linkedUsers": {
+      "IdColTitle" : "Id",
+      "UserNameTitle" : "Username",
+      "FirstNameTitle" : "FirstName",
+      "SurnameTitle" : "Surname",
+      "UnlinkButton" : "Unlink",
+      "AvailableSlots": "Available Slots #"
+    }
   },
   "errors": {
     "user_not_authz" : "User is not Authorized",

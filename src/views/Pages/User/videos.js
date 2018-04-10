@@ -67,23 +67,24 @@ class UserVideos extends Component {
                                                 return (
                                                     <ListGroupItem key={i} className="justify-content-between">
                                                         <Row>
-                                                            <Col lg="10">
-                                                                <Media>
-                                                                    <Media left href="#">
-                                                                        <Media title="Play it" className="video-thumbnail" object src="/img/video_thumbnail_generic.png" alt={video.title} />
-                                                                    </Media>
-                                                                    <Media body>
-                                                                        <Media heading>
-                                                                            {video.title} - {video.date}&nbsp;<Badge pill title="views" color="info">{video.views}</Badge>
-                                                                        </Media>
-                                                                        {!video.own && <Badge color="success">Shared By</Badge>}
-                                                                        &nbsp;{video.author}
-                                                                    </Media>
-                                                                </Media>
+                                                            <Col xs="12" lg="10">
+                                                                <Row>
+                                                                    <Col xs="12" lg="4">
+                                                                        <img title="Play it" className="video-thumbnail" src="/img/video_thumbnail_generic.png" alt={video.title} />
+                                                                    </Col>
+                                                                    <Col xs="12" lg="12">
+                                                                         {video.title}&nbsp;<Badge pill title="views" color="info">{video.views}</Badge>
+                                                                    </Col>
+                                                                    <Col xs="12" lg="12">
+                                                                       {!video.own && <Badge color="success">Shared By</Badge> }
+                                                                       {!video.own && ' '  }
+                                                                       {video.author}
+                                                                    </Col>
+                                                                </Row>
                                                             </Col>
-                                                            <Col lg="2">
+                                                            <Col xs="12" lg="2">
                                                                 {video.own &&
-                                                                    <Button outline color="primary" className="float-right"><i
+                                                                    <Button outline color="primary"><i
                                                                         className="fa fa-share"></i>&nbsp;share</Button>
                                                                 }
                                                             </Col>
