@@ -112,8 +112,8 @@ class AdmimEvaluateExam extends Component {
                                         <Col md="3">
                                             <Label htmlFor="email-input">Video</Label>
                                         </Col>
-                                        <Col xs="12" md="9">
-                                           <img src="/img/video_thumbnail_generic.png" title="play it"/>
+                                        <Col xs="12" md="9" xs="12">
+                                           <img  className="video-thumbnail" src="/img/video_thumbnail_generic.png" title="play it"/>
                                         </Col>
                                     </FormGroup>
 

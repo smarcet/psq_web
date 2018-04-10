@@ -29,6 +29,7 @@
       "SlotsColTitle": "Available Slots",
       "EditButton": "Edit",
       "DeleteButton": "Delete"
+
     },
     "adminUsers": {
       "IdColTitle" : "Id",
@@ -38,6 +39,19 @@
     }
    },
   "admin":{
+    "sideBar":{
+      "navLinks":{
+        "dashboard" : "Dashboard",
+        "devices" : "Devices",
+        "userGroups" : "User Groups",
+        "users" : "Users",
+        "exercises" : "Exercises",
+        "exams": "Exams",
+        "news" : "News",
+        "settings" : "Settings",
+        "logout": "Logout"
+      }
+    },
     "news":{
       "Title": "News"
     },
@@ -52,6 +66,10 @@
       "CreatorColTitle": "Author",
       "TakersColTitle": "# Takes",
       "AddExerciseButton": "Add Exercise"
+    },
+    "devices":{
+      "transferButton": "Transfer Ownership",
+      "editButton" : "Edit"
     },
     "exams": {
       "Title": "Exams",

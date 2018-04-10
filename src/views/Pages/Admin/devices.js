@@ -34,6 +34,7 @@ class AdminDevices extends Component {
                 active:true,
                 owner: 'Jose Perez',
                 slots: 3,
+                can_transfer: true,
             },
             {
                 id:2,
@@ -42,14 +43,16 @@ class AdminDevices extends Component {
                 active:true,
                 owner: 'Jose Perez',
                 slots: 6,
+                can_transfer: true,
             },
             {
                 id:3,
                 serial:'555555',
                 friendly_name: 'Device#3',
                 active:false,
-                owner: 'N/A',
+                owner: 'Juan Gomez',
                 slots: 0,
+                can_transfer: false,
             },
         ];
         return (
@@ -80,6 +83,7 @@ class AdminDevices extends Component {
                                         <th>{T.translate("superAdmin.devices.SlotsColTitle")}</th>
                                         <th>{T.translate("superAdmin.devices.StatusColTitle")}</th>
                                         <th>&nbsp;</th>
+                                        <th>&nbsp;</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -105,7 +109,16 @@ class AdminDevices extends Component {
                                                     }
                                                 </td>
                                                 <td className="col-button">
-                                                    <Button outline color="primary" onClick={(e) => this.onClickEditDevice(e, device)}><i className="fa fa-edit"></i>&nbsp;{T.translate("superAdmin.devices.EditButton")}</Button>{' '}
+                                                    <Button outline color="primary" onClick={(e) => this.onClickEditDevice(e, device)}><i className="fa fa-edit"></i>&nbsp;{T.translate("admin.devices.editButton")}</Button>
+                                                </td>
+                                                <td className="col-button">
+                                                    {device.can_transfer &&
+                                                        <Button outline color="warning"
+                                                                onClick={(e) => this.onClickEditDevice(e, device)}><i
+                                                            className="fa fa-exchange"></i>&nbsp;{T.translate("admin.devices.transferButton")}
+                                                        </Button>
+                                                    }
+
                                                 </td>
                                             </tr>
                                         );
