@@ -1,21 +1,28 @@
 import React, {Component} from 'react';
 import {
-    Badge,
     Row,
     Col,
-    TabContent,
-    TabPane,
-    Nav,
-    NavItem,
-    NavLink,
-    Table,
-    Pagination,
-    PaginationItem,
-    PaginationLink,
+    Button,
+    ButtonDropdown,
+    DropdownToggle,
+    DropdownMenu,
+    DropdownItem,
+    Card,
+    CardHeader,
+    CardFooter,
+    CardBody,
+    Collapse,
+    Form,
+    FormGroup,
+    FormText,
+    Label,
     Input,
-    Button} from 'reactstrap';
+    InputGroup,
+    InputGroupAddon,
+    InputGroupText
+} from 'reactstrap';
+
 import T from "i18n-react/dist/i18n-react";
-import SuperAdminNewDevice from "./new-device";
 import classnames from 'classnames';
 
 class SuperAdminEditDevice extends Component {
@@ -40,104 +47,72 @@ class SuperAdminEditDevice extends Component {
 
     render(){
         let deviceId = this.props.match.params.device_id;
-        let linkedUsers = [
-            {
-                id: 1,
-                first_name: 'Juan',
-                last_name: 'Perez',
-                user_name: 'juanperez@gmail.com',
-
-            }
-        ];
+        let deviceTitle = deviceId != null ? `Device # ${deviceId}` : 'New Device';
         return(
             <Row>
-                <Col xs="12" md="12" className="mb-4">
-                    <Nav tabs>
+                <Col xs="12" md="12" lg="12">
+                    <Card>
+                        <CardHeader>
+                            <strong>{deviceTitle}</strong>
+                        </CardHeader>
+                        <CardBody>
+                            <Form action="" method="post" encType="multipart/form-data" className="form-horizontal">
+                                <FormGroup row>
+                                    <Col md="3">
+                                        <Label htmlFor="text-input">Serial #</Label>
+                                    </Col>
+                                    <Col xs="12" md="9">
+                                        <Input type="text" id="text-input" name="text-input" placeholder="Serial Number"/>
+                                    </Col>
+                                </FormGroup>
+                                <FormGroup row>
+                                    <Col md="3">
+                                        <Label htmlFor="text-input">Friendly Name</Label>
+                                    </Col>
+                                    <Col xs="12" md="9">
+                                        <Input type="text" id="text-input" name="text-input" placeholder="Friendly Name"/>
+                                    </Col>
+                                </FormGroup>
+                                <FormGroup row>
+                                    <Col md="3">
+                                        <Label htmlFor="email-input">Available Slots #</Label>
+                                    </Col>
+                                    <Col xs="12" md="9">
+                                        <Input type="number" id="email-input" name="email-input" placeholder="l"/>
+                                        <FormText className="help-block">Please enter available slots #</FormText>
+                                    </Col>
+                                </FormGroup>
+                                <FormGroup row>
+                                    <Col md="3">
+                                        <Label htmlFor="select">Admin Owner</Label>
+                                    </Col>
+                                    <Col xs="12" md="9">
+                                        <Input type="select" name="select" id="select">
+                                            <option value="0">-- Please select Owner --</option>
+                                            <option value="1">Admin#1</option>
+                                            <option value="2">Admin#1</option>
+                                            <option value="3">Admin#3</option>
+                                        </Input>
+                                    </Col>
+                                </FormGroup>
+                                <FormGroup row>
+                                    <Col md="3">
+                                        <Label>Is Enable?</Label>
+                                    </Col>
+                                    <Col md="9">
+                                        <FormGroup check inline>
+                                            <Input className="form-check-input" type="checkbox" id="inline-checkbox1" name="inline-checkbox1" value="option1"/>
+                                        </FormGroup>
 
-                        <NavItem>
-                            <NavLink
-                                className={classnames({ active: this.state.activeTab === '1' })}
-                                onClick={() => { this.toggleTab('1'); }}>
-                                <i className="icon-camrecorder"></i>
-                                <span className={ this.state.activeTab === '1' ? "" : "d-none"}> {T.translate("superAdmin.editDevice.MainTab")} </span>{'\u00A0'}
-
-                            </NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <NavLink
-                                className={classnames({ active: this.state.activeTab === '2' })}
-                                onClick={() => { this.toggleTab('2'); }}>
-                                <i className="icon-user"></i>
-                                <span className={ this.state.activeTab === '2' ? "" : "d-none"}>  {T.translate("superAdmin.editDevice.UsersTab")} </span>{'\u00A0'}
-                            </NavLink>
-                        </NavItem>
-
-                    </Nav>
-                    <TabContent activeTab={this.state.activeTab}>
-                        <TabPane tabId="1">
-                            <SuperAdminNewDevice deviceId={deviceId}/>
-                        </TabPane>
-                        <TabPane tabId="2">
-                            <Row className="search-container">
-                                <Col xs="12" sm="4" lg="4" >
-                                    <Input type="text" className="input-search" id="input1-group2" name="input1-group2" placeholder="Search User"/>
-                                    <i className="fa fa-search filter-search"></i>
-                                </Col>
-                                <Col xs="12" sm="4" lg="3" >
-                                    <Button onClick={(e) => this.onClickAddNewAdminUser(e)} className="button-add" color="primary">
-                                        <i className="fa fa-link"></i>{'\u00A0'}Link User
-                                    </Button>
-                                </Col>
-                            </Row>
-                            <Row className="available-slots-container">
-                                <Col md="4">
-                                    <span>{T.translate("superAdmin.editDevice.linkedUsers.AvailableSlots")} <Badge pill color="secondary">2</Badge></span>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col md="12">
-                                    <Table responsive striped>
-                                        <thead>
-                                        <tr>
-                                            <th>{T.translate("superAdmin.editDevice.linkedUsers.IdColTitle")}</th>
-                                            <th>{T.translate("superAdmin.editDevice.linkedUsers.UserNameTitle")}</th>
-                                            <th>{T.translate("superAdmin.editDevice.linkedUsers.FirstNameTitle")}</th>
-                                            <th>{T.translate("superAdmin.editDevice.linkedUsers.SurnameTitle")}</th>
-                                            <th>&nbsp;</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        { linkedUsers.map((user, i) => {
-
-                                            return (
-                                                <tr key={i}>
-                                                    <td>{user.id}</td>
-                                                    <td>{user.user_name}</td>
-                                                    <td>{user.first_name}</td>
-                                                    <td>{user.last_name}</td>
-                                                    <td>
-                                                        <Button outline color="danger">{T.translate("superAdmin.editDevice.linkedUsers.UnlinkButton")}</Button>{' '}
-                                                    </td>
-                                                </tr>
-                                            );
-                                        })}
-                                        </tbody>
-                                    </Table>
-                                    <Pagination>
-                                        <PaginationItem disabled><PaginationLink previous href="#">Prev</PaginationLink></PaginationItem>
-                                        <PaginationItem active>
-                                            <PaginationLink href="#">1</PaginationLink>
-                                        </PaginationItem>
-                                        <PaginationItem><PaginationLink href="#">2</PaginationLink></PaginationItem>
-                                        <PaginationItem><PaginationLink href="#">3</PaginationLink></PaginationItem>
-                                        <PaginationItem><PaginationLink href="#">4</PaginationLink></PaginationItem>
-                                        <PaginationItem><PaginationLink next href="#">Next</PaginationLink></PaginationItem>
-                                    </Pagination>
-                                </Col>
-                            </Row>
-                        </TabPane>
-
-                    </TabContent>
+                                    </Col>
+                                </FormGroup>
+                            </Form>
+                        </CardBody>
+                        <CardFooter>
+                            <Button type="submit" size="sm" color="primary"><i className="fa fa-dot-circle-o"></i> Save</Button>{' '}
+                            <Button type="reset" size="sm" color="danger"><i className="fa fa-ban"></i> Cancel</Button>
+                        </CardFooter>
+                    </Card>
                 </Col>
             </Row>
         );

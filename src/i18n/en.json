@@ -30,18 +30,6 @@
       "EditButton": "Edit",
       "DeleteButton": "Delete"
     },
-    "editDevice":{
-      "MainTab": "Device Data",
-      "UsersTab": "Users",
-      "linkedUsers": {
-        "IdColTitle" : "Id",
-        "UserNameTitle" : "Username",
-        "FirstNameTitle" : "FirstName",
-        "SurnameTitle" : "Surname",
-        "UnlinkButton" : "Unlink",
-        "AvailableSlots": "Available Slots #"
-      }
-    },
     "adminUsers": {
       "IdColTitle" : "Id",
       "FirstNameColTitle" : "First Name",
@@ -126,6 +114,19 @@
     "title": "Login",
     "subTitle": "Sign In to your account",
     "forgotPassword" : "Forgot password?"
+  },
+  "editDevice":{
+    "mainTab": "Device Data",
+    "usersTab": "Users",
+    "adminUsersTab": "Admin Users",
+    "linkedUsers": {
+      "IdColTitle" : "Id",
+      "UserNameTitle" : "Username",
+      "FirstNameTitle" : "FirstName",
+      "SurnameTitle" : "Surname",
+      "UnlinkButton" : "Unlink",
+      "AvailableSlots": "Available Slots #"
+    }
   },
   "errors": {
     "user_not_authz" : "User is not Authorized",

@@ -33,7 +33,6 @@ class SuperAdminNewAdminUser extends Component {
                         </CardHeader>
                         <CardBody>
                             <Form action="" method="post" encType="multipart/form-data" className="form-horizontal">
-
                                 <FormGroup row>
                                     <Col md="3">
                                         <Label htmlFor="text-input">First Name</Label>

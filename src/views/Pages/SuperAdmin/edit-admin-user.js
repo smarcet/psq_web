@@ -49,6 +49,11 @@ class SuperAdminEditAdminUser extends Component {
         }
     }
 
+    onClickAddNewDevice(e){
+        this.props.history.push(`/auth/super-admin/devices/new`);
+        event.preventDefault();
+    }
+
     render(){
         return (
             <Row>
@@ -94,6 +99,9 @@ class SuperAdminEditAdminUser extends Component {
                                 </Col>
                                 <Col xs="12" md="3">
                                     <Button color="primary" className="button-add"><i className="fa fa-link"></i>{'\u00A0'} Link Device</Button>
+                                </Col>
+                                <Col xs="12" md="3" >
+                                    <Button color="primary" onClick={(e) => this.onClickAddNewDevice(e)}  className="button-add"><i className="fa fa-plus"></i>{'\u00A0'} Add New Device</Button>
                                 </Col>
                             </Row>
                             <Row>

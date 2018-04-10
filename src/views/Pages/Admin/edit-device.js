@@ -51,6 +51,11 @@ class AdminEditDevice extends Component {
         }
     }
 
+    onClickAddNewUser(event){
+        this.props.history.push("/auth/admin/users/new");
+        event.preventDefault();
+    }
+
     onClickUnlinkUser(event, user){
         swal({
             title: 'Are you sure?',
@@ -83,29 +88,43 @@ class AdminEditDevice extends Component {
                 role: 'STUDENT',
             }
         ];
+        let linkedAdminUsers = [
+            {
+                id: 1,
+                first_name: 'Jose',
+                last_name: 'Gomez',
+                user_name: 'jgomez@gmail.com',
+                role: 'TEACHER',
+            }
+        ];
         return(
             <Row>
                 <Col xs="12" md="12" className="mb-4">
                     <Nav tabs>
-
                         <NavItem>
                             <NavLink
                                 className={classnames({ active: this.state.activeTab === '1' })}
                                 onClick={() => { this.toggleTab('1'); }}>
-                                <i className="icon-camrecorder"></i>
-                                <span className={ this.state.activeTab === '1' ? "" : "d-none"}> {T.translate("superAdmin.editDevice.MainTab")} </span>{'\u00A0'}
-
+                                <i className="fa fa-video-camera"></i>
+                                <span className={ this.state.activeTab === '1' ? "" : "d-none"}> {T.translate("editDevice.mainTab")} </span>{'\u00A0'}
                             </NavLink>
                         </NavItem>
                         <NavItem>
                             <NavLink
                                 className={classnames({ active: this.state.activeTab === '2' })}
                                 onClick={() => { this.toggleTab('2'); }}>
-                                <i className="icon-user"></i>
-                                <span className={ this.state.activeTab === '2' ? "" : "d-none"}>  {T.translate("superAdmin.editDevice.UsersTab")} </span>{'\u00A0'}
+                                <i className="fa fa-user"></i>
+                                <span className={ this.state.activeTab === '2' ? "" : "d-none"}>  {T.translate("editDevice.usersTab")} </span>{'\u00A0'}
                             </NavLink>
                         </NavItem>
-
+                        <NavItem>
+                            <NavLink
+                                className={classnames({ active: this.state.activeTab === '3' })}
+                                onClick={() => { this.toggleTab('3'); }}>
+                                <i className="fa fa-user-plus"></i>
+                                <span className={ this.state.activeTab === '3' ? "" : "d-none"}>  {T.translate("editDevice.adminUsersTab")} </span>{'\u00A0'}
+                            </NavLink>
+                        </NavItem>
                     </Nav>
                     <TabContent activeTab={this.state.activeTab}>
                         <TabPane tabId="1">
@@ -155,7 +174,7 @@ class AdminEditDevice extends Component {
                                             </Form>
                                         </CardBody>
                                         <CardFooter>
-                                            <Button type="submit" size="sm" color="primary"><i className="fa fa-dot-circle-o"></i> Create</Button>{' '}
+                                            <Button type="submit" size="sm" color="primary"><i className="fa fa-dot-circle-o"></i> Save</Button>{' '}
                                             <Button type="reset" size="sm" color="danger"><i className="fa fa-ban"></i> Cancel</Button>
                                         </CardFooter>
                                     </Card>
@@ -173,10 +192,15 @@ class AdminEditDevice extends Component {
                                         <i className="fa fa-link"></i>{'\u00A0'}Link User
                                     </Button>
                                 </Col>
+                                <Col xs="12" sm="4" lg="3" >
+                                    <Button onClick={(e) => this.onClickAddNewUser(e)} className="button-add" color="primary">
+                                        <i className="fa fa-plus-circle"></i>{'\u00A0'} Add New User
+                                    </Button>
+                                </Col>
                             </Row>
                             <Row className="available-slots-container">
                                 <Col md="4">
-                                    <span>{T.translate("superAdmin.editDevice.linkedUsers.AvailableSlots")} <Badge pill color="secondary">2</Badge></span>
+                                    <span>{T.translate("editDevice.linkedUsers.AvailableSlots")} <Badge pill color="secondary">2</Badge></span>
                                 </Col>
                             </Row>
                             <Row>
@@ -184,10 +208,10 @@ class AdminEditDevice extends Component {
                                     <Table responsive striped>
                                         <thead>
                                         <tr>
-                                            <th>{T.translate("superAdmin.editDevice.linkedUsers.IdColTitle")}</th>
-                                            <th>{T.translate("superAdmin.editDevice.linkedUsers.UserNameTitle")}</th>
-                                            <th>{T.translate("superAdmin.editDevice.linkedUsers.FirstNameTitle")}</th>
-                                            <th>{T.translate("superAdmin.editDevice.linkedUsers.SurnameTitle")}</th>
+                                            <th>{T.translate("editDevice.linkedUsers.IdColTitle")}</th>
+                                            <th>{T.translate("editDevice.linkedUsers.UserNameTitle")}</th>
+                                            <th>{T.translate("editDevice.linkedUsers.FirstNameTitle")}</th>
+                                            <th>{T.translate("editDevice.linkedUsers.SurnameTitle")}</th>
                                             <th>Role</th>
                                             <th>&nbsp;</th>
                                         </tr>
@@ -203,7 +227,7 @@ class AdminEditDevice extends Component {
                                                     <td>{user.last_name}</td>
                                                     <td>{user.role}</td>
                                                     <td>
-                                                        <Button onClick={(e) => { this.onClickUnlinkUser(e, user); }} outline color="danger">{T.translate("superAdmin.editDevice.linkedUsers.UnlinkButton")}</Button>{' '}
+                                                        <Button onClick={(e) => { this.onClickUnlinkUser(e, user); }} outline color="danger">{T.translate("editDevice.linkedUsers.UnlinkButton")}</Button>{' '}
                                                     </td>
                                                 </tr>
                                             );
@@ -223,7 +247,72 @@ class AdminEditDevice extends Component {
                                 </Col>
                             </Row>
                         </TabPane>
+                        <TabPane tabId="3">
+                            <Row className="search-container">
+                                <Col xs="12" sm="4" lg="4" >
+                                    <Input type="text" className="input-search" id="input1-group2" name="input1-group2" placeholder="Search User"/>
+                                    <i className="fa fa-search filter-search"></i>
+                                </Col>
+                                <Col xs="12" sm="4" lg="3" >
+                                    <Button onClick={(e) => this.onClickLinkAdminUser(e)} className="button-add" color="primary">
+                                        <i className="fa fa-link"></i>{'\u00A0'}Link Admin User
+                                    </Button>
+                                </Col>
+                                <Col xs="12" sm="4" lg="3" >
+                                    <Button onClick={(e) => this.onClickAddNewUser(e)} className="button-add" color="primary">
+                                        <i className="fa fa-plus-circle"></i>{'\u00A0'} Add New Admin User
+                                    </Button>
+                                </Col>
+                            </Row>
+                            <Row className="available-slots-container">
+                                <Col md="4">
+                                    <span>{T.translate("editDevice.linkedUsers.AvailableSlots")} <Badge pill color="secondary">2</Badge></span>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col md="12">
+                                    <Table responsive striped>
+                                        <thead>
+                                        <tr>
+                                            <th>{T.translate("editDevice.linkedUsers.IdColTitle")}</th>
+                                            <th>{T.translate("editDevice.linkedUsers.UserNameTitle")}</th>
+                                            <th>{T.translate("editDevice.linkedUsers.FirstNameTitle")}</th>
+                                            <th>{T.translate("editDevice.linkedUsers.SurnameTitle")}</th>
+                                            <th>Role</th>
+                                            <th>&nbsp;</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        { linkedAdminUsers.map((user, i) => {
 
+                                            return (
+                                                <tr key={i}>
+                                                    <td>{user.id}</td>
+                                                    <td>{user.user_name}</td>
+                                                    <td>{user.first_name}</td>
+                                                    <td>{user.last_name}</td>
+                                                    <td>{user.role}</td>
+                                                    <td>
+                                                        <Button onClick={(e) => { this.onClickUnlinkUser(e, user); }} outline color="danger">{T.translate("editDevice.linkedUsers.UnlinkButton")}</Button>{' '}
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })}
+                                        </tbody>
+                                    </Table>
+                                    <Pagination>
+                                        <PaginationItem disabled><PaginationLink previous href="#">Prev</PaginationLink></PaginationItem>
+                                        <PaginationItem active>
+                                            <PaginationLink href="#">1</PaginationLink>
+                                        </PaginationItem>
+                                        <PaginationItem><PaginationLink href="#">2</PaginationLink></PaginationItem>
+                                        <PaginationItem><PaginationLink href="#">3</PaginationLink></PaginationItem>
+                                        <PaginationItem><PaginationLink href="#">4</PaginationLink></PaginationItem>
+                                        <PaginationItem><PaginationLink next href="#">Next</PaginationLink></PaginationItem>
+                                    </Pagination>
+                                </Col>
+                            </Row>
+                        </TabPane>
                     </TabContent>
                 </Col>
             </Row>

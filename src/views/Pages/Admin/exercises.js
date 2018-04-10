@@ -63,14 +63,24 @@ class AdminExams extends Component {
                 title: 'Exercise #1',
                 devices: 'Device#1, Device#2',
                 author: "admin#1",
-                takers: 400
+                takers: 100,
+                type: 1,
             },
             {
                 id:2,
                 title: 'Exercise #2',
                 devices: 'Device#3, Device#2',
                 author: "admin#1",
-                takers: 100
+                takers: 5,
+                type: 1,
+            },
+            {
+                id:3,
+                title: 'Tutorial #1',
+                devices: 'Device#1, Device#2',
+                author: "admin#1",
+                takers: 0,
+                type: 2,
             },
         ];
 
@@ -105,6 +115,7 @@ class AdminExams extends Component {
                                         <th>&nbsp;</th>
                                         <th>&nbsp;</th>
                                         <th>&nbsp;</th>
+                                        <th>&nbsp;</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -117,7 +128,10 @@ class AdminExams extends Component {
                                                 <td>{exercise.title}</td>
                                                 <td>{exercise.devices}</td>
                                                 <td>{exercise.author}</td>
-                                                <td>{exercise.takers}</td>
+                                                <td>
+                                                    {exercise.type == 1 && exercise.takers}
+                                                    {exercise.type == 2 && 'N/A'}
+                                               </td>
                                                 <td className="col-button">
                                                     <Button color="primary" onClick={(e) => this.onClickEditExercise(e, exercise)}outline><i className="fa fa-edit"></i>&nbsp;Edit</Button>
                                                 </td>
@@ -126,6 +140,14 @@ class AdminExams extends Component {
                                                 </td>
                                                 <td className="col-button">
                                                     <Button color="warning" onClick={(e) => this.onClickShareExercise(e, exercise)}outline><i className="fa fa-share-alt"></i>&nbsp;Share</Button>
+                                                </td>
+                                                <td className="col-button">
+                                                    {exercise.type == 2 &&
+                                                    <Button color="primary"
+                                                            onClick={(e) => this.onClickCreateExercise(e, exercise)}
+                                                            outline><i className="fa fa-copy"></i>&nbsp;Create
+                                                        Exercise</Button>
+                                                    }
                                                 </td>
                                             </tr>
                                         );

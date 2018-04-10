@@ -45,34 +45,44 @@ class AdminEditExercise extends Component {
                                 </FormGroup>
                                 <FormGroup row>
                                     <Col md="3">
+                                        <Label htmlFor="type">Type</Label>
+                                    </Col>
+                                    <Col xs="12" md="9">
+                                        <Input type="select" name="type" id="type">
+                                            <option value="1">Regular</option>
+                                            <option value="2">Tutorial</option>
+                                        </Input>
+                                    </Col>
+                                </FormGroup>
+                                <FormGroup row>
+                                    <Col md="3">
                                         <Label htmlFor="text-input">Max. Time</Label>
                                     </Col>
                                     <Col xs="12" md="9">
                                         <Input type="time" id="lname-input" name="lname-input"/>
                                     </Col>
                                 </FormGroup>
-
                                 <FormGroup row>
                                     <Col md="3">
                                         <Label htmlFor="select">Devices</Label>
                                     </Col>
                                     <Col xs="12" md="9">
-                                        <Input type="select" name="select" id="select" multiple>
-                                            <option value="1">DEVICE#1</option>
-                                            <option value="2">DEVICE#2</option>
-                                            <option value="3">DEVICE#3</option>
-                                        </Input>
+                                        <FormGroup check inline>
+                                            <Input className="form-check-input" type="checkbox" id="inline-checkbox1" name="inline-checkbox1" value="option1"/>
+                                            <Label className="form-check-label" check htmlFor="inline-checkbox1">Device#1</Label>
+                                        </FormGroup>
+                                        <FormGroup check inline>
+                                            <Input className="form-check-input" type="checkbox" id="inline-checkbox2" name="inline-checkbox2" value="option2"/>
+                                            <Label className="form-check-label" check htmlFor="inline-checkbox2">Device#2</Label>
+                                        </FormGroup>
+                                        <FormGroup check inline>
+                                            <Input className="form-check-input" type="checkbox" id="inline-checkbox3" name="inline-checkbox3" value="option3"/>
+                                            <Label className="form-check-label" check htmlFor="inline-checkbox3">Device#3</Label>
+                                        </FormGroup>
                                         <FormText className="help-block">Please select devices on which exercise will be available.</FormText>
                                     </Col>
                                 </FormGroup>
-                                <FormGroup row>
-                                    <Col md="3">
-                                        <Label htmlFor="file-input">Video Tutorial</Label>
-                                    </Col>
-                                    <Col xs="12" md="9">
-                                        <Input type="file" id="file-input" name="file-input"/>
-                                    </Col>
-                                </FormGroup>
+
                             </Form>
                         </CardBody>
                         <CardFooter>
