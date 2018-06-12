@@ -28,8 +28,9 @@
       "OwnerColTitle": "Owner",
       "SlotsColTitle": "Available Slots",
       "EditButton": "Edit",
-      "DeleteButton": "Delete"
-
+      "DeleteButton": "Delete",
+      "ActivateButton": "Activate",
+      "VerifyButton": "Verify"
     },
     "adminUsers": {
       "IdColTitle" : "Id",

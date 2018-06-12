@@ -32,7 +32,7 @@ export const doLogin = (username, password ) => (dispatch) => {
             `${apiBaseUrl}/users/me?token=${response.token}`,
             authErrorHandler
         )({})(dispatch);
-    });;
+    });
 
 }
 

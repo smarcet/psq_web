@@ -24,6 +24,10 @@ import {
 
 import T from "i18n-react/dist/i18n-react";
 import classnames from 'classnames';
+import { connect } from 'react-redux'
+import { getDeviceById, updateDevice, getAvailableAdmins } from '../../../actions/superAdmin/devices-actions';
+import {STOP_LOADING} from "../../../actions/base-actions";
+
 
 class SuperAdminEditDevice extends Component {
 
@@ -32,9 +36,51 @@ class SuperAdminEditDevice extends Component {
         this.toggleTab = this.toggleTab.bind(this);
         this.state = {
             activeTab: '1',
+            currentEditDevice: this.props.currentEditDevice,
+            availableAdminsList: this.props.availableAdminsList,
+            errors: {},
         };
+        this.handleChange = this.handleChange.bind(this);
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (this.props.currentEditDevice.id != nextProps.currentEditDevice.id) {
+            this.setState({ ...this.state, currentEditDevice: nextProps.currentEditDevice});
+        }
+        if(this.props.availableAdminsList != nextProps.availableAdminsList){
+            this.setState({ ...this.state, availableAdminsList: nextProps.availableAdminsList});
+        }
+    }
+
+    componentDidMount(){
+
+    }
+
+    handleChange(ev, isValid = null) {
+        let currentEditDevice = {...this.state.currentEditDevice};
+        let {value, id} = ev.target;
+        let errors = this.state.errors;
+        errors[id] = false;
+
+        if(isValid != null)
+            errors[id] = !isValid(ev.target);
+
+        if (ev.target.type == 'checkbox') {
+            value = ev.target.checked;
+        }
+        if (ev.target.type == 'select-one' && value == '0') {
+            value = null;
+        }
+        currentEditDevice[id] = value;
+        this.setState({...this.state, currentEditDevice: currentEditDevice, errors: errors});
+    }
+
+    componentWillMount() {
+        let deviceId = this.props.match.params.device_id;
+        this.props.getAvailableAdmins().then(() => {
+            this.props.getDeviceById(deviceId);
+        });;
+    }
 
     toggleTab(tab) {
         if (this.state.activeTab !== tab) {
@@ -45,8 +91,16 @@ class SuperAdminEditDevice extends Component {
         }
     }
 
+    onSaveDevice(event){
+        this.props.updateDevice(this.state.currentEditDevice);
+        event.preventDefault();
+    }
+
     render(){
         let deviceId = this.props.match.params.device_id;
+        let currentEditDevice = this.state.currentEditDevice;
+        let availableAdminsList = this.state.availableAdminsList;
+        console.log('render form');
         let deviceTitle = deviceId != null ? `Device # ${deviceId}` : 'New Device';
         return(
             <Row>
@@ -62,7 +116,10 @@ class SuperAdminEditDevice extends Component {
                                         <Label htmlFor="text-input">Serial #</Label>
                                     </Col>
                                     <Col xs="12" md="9">
-                                        <Input type="text" id="text-input" name="text-input" placeholder="Serial Number"/>
+                                        <Input type="text"
+                                               invalid={this.state.errors.serial}
+                                               id="serial" value={currentEditDevice.serial} name="serial" placeholder="Serial Number"
+                                               onChange={evt => this.handleChange(evt, target => target.value.trim() != '') } />
                                     </Col>
                                 </FormGroup>
                                 <FormGroup row>
@@ -70,15 +127,20 @@ class SuperAdminEditDevice extends Component {
                                         <Label htmlFor="text-input">Friendly Name</Label>
                                     </Col>
                                     <Col xs="12" md="9">
-                                        <Input type="text" id="text-input" name="text-input" placeholder="Friendly Name"/>
+                                        <Input type="text"
+                                               invalid={this.state.errors.friendly_name}
+                                               id="friendly_name" value={currentEditDevice.friendly_name} name="friendly_name" placeholder="Friendly Name"
+                                               onChange={evt => this.handleChange(evt, target => target.value.trim() != '') } />
                                     </Col>
                                 </FormGroup>
                                 <FormGroup row>
                                     <Col md="3">
-                                        <Label htmlFor="email-input">Available Slots #</Label>
+                                        <Label htmlFor="slots">Available Slots #</Label>
                                     </Col>
                                     <Col xs="12" md="9">
-                                        <Input type="number" id="email-input" name="email-input" placeholder="l"/>
+                                        <Input type="number" id="slots" name="slots" value={currentEditDevice.slots}
+                                               invalid={this.state.errors.slots}
+                                               placeholder="Available Slots #" onChange={(evt) => this.handleChange(evt, (target) => parseInt(target.value) > 0) }/>
                                         <FormText className="help-block">Please enter available slots #</FormText>
                                     </Col>
                                 </FormGroup>
@@ -87,11 +149,18 @@ class SuperAdminEditDevice extends Component {
                                         <Label htmlFor="select">Admin Owner</Label>
                                     </Col>
                                     <Col xs="12" md="9">
-                                        <Input type="select" name="select" id="select">
+                                        <Input type="select"
+                                               name="owner"
+                                               id="owner"
+                                               value={currentEditDevice.owner != null ? (currentEditDevice.owner.hasOwnProperty('id') ? currentEditDevice.owner.id :  currentEditDevice.owner) : ''}
+                                               onChange={this.handleChange}>
                                             <option value="0">-- Please select Owner --</option>
-                                            <option value="1">Admin#1</option>
-                                            <option value="2">Admin#1</option>
-                                            <option value="3">Admin#3</option>
+                                            {
+                                                availableAdminsList.map((item, idx)=>
+                                                    <option
+                                                        key={item.id} value={item.id.toString()}>{item.first_name+' '+item.last_name}</option>
+                                                )
+                                            }
                                         </Input>
                                     </Col>
                                 </FormGroup>
@@ -101,15 +170,17 @@ class SuperAdminEditDevice extends Component {
                                     </Col>
                                     <Col md="9">
                                         <FormGroup check inline>
-                                            <Input className="form-check-input" type="checkbox" id="inline-checkbox1" name="inline-checkbox1" value="option1"/>
+                                            <Input className="form-check-input"
+                                                   type="checkbox"
+                                                   checked={currentEditDevice.is_active}
+                                                   id="is_active" name="is_active" onChange={this.handleChange}/>
                                         </FormGroup>
-
                                     </Col>
                                 </FormGroup>
                             </Form>
                         </CardBody>
                         <CardFooter>
-                            <Button type="submit" size="sm" color="primary"><i className="fa fa-dot-circle-o"></i> Save</Button>{' '}
+                            <Button type="submit" size="sm" color="primary" onClick={(e) => this.onSaveDevice(e)}><i className="fa fa-dot-circle-o"></i> Save</Button>{' '}
                             <Button type="reset" size="sm" color="danger"><i className="fa fa-ban"></i> Cancel</Button>
                         </CardFooter>
                     </Card>
@@ -119,4 +190,16 @@ class SuperAdminEditDevice extends Component {
     }
 }
 
-export default SuperAdminEditDevice;
+const mapStateToProps = ({ superAdminEditDevicesState }) => ({
+    currentEditDevice : superAdminEditDevicesState.currentEditDevice,
+    availableAdminsList: superAdminEditDevicesState.availableAdminsList,
+});
+
+export default connect (
+    mapStateToProps,
+    {
+        getDeviceById,
+        updateDevice,
+        getAvailableAdmins,
+    }
+)(SuperAdminEditDevice);

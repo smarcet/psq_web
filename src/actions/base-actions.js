@@ -268,13 +268,13 @@ export const authErrorHandler = (err, res) => (dispatch) => {
             swal("Not Found", msg, "warning");
             break;
         case 412:
-            for (var [key, value] of Object.entries(err.response.body.errors)) {
-                msg += '- ' + value + '<br>';
+            for (var value of err.response.body) {
+                msg += '* ' + value + '<br>';
             }
             swal("Validation error", msg, "warning");
             dispatch({
                 type: VALIDATE,
-                payload: {errors: err.response.body.errors}
+                payload: {errors: err.response.body}
             });
             break;
         default:

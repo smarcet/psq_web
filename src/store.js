@@ -4,7 +4,11 @@ import loggedUserReducer from './reducers/auth-reducer'
 import baseReducer from './reducers/base-reducer'
 import thunk from 'redux-thunk';
 import { persistStore, persistCombineReducers } from 'redux-persist'
-import storage from 'redux-persist/es/storage' // default: localStorage if web, AsyncStorage if react-native
+import storage from 'redux-persist/es/storage'
+import superAdminDevicesReducer from "./reducers/superAdmin/devices-reducer";
+import superAdminEditDevicesReducer from "./reducers/superAdmin/edit-device-reducer";
+
+// default: localStorage if web, AsyncStorage if react-native
 
 const config = {
     key: 'root_psq',
@@ -14,6 +18,8 @@ const config = {
 const reducers = persistCombineReducers(config, {
     loggedUserState: loggedUserReducer,
     baseState: baseReducer,
+    superAdminDevicesState: superAdminDevicesReducer,
+    superAdminEditDevicesState: superAdminEditDevicesReducer,
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
