@@ -7,6 +7,9 @@ import { persistStore, persistCombineReducers } from 'redux-persist'
 import storage from 'redux-persist/es/storage'
 import superAdminDevicesReducer from "./reducers/superAdmin/devices-reducer";
 import superAdminEditDevicesReducer from "./reducers/superAdmin/edit-device-reducer";
+import superAdminAdminUsersReducer from "./reducers/superAdmin/admin-users-reducer";
+import superAdminEditAdminUserReducer from "./reducers/superAdmin/edit-admin-user-reducer";
+import superAdminNewAdminUserReducer from "./reducers/superAdmin/new-admin-user-reducer";
 
 // default: localStorage if web, AsyncStorage if react-native
 
@@ -20,6 +23,9 @@ const reducers = persistCombineReducers(config, {
     baseState: baseReducer,
     superAdminDevicesState: superAdminDevicesReducer,
     superAdminEditDevicesState: superAdminEditDevicesReducer,
+    superAdminAdminUsersState: superAdminAdminUsersReducer,
+    superAdminEditAdminUserState: superAdminEditAdminUserReducer,
+    superAdminNewAdminUserState:superAdminNewAdminUserReducer,
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

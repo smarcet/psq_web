@@ -1,4 +1,4 @@
-import { RETRIEVED_DEVICES, DELETED_DEVICE } from '../../actions/superAdmin/devices-actions';
+import { RETRIEVED_ADMIN_USERS, DELETED_ADMIN_USER } from '../../actions/superAdmin/admin-users-actions';
 import{ LOGOUT_USER } from '../../actions/auth-actions';
 
 const DEFAULT_STATE = {
@@ -6,33 +6,34 @@ const DEFAULT_STATE = {
     count: 0,
 }
 
-const superAdminDevicesReducer = (state = DEFAULT_STATE, action) => {
+const superAdminAdminUsersReducer = (state = DEFAULT_STATE, action) => {
     const { type, payload } = action;
     switch (type) {
-        case RETRIEVED_DEVICES: {
+        case RETRIEVED_ADMIN_USERS: {
             return {
                 ...state,
                 items: action.payload.response.results,
                 count: action.payload.response.count,
             };
         }
-        break;
-        case DELETED_DEVICE:{
-            let { deviceId } = payload;
+            break;
+        case DELETED_ADMIN_USER:{
+            debugger;
+            let { userId } = payload;
             return {
                 ...state,
                 count : state.count - 1,
-                items : state.items.filter(item => item.id !== deviceId),
+                items : state.items.filter(item => item.id !== userId),
             };
         }
-        break;
+            break;
         case LOGOUT_USER: {
             return DEFAULT_STATE;
         }
-        break;
+            break;
         default:
             return state;
     }
 }
 
-export default superAdminDevicesReducer
+export default superAdminAdminUsersReducer;

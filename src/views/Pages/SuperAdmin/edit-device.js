@@ -21,7 +21,8 @@ import {
     InputGroupAddon,
     InputGroupText
 } from 'reactstrap';
-
+import 'sweetalert2/dist/sweetalert2.css';
+import swal from 'sweetalert2';
 import T from "i18n-react/dist/i18n-react";
 import classnames from 'classnames';
 import { connect } from 'react-redux'
@@ -41,6 +42,13 @@ class SuperAdminEditDevice extends Component {
             errors: {},
         };
         this.handleChange = this.handleChange.bind(this);
+    }
+
+    componentWillMount() {
+        let deviceId = this.props.match.params.device_id;
+        this.props.getAvailableAdmins().then(() => {
+            this.props.getDeviceById(deviceId);
+        });;
     }
 
     componentWillReceiveProps(nextProps) {
@@ -75,13 +83,6 @@ class SuperAdminEditDevice extends Component {
         this.setState({...this.state, currentEditDevice: currentEditDevice, errors: errors});
     }
 
-    componentWillMount() {
-        let deviceId = this.props.match.params.device_id;
-        this.props.getAvailableAdmins().then(() => {
-            this.props.getDeviceById(deviceId);
-        });;
-    }
-
     toggleTab(tab) {
         if (this.state.activeTab !== tab) {
             this.setState({
@@ -92,8 +93,31 @@ class SuperAdminEditDevice extends Component {
     }
 
     onSaveDevice(event){
-        this.props.updateDevice(this.state.currentEditDevice);
+        if(this.isValidForm())
+            this.props.updateDevice(this.state.currentEditDevice).then(() => {
+                swal(
+                    '',
+                    'Your device has been successfully updated!.',
+                    'success'
+                );
+                this.props.history.goBack();
+            });
+
         event.preventDefault();
+    }
+
+    onCancelEdit(event){
+        this.props.history.goBack();
+        event.preventDefault();
+    }
+
+    isValidForm(){
+        let { errors } = this.state;
+        let isValid = true;
+        Object.keys( errors ).forEach( key => {
+            isValid = isValid && !errors[key];
+        });
+        return isValid;
     }
 
     render(){
@@ -118,7 +142,9 @@ class SuperAdminEditDevice extends Component {
                                     <Col xs="12" md="9">
                                         <Input type="text"
                                                invalid={this.state.errors.serial}
-                                               id="serial" value={currentEditDevice.serial} name="serial" placeholder="Serial Number"
+                                               id="serial"
+                                               value={currentEditDevice.serial}
+                                               name="serial" placeholder="Serial Number"
                                                onChange={evt => this.handleChange(evt, target => target.value.trim() != '') } />
                                     </Col>
                                 </FormGroup>
@@ -181,7 +207,7 @@ class SuperAdminEditDevice extends Component {
                         </CardBody>
                         <CardFooter>
                             <Button type="submit" size="sm" color="primary" onClick={(e) => this.onSaveDevice(e)}><i className="fa fa-dot-circle-o"></i> Save</Button>{' '}
-                            <Button type="reset" size="sm" color="danger"><i className="fa fa-ban"></i> Cancel</Button>
+                            <Button type="reset" size="sm" color="danger" onClick={(e) => this.onCancelEdit(e)}><i className="fa fa-ban"></i> Cancel</Button>
                         </CardFooter>
                     </Card>
                 </Col>

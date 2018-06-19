@@ -17,9 +17,15 @@ import {
 } from 'reactstrap';
 import {Bar, Line} from 'react-chartjs-2';
 import T from 'i18n-react';
+import {connect} from "react-redux";
+import {getAdminUsersByPage} from "../../../actions/superAdmin/admin-users-actions";
 
 
 class SuperAdminAdminUsers extends Component {
+
+    componentWillMount () {
+        this.props.getAdminUsersByPage();
+    }
 
     onClickAddNewAdminUser(event){
         this.props.history.push("/auth/super-admin/admin-users/new");
@@ -36,26 +42,7 @@ class SuperAdminAdminUsers extends Component {
     }
 
     render(){
-        let users = [
-            {
-                id:1,
-                first_name: 'Juan',
-                last_name: 'Perez',
-                active: true
-            },
-            {
-                id:2,
-                first_name: 'Jose',
-                last_name: 'Perez',
-                active: false
-            },
-            {
-                id:3,
-                first_name: 'Sebastian',
-                last_name: 'Perez',
-                active: true
-            },
-        ];
+        let users = this.props.adminUsers;
         return (
             <div className="animated fadeIn">
                 <Row>
@@ -67,7 +54,11 @@ class SuperAdminAdminUsers extends Component {
                             <CardBody>
                                 <Row className="search-container">
                                     <Col xs="12" sm="4" lg="4" >
-                                        <Input type="text" className="input-search" id="input1-group2" name="input1-group2" placeholder="Search User"/>
+                                        <Input type="text"
+                                               className="input-search"
+                                               id="search_user"
+                                               name="search_user"
+                                               placeholder="Search User"/>
                                         <i className="fa fa-search filter-search"></i>
                                     </Col>
                                     <Col xs="12" sm="4" lg="3" >
@@ -98,11 +89,11 @@ class SuperAdminAdminUsers extends Component {
                                                 <td>{user.last_name}</td>
                                                 <td>
                                                     {
-                                                        user.active &&
+                                                        user.is_active &&
                                                         <Badge color="success">Active</Badge>
                                                     }
                                                     {
-                                                        !user.active &&
+                                                        !user.is_active &&
                                                         <Badge color="secondary">Inactive</Badge>
                                                     }
                                                 </td>
@@ -136,4 +127,14 @@ class SuperAdminAdminUsers extends Component {
     }
 }
 
-export default SuperAdminAdminUsers;
+const mapStateToProps = ({ superAdminAdminUsersState }) => ({
+    adminUsers : superAdminAdminUsersState.items,
+});
+
+export default connect (
+    mapStateToProps,
+    {
+        getAdminUsersByPage,
+
+    }
+)(SuperAdminAdminUsers);
