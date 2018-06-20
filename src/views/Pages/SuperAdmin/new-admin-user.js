@@ -1,29 +1,13 @@
 import React, {Component} from 'react';
 import {
-    Badge,
     Row,
     Col,
-    TabContent,
-    TabPane,
-    Nav,
-    NavItem,
-    NavLink,
-    Table,
-    Pagination,
-    PaginationItem,
-    PaginationLink,
-    ButtonDropdown,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem,
-    Button} from 'reactstrap';
-import SuperAdminAdminUserEditForm from "./admin-user-edit-form";
-import classnames from 'classnames';
+} from 'reactstrap';
 import T from "i18n-react/dist/i18n-react";
 import {connect} from "react-redux";
 import { createNewAdminUser } from "../../../actions/superAdmin/admin-users-actions";
 import swal from "sweetalert2";
-import SuperAdminAdminUserEditDevicesForm from "./admin-user-edit-devices-form";
+import UserEditForm from "../user-edit-form";
 
 class SuperAdminNewAdminUser extends Component {
 
@@ -101,12 +85,13 @@ class SuperAdminNewAdminUser extends Component {
         return(
           <Row>
               <Col xs="12" md="12" className="mb-4">
-              <SuperAdminAdminUserEditForm onSave={this.onSaveUser}
-                                           config={config}
-                                           onCancel={this.onCancel}
-                                           handleChange={this.handleChange}
-                                           errors={this.state.errors}
-                                           currentEditAdminUser={this.state.currentEditAdminUser}/>
+              <UserEditForm
+                  onSave={this.onSaveUser}
+                  config={config}
+                  onCancel={this.onCancel}
+                  handleChange={this.handleChange}
+                  errors={this.state.errors}
+                  currentEditUser={this.state.currentEditAdminUser}/>
               </Col>
           </Row>
         );

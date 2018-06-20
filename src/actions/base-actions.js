@@ -152,6 +152,7 @@ export const postRequest = (
 };
 
 export const postFile = (
+    fileFieldName,
     requestActionCreator,
     receiveActionCreator,
     endpoint,
@@ -172,7 +173,7 @@ export const postFile = (
     return new Promise((resolve, reject) => {
 
         const req = http.post(url)
-            .attach('file', file);
+            .attach(fileFieldName, file);
 
         if(!isObjectEmpty(fileMetadata)) {
             Object.keys(fileMetadata).forEach(function (key) {
@@ -236,7 +237,8 @@ const responseHandler =
                 dispatch(receiveActionCreator({response: json}));
                 return resolve({response: json});
             }
-            dispatch(receiveActionCreator);
+            if(receiveActionCreator != null )
+                dispatch(receiveActionCreator);
             return resolve({response: json});
         }
 

@@ -8,22 +8,14 @@ import {
     Nav,
     NavItem,
     NavLink,
-    Table,
-    Pagination,
-    PaginationItem,
-    PaginationLink,
-    ButtonDropdown,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem,
-    Button} from 'reactstrap';
-import SuperAdminAdminUserEditForm from "./admin-user-edit-form";
+   } from 'reactstrap';
 import classnames from 'classnames';
 import T from "i18n-react/dist/i18n-react";
 import {connect} from "react-redux";
 import {getAdminUserById, getAvailableDevices, getUserOwnedDevices, unLinkDevice, linkDevice} from "../../../actions/superAdmin/admin-users-actions";
 import swal from "sweetalert2";
 import SuperAdminAdminUserEditDevicesForm from "./admin-user-edit-devices-form";
+import UserEditForm from "../user-edit-form";
 
 class SuperAdminEditAdminUser extends Component {
 
@@ -156,13 +148,13 @@ class SuperAdminEditAdminUser extends Component {
                     </Nav>
                     <TabContent activeTab={this.state.activeTab}>
                         <TabPane tabId="1">
-                            <SuperAdminAdminUserEditForm
+                            <UserEditForm
                                 config={config}
                                 onSave={this.onSave}
                                 errors={this.state.errors}
                                 handleChange={this.handleChange}
                                 onCancel={this.onCancel}
-                                currentEditAdminUser={currentEditAdminUser}/>
+                                currentEditUser={currentEditAdminUser}/>
                         </TabPane>
                         <TabPane tabId="2">
                             <SuperAdminAdminUserEditDevicesForm

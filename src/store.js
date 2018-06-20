@@ -10,6 +10,7 @@ import superAdminEditDevicesReducer from "./reducers/superAdmin/edit-device-redu
 import superAdminAdminUsersReducer from "./reducers/superAdmin/admin-users-reducer";
 import superAdminEditAdminUserReducer from "./reducers/superAdmin/edit-admin-user-reducer";
 import superAdminNewAdminUserReducer from "./reducers/superAdmin/new-admin-user-reducer";
+import SettingsReducer from "./reducers/settings-reducer";
 
 // default: localStorage if web, AsyncStorage if react-native
 
@@ -26,6 +27,7 @@ const reducers = persistCombineReducers(config, {
     superAdminAdminUsersState: superAdminAdminUsersReducer,
     superAdminEditAdminUserState: superAdminEditAdminUserReducer,
     superAdminNewAdminUserState:superAdminNewAdminUserReducer,
+    settingsState: SettingsReducer,
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

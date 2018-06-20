@@ -1,5 +1,6 @@
-import { LOGOUT_USER , SET_LOGGED_USER, RECEIVE_USER_INFO, RECEIVE_AUTH} from '../actions/auth-actions';
+import { LOGOUT_USER , RECEIVE_USER_INFO, RECEIVE_AUTH} from '../actions/auth-actions';
 import jwtDecode from 'jwt-decode';
+import {UPDATED_MY_USER_INFO, UPDATED_MY_USER_INFO_PIC} from "../actions/settings-actions";
 
 const DEFAULT_STATE = {
     isLoggedUser: false,
@@ -22,6 +23,14 @@ const loggedUserReducer = (state = DEFAULT_STATE, action) => {
     if(action.type === RECEIVE_USER_INFO){
         let { response } = action.payload;
         return {...state, isLoggedUser:true, currentUser: response};
+    }
+    if(action.type === UPDATED_MY_USER_INFO){
+        let newUserInfo  = action.payload;
+        return {...state,  currentUser: newUserInfo};
+    }
+    if(action.type === UPDATED_MY_USER_INFO_PIC){
+        let {pic, pic_url}  =  action.payload.response ;
+        return {...state,  currentUser: {...state.currentUser, pic, pic_url}};
     }
     return state
 }
