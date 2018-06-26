@@ -15,8 +15,27 @@ import {
 } from 'reactstrap';
 
 class UserEditForm extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            showChangePassword: false,
+        };
+        this.handleOnClickChangePassword = this.handleOnClickChangePassword.bind(this);
+    }
+
+    handleOnClickChangePassword(evt){
+        let newVal = !this.state.showChangePassword;
+        this.setState({...this.state, showChangePassword: newVal});
+        let { onShowPasswordChangeVisibilityChange } = this.props;
+        if(onShowPasswordChangeVisibilityChange != null)
+            onShowPasswordChangeVisibilityChange(newVal);
+        evt.preventDefault();
+    }
+
     render(){
         let { currentEditUser, handleChange, errors, onSave, onCancel, config } = this.props;
+        let { showChangePassword } = this.state;
         return(
             <Row>
                 <Col xs="12" md="12">
@@ -64,15 +83,54 @@ class UserEditForm extends Component {
                                         <FormText className="help-block">Please enter your email</FormText>
                                     </Col>
                                 </FormGroup>
-                                { config.showPassword &&
+                                {config.showPassword &&
+                                    <FormGroup row>
+                                        <Col md="3">
+                                            <Button color="link" onClick={this.handleOnClickChangePassword}>{!showChangePassword ? "change password" : "cancel"}</Button>
+                                        </Col>
+                                        <Col xs="12" md="9">
+                                            &nbsp;
+                                        </Col>
+                                    </FormGroup>
+                                }
+                                { config.showPassword && showChangePassword &&
+
                                 <FormGroup row>
                                     <Col md="3">
-                                        <Label htmlFor="password-input">Password</Label>
+                                        <Label htmlFor="password">Password</Label>
                                     </Col>
                                     <Col xs="12" md="9">
-                                        <Input type="password" id="password-input" name="password-input"
-                                               placeholder="Password"/>
+                                        <Input type="password" id="password" name="password"
+                                               placeholder="Password"
+                                               invalid={errors.password}
+                                               onChange={
+                                                   evt => handleChange(evt, (target) => {
+                                                       let value = target.value.trim();
+                                                       if (value == '') return false;
+                                                       if (value.length <  8 ) return false;
+                                                       return true;
+                                                   })}
+                                        />
                                         <FormText className="help-block">Please enter a complex password</FormText>
+                                    </Col>
+                                    <Col md="3">
+                                        <Label htmlFor="password_confirmation">Confirm Password</Label>
+                                    </Col>
+                                    <Col xs="12" md="9">
+                                        <Input type="password" id="password_confirmation" name="password_confirmation"
+                                               invalid={errors.password_confirmation}
+                                               placeholder="Password Confirmation"
+                                               onChange={
+                                                   evt => handleChange(evt, (target) => {
+                                                       let confirmValue = target.value.trim();;
+                                                       let value = document.getElementById('password').value.trim();
+                                                       if (value == '') return false;
+                                                       if (value != confirmValue) return false;
+                                                       if (value.length <  8 ) return false;
+                                                       return true;
+                                                   })}
+                                        />
+                                        <FormText className="help-block">Please re enter new password</FormText>
                                     </Col>
                                 </FormGroup>
                                 }

@@ -7,24 +7,35 @@ import {
     CardHeader,
     CardBody,
     Table,
-    Pagination,
-    PaginationItem,
-    PaginationLink,
     Button,
-    InputGroup,
-    InputGroupAddon,
     Input
 } from 'reactstrap';
-import {Bar, Line} from 'react-chartjs-2';
 import T from 'i18n-react';
 import {connect} from "react-redux";
-import {getAdminUsersByPage} from "../../../actions/superAdmin/admin-users-actions";
+import { getAdminUsersByPage, deleteAdminUser} from "../../../actions/superAdmin/admin-users-actions";
+import PaginationContainer from "../../Base/PaginationContainer/PaginationContainer";
+import swal from "sweetalert2";
 
 
 class SuperAdminAdminUsers extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            currentPage: 1,
+        };
+        this.onPageClick = this.onPageClick.bind(this);
+        this.handleOnChangeSearch = this.handleOnChangeSearch.bind(this);
+    }
+
+    handleOnChangeSearch(event){
+        let {value} = event.target;
+        this.setState({...this.state, currentPage: 1});
+        this.props.getAdminUsersByPage(1, 5, value);
+    }
+
     componentWillMount () {
-        this.props.getAdminUsersByPage();
+        this.props.getAdminUsersByPage(this.state.currentPage);
     }
 
     onClickAddNewAdminUser(event){
@@ -38,7 +49,29 @@ class SuperAdminAdminUsers extends Component {
     }
 
     onClickDeleteAdminUser(event, user){
+        swal({
+            title: 'Are you sure?',
+            text: 'You will not be able to recover this user!',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, keep it'
+        }).then((result) => {
+            if (result.value) {
+                this.props.deleteAdminUser(user.id).then(() =>  swal(
+                    'Deleted!',
+                    'Your user has been deleted.',
+                    'success'
+                ))
+            }
+        })
+        event.preventDefault();
+    }
 
+    onPageClick(event, pageNumber){
+        this.setState({...this.state, currentPage: pageNumber});
+        this.props.getAdminUsersByPage(pageNumber);
+        event.preventDefault();
     }
 
     render(){
@@ -58,6 +91,7 @@ class SuperAdminAdminUsers extends Component {
                                                className="input-search"
                                                id="search_user"
                                                name="search_user"
+                                               onChange={this.handleOnChangeSearch}
                                                placeholder="Search User"/>
                                         <i className="fa fa-search filter-search"></i>
                                     </Col>
@@ -71,6 +105,7 @@ class SuperAdminAdminUsers extends Component {
                                     <thead>
                                     <tr>
                                         <th>{T.translate("superAdmin.adminUsers.IdColTitle")}</th>
+                                        <th>Email</th>
                                         <th>{T.translate("superAdmin.adminUsers.FirstNameColTitle")}</th>
                                         <th>{T.translate("superAdmin.adminUsers.SurNameColTitle")}</th>
                                         <th>{T.translate("superAdmin.adminUsers.StatusColTitle")}</th>
@@ -85,6 +120,7 @@ class SuperAdminAdminUsers extends Component {
                                         return (
                                             <tr key={user.id}>
                                                 <td>{user.id}</td>
+                                                <td>{user.email}</td>
                                                 <td>{user.first_name}</td>
                                                 <td>{user.last_name}</td>
                                                 <td>
@@ -109,16 +145,12 @@ class SuperAdminAdminUsers extends Component {
 
                                     </tbody>
                                 </Table>
-                                <Pagination>
-                                    <PaginationItem disabled><PaginationLink previous href="#">Prev</PaginationLink></PaginationItem>
-                                    <PaginationItem active>
-                                        <PaginationLink href="#">1</PaginationLink>
-                                    </PaginationItem>
-                                    <PaginationItem><PaginationLink href="#">2</PaginationLink></PaginationItem>
-                                    <PaginationItem><PaginationLink href="#">3</PaginationLink></PaginationItem>
-                                    <PaginationItem><PaginationLink href="#">4</PaginationLink></PaginationItem>
-                                    <PaginationItem><PaginationLink next href="#">Next</PaginationLink></PaginationItem>
-                                </Pagination>
+                                <PaginationContainer
+                                    count={this.props.adminUsersCount}
+                                    pageSize={5}
+                                    currentPage={this.state.currentPage}
+                                    onPageClick={this.onPageClick}
+                                />
                             </CardBody>
                         </Card>
                     </Col>
@@ -129,12 +161,13 @@ class SuperAdminAdminUsers extends Component {
 
 const mapStateToProps = ({ superAdminAdminUsersState }) => ({
     adminUsers : superAdminAdminUsersState.items,
+    adminUsersCount:  superAdminAdminUsersState.count,
 });
 
 export default connect (
     mapStateToProps,
     {
         getAdminUsersByPage,
-
+        deleteAdminUser,
     }
 )(SuperAdminAdminUsers);

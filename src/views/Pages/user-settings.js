@@ -20,6 +20,7 @@ class UserSettings extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.onSaveUser = this.onSaveUser.bind(this);
         this.onCancel   = this.onCancel.bind(this);
+        this.handleShowPasswordChangeVisibilityChange = this.handleShowPasswordChangeVisibilityChange.bind(this);
     }
 
     isValidForm(){
@@ -31,9 +32,19 @@ class UserSettings extends Component {
         return isValid;
     }
 
+    handleShowPasswordChangeVisibilityChange(show){
+        if(!show){
+            let { currentEditUser, errors } = this.state;
+            currentEditUser['password'] =  currentEditUser['password_confirmation'] = null;
+            errors['password'] = errors['password_confirmation'] = false;
+            this.setState({...this.state, currentEditUser: currentEditUser, errors: errors});
+        }
+    }
+
     onSaveUser(event){
         if(this.isValidForm())
             this.props.updateMyUserInfo(this.state.currentEditUser).then(() => {
+                // if user update his/her profile pic , call the endpoint
                 if(this.state.currentEditUser.hasOwnProperty('pic_file')){
                     let { currentEditUser } = this.state;
                     let picFile = currentEditUser.pic_file;
@@ -92,6 +103,7 @@ class UserSettings extends Component {
                         onCancel={this.onCancel}
                         handleChange={this.handleChange}
                         errors={this.state.errors}
+                        onShowPasswordChangeVisibilityChange={this.handleShowPasswordChangeVisibilityChange}
                         currentEditUser={this.state.currentEditUser}
                     />
                 </Col>

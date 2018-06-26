@@ -1,6 +1,5 @@
 import {createAction, getRequest, deleteRequest, putRequest, postRequest} from "../base-actions";
 import {authErrorHandler, START_LOADING, STOP_LOADING} from "../base-actions";
-import {RETRIEVED_DEVICE} from "./devices-actions";
 
 export const RETRIEVED_ADMIN_USERS = 'RETRIEVED_ADMIN_USERS';
 export const DELETED_ADMIN_USER = 'DELETED_ADMIN_USER';
@@ -12,16 +11,26 @@ export const UNLINKED_DEVICE = 'UNLINKED_DEVICE';
 export const LINK_DEVICE = 'LINK_DEVICE';
 export const NEW_ADMIN_USER = 'NEW_ADMIN_USER';
 
-export const getAdminUsersByPage = (currentPage = 1, pageSize = 10) => (dispatch, getState) => {
+export const getAdminUsersByPage = (currentPage = 1, pageSize = 5, searchTerm = '', ordering = '') => (dispatch, getState) => {
     let { loggedUserState } = getState();
     let { token }           = loggedUserState;
     let apiBaseUrl          = process.env['API_BASE_URL'];
+
+    if(ordering == ''){
+        ordering = 'id';
+    }
 
     let params = {
         token : token,
         page: currentPage,
         page_size : pageSize,
+        ordering  : ordering
     };
+
+    if(searchTerm != ''){
+        params['search'] = searchTerm;
+    }
+
 
     getRequest(
         createAction(START_LOADING),
@@ -164,6 +173,30 @@ export const createNewAdminUser = (newAdminUser) => (dispatch, getState) => {
         createAction(NEW_ADMIN_USER),
         `${apiBaseUrl}/admin-users`,
         newAdminUser,
+        authErrorHandler,
+    )(params)(dispatch).then((payload) => {
+        dispatch({
+            type: STOP_LOADING,
+            payload: {}
+        });
+    });
+}
+
+export const deleteAdminUser = (userId) =>  (dispatch, getState) => {
+
+    let {loggedUserState} = getState();
+    let {token} = loggedUserState;
+    let apiBaseUrl = process.env['API_BASE_URL'];
+
+    let params = {
+        token: token,
+    };
+
+    return deleteRequest(
+        createAction(START_LOADING),
+        createAction(DELETED_ADMIN_USER)({userId:userId}),
+        `${apiBaseUrl}/admin-users/${userId}`,
+        {},
         authErrorHandler,
     )(params)(dispatch).then((payload) => {
         dispatch({
