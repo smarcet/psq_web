@@ -3,23 +3,16 @@ import {
     Row,
     Col,
     Button,
-    ButtonDropdown,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem,
     Card,
     CardHeader,
     CardFooter,
     CardBody,
-    Collapse,
     Form,
     FormGroup,
     FormText,
     Label,
     Input,
-    InputGroup,
-    InputGroupAddon,
-    InputGroupText
+
 } from 'reactstrap';
 import 'sweetalert2/dist/sweetalert2.css';
 import swal from 'sweetalert2';
@@ -27,8 +20,6 @@ import T from "i18n-react/dist/i18n-react";
 import classnames from 'classnames';
 import { connect } from 'react-redux'
 import { getDeviceById, updateDevice, getAvailableAdmins } from '../../../actions/superAdmin/devices-actions';
-import {STOP_LOADING} from "../../../actions/base-actions";
-
 
 class SuperAdminEditDevice extends Component {
 

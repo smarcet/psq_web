@@ -49,3 +49,18 @@ export const doLogout = () => (dispatch) => {
         payload: {}
     });
 }
+
+export const doActivateUser = (formData) => (dispatch) => {
+    let apiBaseUrl = process.env['API_BASE_URL'];
+    return postRequest(
+        null,
+        null,
+        `${apiBaseUrl}/users/activate/${formData.token}`,
+        {
+            "password": formData.password
+        },
+        authErrorHandler,
+    )({})(dispatch).then((payload) => {
+
+    });
+}

@@ -96,7 +96,6 @@ export const getUserOwnedDevices =(userId) => (dispatch, getState) => {
     let {token} = loggedUserState;
     let apiBaseUrl = process.env['API_BASE_URL'];
 
-
     let params = {
         token: token,
     };
@@ -196,6 +195,30 @@ export const deleteAdminUser = (userId) =>  (dispatch, getState) => {
         createAction(START_LOADING),
         createAction(DELETED_ADMIN_USER)({userId:userId}),
         `${apiBaseUrl}/admin-users/${userId}`,
+        {},
+        authErrorHandler,
+    )(params)(dispatch).then((payload) => {
+        dispatch({
+            type: STOP_LOADING,
+            payload: {}
+        });
+    });
+}
+
+export const resendUserVerification  = (userId) =>  (dispatch, getState) => {
+
+    let {loggedUserState} = getState();
+    let {token} = loggedUserState;
+    let apiBaseUrl = process.env['API_BASE_URL'];
+
+    let params = {
+        token: token,
+    };
+
+    return postRequest(
+        createAction(START_LOADING),
+        null,
+        `${apiBaseUrl}/users/${userId}/verification/resend`,
         {},
         authErrorHandler,
     )(params)(dispatch).then((payload) => {

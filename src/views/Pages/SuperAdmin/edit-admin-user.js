@@ -29,19 +29,18 @@ class SuperAdminEditAdminUser extends Component {
             currentEditAdminUser: this.props.currentEditAdminUser,
             errors: {},
         };
-        this.handleChange   = this.handleChange.bind(this);
         this.handleChangeSearchDevices = this.handleChangeSearchDevices.bind(this);
+        this.onCancel = this.onCancel.bind(this);
+        this.handleChange   = this.handleChange.bind(this);
         this.onSelectedDevice = this.onSelectedDevice.bind(this);
         this.onUnlinkDevice = this.onUnlinkDevice.bind(this);
         this.onLinkDevice = this.onLinkDevice.bind(this);
-        this.onCancel = this.onCancel.bind(this);
     }
 
     onCancel(event){
         this.props.history.goBack();
         event.preventDefault();
     }
-
 
     handleChange(ev, isValid = null) {
         let currentEditAdminUser = {...this.state.currentEditAdminUser};

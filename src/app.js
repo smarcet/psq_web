@@ -5,8 +5,10 @@ import AuthorizedRoute from './routes/autorized-route';
 import DefaultRoute from './routes/default-route';
 import Login from './views/Pages/Login';
 import { connect } from 'react-redux'
-import { onUserAuth, doLogin, getUserInfo } from './actions/auth-actions'
+import { onUserAuth, doLogin,  doActivateUser } from './actions/auth-actions'
 import Page404 from './views/Pages/Page404';
+import ActivateUser from "./views/Pages/ActivateUser/ActivateUser";
+import PropsRoute from "./routes/props-route";
 
 class App extends React.PureComponent {
     render() {
@@ -18,6 +20,7 @@ class App extends React.PureComponent {
                                          currentUser={this.props.currentUser}
                                          component={Full} />
                         <Route path="/404" component={Page404} />
+                        <PropsRoute path="/users/validate/:token" component={ActivateUser} doActivateUser={this.props.doActivateUser}/>
                         <DefaultRoute isLoggedUser={this.props.isLoggedUser} component={Login} doLogin={this.props.doLogin}/>
                     </Switch>
             </BrowserRouter>
@@ -32,7 +35,7 @@ const mapStateToProps = ({ loggedUserState }) => ({
 
 export default connect(mapStateToProps, {
     onUserAuth,
-    getUserInfo,
-    doLogin
+    doLogin,
+    doActivateUser
 })(App)
 

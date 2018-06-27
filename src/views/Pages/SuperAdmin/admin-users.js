@@ -12,7 +12,7 @@ import {
 } from 'reactstrap';
 import T from 'i18n-react';
 import {connect} from "react-redux";
-import { getAdminUsersByPage, deleteAdminUser} from "../../../actions/superAdmin/admin-users-actions";
+import { getAdminUsersByPage, deleteAdminUser, resendUserVerification} from "../../../actions/superAdmin/admin-users-actions";
 import PaginationContainer from "../../Base/PaginationContainer/PaginationContainer";
 import swal from "sweetalert2";
 
@@ -46,6 +46,14 @@ class SuperAdminAdminUsers extends Component {
     onClickEditAdminUser(event, user){
         this.props.history.push(`/auth/super-admin/admin-users/${user.id}`);
         event.preventDefault();
+    }
+
+    onClickReSendVerification(event, user){
+        this.props.resendUserVerification(user.id).then(() =>  swal(
+            'Success!',
+            'Your user has been notified.',
+            'success'
+        ))
     }
 
     onClickDeleteAdminUser(event, user){
@@ -111,6 +119,7 @@ class SuperAdminAdminUsers extends Component {
                                         <th>{T.translate("superAdmin.adminUsers.StatusColTitle")}</th>
                                         <th>&nbsp;</th>
                                         <th>&nbsp;</th>
+                                        <th>&nbsp;</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -131,6 +140,15 @@ class SuperAdminAdminUsers extends Component {
                                                     {
                                                         !user.is_active &&
                                                         <Badge color="secondary">Inactive</Badge>
+                                                    }
+                                                </td>
+                                                <td className="col-button">
+                                                    {!user.is_active &&
+                                                    !user.is_verified &&
+                                                    < Button color="danger" outline
+                                                             onClick={(e) => this.onClickReSendVerification(e, user)}><i
+                                                        className="fa fa-envelope"></i>&nbsp;Re-send
+                                                        verification</Button>
                                                     }
                                                 </td>
                                                 <td className="col-button">
@@ -169,5 +187,6 @@ export default connect (
     {
         getAdminUsersByPage,
         deleteAdminUser,
+        resendUserVerification,
     }
 )(SuperAdminAdminUsers);

@@ -14,23 +14,13 @@ import {
     PaginationLink,
     Input,
     Button} from 'reactstrap';
-
-import {
-
-    Card,
-    CardHeader,
-    CardFooter,
-    CardBody,
-    Form,
-    FormGroup,
-    FormText,
-    Label,
-
-} from 'reactstrap';
 import T from "i18n-react/dist/i18n-react";
 import 'sweetalert2/dist/sweetalert2.css';
 import swal from 'sweetalert2';
 import classnames from 'classnames';
+import DeviceEditForm from "./device-edit-form";
+import {connect} from "react-redux";
+import {getMyDeviceById} from "../../../actions/Admin/devices-actions";
 
 class AdminEditDevice extends Component {
 
@@ -39,7 +29,38 @@ class AdminEditDevice extends Component {
         this.toggleTab = this.toggleTab.bind(this);
         this.state = {
             activeTab: '1',
+            currentEditDevice: this.props.currentEditDevice,
+            errors: {
+            },
         };
+        this.onCancel = this.onCancel.bind(this);
+        this.handleChange   = this.handleChange.bind(this);
+    }
+
+    onCancel(event){
+        this.props.history.goBack();
+        event.preventDefault();
+    }
+
+    handleChange(ev, isValid = null) {
+        let currentEditDevice = {...this.state.currentEditDevice};
+        let {value, id} = ev.target;
+        let errors = this.state.errors;
+        errors[id] = false;
+
+        if(isValid != null)
+            errors[id] = !isValid(ev.target);
+
+        if (ev.target.type == 'checkbox') {
+            value = ev.target.checked;
+        }
+
+        if (ev.target.type == 'select-one' && value == '0') {
+            value = null;
+        }
+
+        currentEditDevice[id] = value;
+        this.setState({...this.state, currentEditDevice: currentEditDevice, errors: errors});
     }
 
     toggleTab(tab) {
@@ -48,6 +69,17 @@ class AdminEditDevice extends Component {
                 ...this.state,
                 activeTab: tab
             });
+        }
+    }
+
+    componentWillMount() {
+        let deviceId = this.props.match.params.device_id;
+        this.props.getMyDeviceById(deviceId);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (this.props.currentEditDevice.id != nextProps.currentEditDevice.id) {
+            this.setState({ ...this.state, currentEditDevice: nextProps.currentEditDevice});
         }
     }
 
@@ -77,8 +109,7 @@ class AdminEditDevice extends Component {
     }
 
     render(){
-        let deviceId = this.props.match.params.device_id;
-        let deviceTitle = `Edit Device # ${deviceId}`;
+        let { currentEditDevice } = this.state;
         let linkedUsers = [
             {
                 id: 1,
@@ -128,58 +159,13 @@ class AdminEditDevice extends Component {
                     </Nav>
                     <TabContent activeTab={this.state.activeTab}>
                         <TabPane tabId="1">
-                            <Row>
-                                <Col xs="12" md="12" lg="12">
-                                    <Card>
-                                        <CardHeader>
-                                            <strong>{deviceTitle}</strong>
-                                        </CardHeader>
-                                        <CardBody>
-                                            <Form action="" method="post" encType="multipart/form-data" className="form-horizontal">
-                                                <FormGroup row>
-                                                    <Col md="3">
-                                                        <Label htmlFor="text-input">Serial #</Label>
-                                                    </Col>
-                                                    <Col xs="12" md="9">
-                                                        <Input type="text" id="text-input" name="text-input" value="123456" readOnly={true}/>
-                                                    </Col>
-                                                </FormGroup>
-                                                <FormGroup row>
-                                                    <Col md="3">
-                                                        <Label htmlFor="text-input">Friendly Name</Label>
-                                                    </Col>
-                                                    <Col xs="12" md="9">
-                                                        <Input type="text" id="text-input" name="text-input" placeholder="Friendly Name" defaultValue="DEVICE#1"/>
-                                                    </Col>
-                                                </FormGroup>
-                                                <FormGroup row>
-                                                    <Col md="3">
-                                                        <Label htmlFor="email-input">Available Slots #</Label>
-                                                    </Col>
-                                                    <Col xs="12" md="9">
-                                                        <Input type="number" id="email-input" name="email-input" value="3" readOnly={true}/>
-                                                        <FormText className="help-block"># Users to associate with device</FormText>
-                                                    </Col>
-                                                </FormGroup>
-                                                <FormGroup row>
-                                                    <Col md="3">
-                                                        <Label>Is Enable?</Label>
-                                                    </Col>
-                                                    <Col md="9">
-                                                        <FormGroup check inline>
-                                                            <Input className="form-check-input" type="checkbox" id="inline-checkbox1" name="inline-checkbox1" value="option1"/>
-                                                        </FormGroup>
-                                                    </Col>
-                                                </FormGroup>
-                                            </Form>
-                                        </CardBody>
-                                        <CardFooter>
-                                            <Button type="submit" size="sm" color="primary"><i className="fa fa-dot-circle-o"></i> Save</Button>{' '}
-                                            <Button type="reset" size="sm" color="danger"><i className="fa fa-ban"></i> Cancel</Button>
-                                        </CardFooter>
-                                    </Card>
-                                </Col>
-                            </Row>
+                            <DeviceEditForm
+                                onSave={this.onSave}
+                                errors={this.state.errors}
+                                handleChange={this.handleChange}
+                                onCancel={this.onCancel}
+                                device={currentEditDevice}
+                            />
                         </TabPane>
                         <TabPane tabId="2">
                             <Row className="search-container">
@@ -320,4 +306,13 @@ class AdminEditDevice extends Component {
     }
 }
 
-export default AdminEditDevice;
+const mapStateToProps = ({ adminEditDevicesState }) => ({
+    currentEditDevice : adminEditDevicesState.currentEditDevice,
+});
+
+export default connect (
+    mapStateToProps,
+    {
+        getMyDeviceById,
+    }
+)(AdminEditDevice);

@@ -17,44 +17,46 @@ import {
 import T from 'i18n-react';
 import 'sweetalert2/dist/sweetalert2.css';
 import swal from 'sweetalert2';
+import { connect } from 'react-redux'
+import {getMyDevicesByPage} from "../../../actions/Admin/devices-actions";
+import PaginationContainer from "../../Base/PaginationContainer/PaginationContainer";
+
 
 class AdminDevices extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            currentPage: 1,
+        };
+        this.onPageClick = this.onPageClick.bind(this);
+        this.handleOnChangeSearch = this.handleOnChangeSearch.bind(this);
+    }
+
+    handleOnChangeSearch(event){
+        let {value} = event.target;
+        this.setState({...this.state, currentPage: 1});
+        this.props.getMyDevicesByPage(1, 5, value);
+    }
+
+    componentWillMount () {
+        this.props.getMyDevicesByPage(this.state.currentPage);
+    }
 
     onClickEditDevice(e, device){
         this.props.history.push(`/auth/admin/devices/${device.id}`);
     }
 
+    onPageClick(event, pageNumber){
+        this.setState({...this.state, currentPage: pageNumber});
+        this.props.getMyDevicesByPage(pageNumber);
+        event.preventDefault();
+    }
+
     render(){
 
-        let devices = [
-            {
-                id:1,
-                serial:'12345',
-                friendly_name: 'Device#1',
-                active:true,
-                owner: 'Jose Perez',
-                slots: 3,
-                can_transfer: true,
-            },
-            {
-                id:2,
-                serial:'45678',
-                friendly_name: 'Device#2',
-                active:true,
-                owner: 'Jose Perez',
-                slots: 6,
-                can_transfer: true,
-            },
-            {
-                id:3,
-                serial:'555555',
-                friendly_name: 'Device#3',
-                active:false,
-                owner: 'Juan Gomez',
-                slots: 0,
-                can_transfer: false,
-            },
-        ];
+        let { devices, currentUser } = this.props;
+        let currentUserIid = currentUser.id;
         return (
             <div className="animated fadeIn">
                 <Row>
@@ -66,7 +68,12 @@ class AdminDevices extends Component {
                             <CardBody>
                                 <Row className="search-container">
                                     <Col xs="12" sm="4" lg="4" >
-                                        <Input type="text" className="input-search" id="input1-group2" name="input1-group2" placeholder="Search Devices"/>
+                                        <Input type="text"
+                                               className="input-search"
+                                               id="search_devices"
+                                               name="search_devices"
+                                               placeholder="Search Devices"
+                                               onChange={this.handleOnChangeSearch}/>
                                         <i className="fa fa-search filter-search"></i>
                                     </Col>
                                     <Col xs="12" sm="4" lg="3" >
@@ -89,22 +96,23 @@ class AdminDevices extends Component {
                                     <tbody>
 
                                     { devices.map((device, i) => {
-
+                                        let ownerId = device.owner != null ? device.owner.id : null;
+                                        let ownerEmail = device.owner != null ? device.owner.email : 'NOT SET';
                                         return (
 
                                             <tr key={device.id}>
                                                 <td>{device.id}</td>
                                                 <td>{device.serial}</td>
                                                 <td>{device.friendly_name}</td>
-                                                <td>{device.owner}</td>
+                                                <td>{ownerEmail}</td>
                                                 <td>{device.slots}</td>
                                                 <td>
                                                     {
-                                                        device.active &&
+                                                        device.is_active &&
                                                         <Badge color="success">Active</Badge>
                                                     }
                                                     {
-                                                        !device.active &&
+                                                        !device.is_active &&
                                                         <Badge color="secondary">Disabled</Badge>
                                                     }
                                                 </td>
@@ -112,7 +120,7 @@ class AdminDevices extends Component {
                                                     <Button outline color="primary" onClick={(e) => this.onClickEditDevice(e, device)}><i className="fa fa-edit"></i>&nbsp;{T.translate("admin.devices.editButton")}</Button>
                                                 </td>
                                                 <td className="col-button">
-                                                    {device.can_transfer &&
+                                                    { ownerId == currentUserIid &&
                                                         <Button outline color="warning"
                                                                 onClick={(e) => this.onClickEditDevice(e, device)}><i
                                                             className="fa fa-exchange"></i>&nbsp;{T.translate("admin.devices.transferButton")}
@@ -125,16 +133,12 @@ class AdminDevices extends Component {
                                     })}
                                     </tbody>
                                 </Table>
-                                <Pagination>
-                                    <PaginationItem disabled><PaginationLink previous href="#">Prev</PaginationLink></PaginationItem>
-                                    <PaginationItem active>
-                                        <PaginationLink href="#">1</PaginationLink>
-                                    </PaginationItem>
-                                    <PaginationItem><PaginationLink href="#">2</PaginationLink></PaginationItem>
-                                    <PaginationItem><PaginationLink href="#">3</PaginationLink></PaginationItem>
-                                    <PaginationItem><PaginationLink href="#">4</PaginationLink></PaginationItem>
-                                    <PaginationItem><PaginationLink next href="#">Next</PaginationLink></PaginationItem>
-                                </Pagination>
+                                <PaginationContainer
+                                    count={this.props.devicesCount}
+                                    pageSize={5}
+                                    currentPage={this.state.currentPage}
+                                    onPageClick={this.onPageClick}
+                                />
                             </CardBody>
                         </Card>
                     </Col>
@@ -143,4 +147,15 @@ class AdminDevices extends Component {
     }
 }
 
-export default AdminDevices;
+const mapStateToProps = ({ adminDevicesState, loggedUserState }) => ({
+    devices : adminDevicesState.items,
+    devicesCount : adminDevicesState.items,
+    currentUser: loggedUserState.currentUser,
+});
+
+export default connect (
+    mapStateToProps,
+    {
+        getMyDevicesByPage,
+    }
+)(AdminDevices);
