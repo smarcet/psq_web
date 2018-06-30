@@ -3,15 +3,7 @@ import {
     Badge,
     Row,
     Col,
-    TabContent,
-    TabPane,
-    Nav,
-    NavItem,
-    NavLink,
     Table,
-    Pagination,
-    PaginationItem,
-    PaginationLink,
     ButtonDropdown,
     DropdownToggle,
     DropdownMenu,
@@ -108,7 +100,7 @@ class SuperAdminAdminUserEditDevicesForm extends Component {
                                 this.toggleDropDown();
                             }}>
                                 <DropdownToggle>
-                                    <Input type="text" onChange={this.onChangeSearchInput} id="search_device" name="search_device" placeholder="Search Device"/>
+                                    <Input type="text" onChange={this.onChangeSearchInput} id="search_device" name="search_device" placeholder={T.translate("Search Device")}/>
                                 </DropdownToggle>
                                 <DropdownMenu right>
                                     { currentDevices.map((device, i) => {
@@ -121,8 +113,7 @@ class SuperAdminAdminUserEditDevicesForm extends Component {
                             </ButtonDropdown>
                         </Col>
                         <Col xs="12" md="3">
-                            <Button onClick={(e) => this.onClickLinkDevice(e)} color="primary" className="button-add"><i className="fa fa-link"></i>{'\u00A0'} Link
-                                Device</Button>
+                            <Button onClick={(e) => this.onClickLinkDevice(e)} color="primary" className="button-add"><i className="fa fa-link"></i>{'\u00A0'} {T.translate("Link Device")}</Button>
                         </Col>
                         <Col xs="12" md="3">
                         </Col>
@@ -130,16 +121,16 @@ class SuperAdminAdminUserEditDevicesForm extends Component {
                     <Row>
                         <Col md="12">
                             { ownedDevices.length == 0 &&
-                                <p>List is Empty.</p>
+                                <p>{T.translate("List is Empty.")}</p>
                             }
                             { ownedDevices.length > 0 &&
                             <Table responsive striped>
                                 <thead>
                                 <tr>
-                                    <th>{T.translate("superAdmin.devices.IdColTitle")}</th>
-                                    <th>{T.translate("superAdmin.devices.SerialNbrColTitle")}</th>
-                                    <th>{T.translate("superAdmin.devices.FriendlyNameColTitle")}</th>
-                                    <th>{T.translate("superAdmin.devices.StatusColTitle")}</th>
+                                    <th>{T.translate("Id")}</th>
+                                    <th>{T.translate("Serial #")}</th>
+                                    <th>{T.translate("Friendly Name")}</th>
+                                    <th>{T.translate("Status")}</th>
                                     <th>&nbsp;</th>
                                 </tr>
                                 </thead>
@@ -154,16 +145,16 @@ class SuperAdminAdminUserEditDevicesForm extends Component {
                                             <td>
                                                 {
                                                     device.is_active &&
-                                                    <Badge color="success">Active</Badge>
+                                                    <Badge color="success">{T.translate("Active")}</Badge>
                                                 }
                                                 {
                                                     !device.is_active &&
-                                                    <Badge color="secondary">Disabled</Badge>
+                                                    <Badge color="secondary">{T.translate("Disabled")}</Badge>
                                                 }
                                             </td>
                                             <td>
                                                 <Button outline color="danger"
-                                                        onClick={(e) => this.onUnLinkDeviceClicked(device)}>Unlink</Button>{' '}
+                                                        onClick={(e) => this.onUnLinkDeviceClicked(device)}>{T.translate("Unlink")}</Button>{' '}
                                             </td>
                                         </tr>
                                     );

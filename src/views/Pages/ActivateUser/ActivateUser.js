@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Container, Row, Col, Card, CardBody, CardFooter, Button, Input, InputGroup, InputGroupAddon, InputGroupText} from 'reactstrap';
 import swal from "sweetalert2";
+import T from "i18n-react/dist/i18n-react";
 
 class ActivateUser extends Component {
 
@@ -37,8 +38,8 @@ class ActivateUser extends Component {
         if(this.isValidForm())
             this.props.doActivateUser(this.state.formData).then(() => {
                 swal(
-                    '',
-                    'Your user has been successfully activated!.',
+                    T.translate('Success!'),
+                    T.translate('Your user has been successfully activated!.'),
                     'success'
                 );
                 this.props.history.push('/')
@@ -65,7 +66,7 @@ class ActivateUser extends Component {
                             <Card className="mx-4">
                                 <CardBody className="p-4">
                                     <h1>User Activation</h1>
-                                    <p className="text-muted">Activate your account</p>
+                                    <p className="text-muted">{T.translate('Activate your account')}</p>
                                     <InputGroup className="mb-3">
                                         <InputGroupAddon addonType="prepend">
                                             <InputGroupText>
@@ -73,7 +74,7 @@ class ActivateUser extends Component {
                                             </InputGroupText>
                                         </InputGroupAddon>
                                         <Input type="password"
-                                               placeholder="Password"
+                                               placeholder={T.translate("Password")}
                                                id="password" name="password"
                                                invalid={this.state.errors.password}
                                                onChange={
@@ -94,7 +95,7 @@ class ActivateUser extends Component {
                                         <Input type="password" id="password_confirmation"
                                                name="password_confirmation"
                                                invalid={this.state.errors.password_confirmation}
-                                               placeholder="Password Confirmation"
+                                               placeholder={T.translate("Password Confirmation")}
                                                onChange={
                                                    evt => this.handleChange(evt, (target) => {
                                                        let confirmValue = target.value.trim();;
@@ -105,7 +106,7 @@ class ActivateUser extends Component {
                                                        return true;
                                                    })}/>
                                     </InputGroup>
-                                    <Button color="success" block onClick={this.onActivateAccountClicked}>Activate Account</Button>
+                                    <Button color="success" block onClick={this.onActivateAccountClicked}>{T.translate("Activate Account")}</Button>
                                 </CardBody>
                                 <CardFooter className="p-4">
                                 </CardFooter>

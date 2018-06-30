@@ -75,27 +75,27 @@ class AdminUserGroups extends Component {
                     <Col xs="12" lg="12">
                         <Card>
                             <CardHeader>
-                                <i className="fa fa-align-justify"></i> {T.translate("admin.userGroups.Title")}
+                                <i className="fa fa-align-justify"></i> {T.translate("Title")}
                             </CardHeader>
                             <CardBody>
                                 <Row className="search-container">
                                     <Col xs="12" sm="4" lg="4" >
-                                        <Input type="text" className="input-search" id="input1-group2" name="input1-group2" placeholder="Search User Group"/>
+                                        <Input type="text" className="input-search" id="input1-group2" name="input1-group2" placeholder={T.translate("Search User Group")}/>
                                         <i className="fa fa-search filter-search"></i>
                                     </Col>
                                     <Col xs="12" sm="4" lg="3" >
                                         <Button onClick={(e) => this.onClickAddGroup(e)} className="button-add" color="primary">
-                                            <i className="fa fa-plus-circle"></i>{'\u00A0'} Add User Group
+                                            <i className="fa fa-plus-circle"></i>{'\u00A0'} {T.translate("Add User Group")}
                                         </Button>
                                     </Col>
                                 </Row>
                                 <Table responsive striped>
                                     <thead>
                                     <tr>
-                                        <th>Id</th>
-                                        <th>Title</th>
-                                        <th>Code</th>
-                                        <th>Users</th>
+                                        <th>{T.translate("Id")}</th>
+                                        <th>{T.translate("Title")}</th>
+                                        <th>{T.translate("Code")}</th>
+                                        <th>{T.translate("Users")}</th>
                                         <th>&nbsp;</th>
                                         <th>&nbsp;</th>
                                     </tr>
@@ -111,10 +111,10 @@ class AdminUserGroups extends Component {
                                                 <td>{group.code}</td>
                                                 <td>{group.users}</td>
                                                 <td className="col-button">
-                                                    <Button color="primary" onClick={(e) => this.onClickEditGroup(e, group)}outline><i className="fa fa-edit"></i>&nbsp;Edit</Button>
+                                                    <Button color="primary" onClick={(e) => this.onClickEditGroup(e, group)}outline><i className="fa fa-edit"></i>&nbsp;{T.translate("Edit")}</Button>
                                                 </td>
                                                 <td className="col-button">
-                                                    <Button color="danger" onClick={(e) => this.onClickDeleteGroup(e, group)} outline><i className="fa fa-trash"></i>&nbsp;Delete</Button>
+                                                    <Button color="danger" onClick={(e) => this.onClickDeleteGroup(e, group)} outline><i className="fa fa-trash"></i>&nbsp;{T.translate("Delete")}</Button>
                                                 </td>
 
                                             </tr>

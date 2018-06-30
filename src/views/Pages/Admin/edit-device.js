@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {
-    Badge,
     Row,
     Col,
     TabContent,
@@ -8,19 +7,25 @@ import {
     Nav,
     NavItem,
     NavLink,
-    Table,
-    Pagination,
-    PaginationItem,
-    PaginationLink,
-    Input,
-    Button} from 'reactstrap';
+} from 'reactstrap';
 import T from "i18n-react/dist/i18n-react";
 import 'sweetalert2/dist/sweetalert2.css';
 import swal from 'sweetalert2';
 import classnames from 'classnames';
 import DeviceEditForm from "./device-edit-form";
 import {connect} from "react-redux";
-import {getMyDeviceById} from "../../../actions/Admin/devices-actions";
+import { getMyDeviceById,
+    searchAdminAndRawUsers,
+    linkUser2Device,
+    unLinkUser2Device,
+    linkAdminUser2Device,
+    unLinkAdminUser2Device,
+    searchAdminUsers,
+    updateDevice,
+} from "../../../actions/Admin/devices-actions";
+
+import DeviceEditFormUsersList from "./device-edit-form-users-list";
+import {DEFAULT_PAGE_SIZE} from "../../../constants";
 
 class AdminEditDevice extends Component {
 
@@ -33,8 +38,59 @@ class AdminEditDevice extends Component {
             errors: {
             },
         };
+
         this.onCancel = this.onCancel.bind(this);
         this.handleChange   = this.handleChange.bind(this);
+        this.onClickUnlinkUser = this.onClickUnlinkUser.bind(this);
+        this.handleChangeSearchTermDeviceUser = this.handleChangeSearchTermDeviceUser.bind(this);
+        this.handleLinkDeviceUser = this.handleLinkDeviceUser.bind(this);
+        this.onClickAddNewUser = this.onClickAddNewUser.bind(this);
+        this.handleLinkAdminDeviceUser = this.handleLinkAdminDeviceUser.bind(this);
+        this.onClickUnlinkAdminUser = this.onClickUnlinkAdminUser.bind(this);
+        this.handleChangeSearchTermDeviceAdminUser = this.handleChangeSearchTermDeviceAdminUser.bind(this);
+        this.onSave = this.onSave.bind(this);
+    }
+
+    handleChangeSearchTermDeviceUser(term){
+        this.props.searchAdminAndRawUsers(term, DEFAULT_PAGE_SIZE);
+    }
+
+    handleChangeSearchTermDeviceAdminUser(term){
+        this.props.searchAdminUsers(term, DEFAULT_PAGE_SIZE);
+    }
+
+    handleLinkDeviceUser(user){
+        if(this.state.currentEditDevice.slots > 0)
+            this.props.linkUser2Device(this.state.currentEditDevice, user);
+    }
+
+    handleLinkAdminDeviceUser(user){
+        if(this.state.currentEditDevice.slots > 0)
+            this.props.linkAdminUser2Device(this.state.currentEditDevice, user);
+    }
+
+
+    isValidForm(){
+        let { errors } = this.state;
+        let isValid = true;
+        Object.keys( errors ).forEach( key => {
+            isValid = isValid && !errors[key];
+        });
+        return isValid;
+    }
+
+    onSave(event){
+        if(this.isValidForm())
+            this.props.updateDevice(this.state.currentEditDevice).then(() => {
+                swal(
+                    '',
+                    T.translate("Your device has been successfully updated!."),
+                    'success'
+                );
+                this.props.history.goBack();
+            });
+
+        event.preventDefault();
     }
 
     onCancel(event){
@@ -78,9 +134,7 @@ class AdminEditDevice extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.props.currentEditDevice.id != nextProps.currentEditDevice.id) {
-            this.setState({ ...this.state, currentEditDevice: nextProps.currentEditDevice});
-        }
+        this.setState({ ...this.state, currentEditDevice: nextProps.currentEditDevice});
     }
 
     onClickAddNewUser(event){
@@ -90,19 +144,43 @@ class AdminEditDevice extends Component {
 
     onClickUnlinkUser(event, user){
         swal({
-            title: 'Are you sure?',
-            text: 'You are about to disassociate this user with current device',
+            title: T.translate("Are you sure?"),
+            text: T.translate("You are about to disassociate this user with current device"),
             type: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Yes, unlink it!',
-            cancelButtonText: 'No, keep it'
+            confirmButtonText: T.translate("Yes, unlink it!"),
+            cancelButtonText: T.translate("No, keep it")
         }).then((result) => {
             if (result.value) {
-                swal(
-                    'Deleted!',
-                    'Your user has been unlinked.',
-                    'success'
-                )
+                this.props.unLinkUser2Device(this.state.currentEditDevice, user).then(()=> {
+                    swal(
+                        T.translate("Unlinked!"),
+                        T.translate("User has been unlinked from this device."),
+                        'success'
+                    )
+                });
+            }
+        })
+        event.preventDefault();
+    }
+
+    onClickUnlinkAdminUser(event, user){
+        swal({
+            title: T.translate("Are you sure?"),
+            text: T.translate("You are about to disassociate this user with current device"),
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: T.translate("Yes, unlink it!"),
+            cancelButtonText: T.translate("No, keep it")
+        }).then((result) => {
+            if (result.value) {
+                this.props.unLinkAdminUser2Device(this.state.currentEditDevice, user).then(()=> {
+                    swal(
+                        T.translate("Unlinked!"),
+                        T.translate("User has been unlinked from this device."),
+                        'success'
+                    )
+                });
             }
         })
         event.preventDefault();
@@ -110,24 +188,10 @@ class AdminEditDevice extends Component {
 
     render(){
         let { currentEditDevice } = this.state;
-        let linkedUsers = [
-            {
-                id: 1,
-                first_name: 'Juan',
-                last_name: 'Perez',
-                user_name: 'juanperez@gmail.com',
-                role: 'STUDENT',
-            }
-        ];
-        let linkedAdminUsers = [
-            {
-                id: 1,
-                first_name: 'Jose',
-                last_name: 'Gomez',
-                user_name: 'jgomez@gmail.com',
-                role: 'TEACHER',
-            }
-        ];
+        let deviceUsers = currentEditDevice.users;
+        let deviceAdminUsers = currentEditDevice.admins;
+        let slots = currentEditDevice.slots - (currentEditDevice.users.length + currentEditDevice.admins.length);
+
         return(
             <Row>
                 <Col xs="12" md="12" className="mb-4">
@@ -137,7 +201,7 @@ class AdminEditDevice extends Component {
                                 className={classnames({ active: this.state.activeTab === '1' })}
                                 onClick={() => { this.toggleTab('1'); }}>
                                 <i className="fa fa-video-camera"></i>
-                                <span className={ this.state.activeTab === '1' ? "" : "d-none"}> {T.translate("editDevice.mainTab")} </span>{'\u00A0'}
+                                <span className={ this.state.activeTab === '1' ? "" : "d-none"}> {T.translate("Device Data")} </span>{'\u00A0'}
                             </NavLink>
                         </NavItem>
                         <NavItem>
@@ -145,7 +209,7 @@ class AdminEditDevice extends Component {
                                 className={classnames({ active: this.state.activeTab === '2' })}
                                 onClick={() => { this.toggleTab('2'); }}>
                                 <i className="fa fa-user"></i>
-                                <span className={ this.state.activeTab === '2' ? "" : "d-none"}>  {T.translate("editDevice.usersTab")} </span>{'\u00A0'}
+                                <span className={ this.state.activeTab === '2' ? "" : "d-none"}>  {T.translate("Users Data")} </span>{'\u00A0'}
                             </NavLink>
                         </NavItem>
                         <NavItem>
@@ -153,7 +217,7 @@ class AdminEditDevice extends Component {
                                 className={classnames({ active: this.state.activeTab === '3' })}
                                 onClick={() => { this.toggleTab('3'); }}>
                                 <i className="fa fa-user-plus"></i>
-                                <span className={ this.state.activeTab === '3' ? "" : "d-none"}>  {T.translate("editDevice.adminUsersTab")} </span>{'\u00A0'}
+                                <span className={ this.state.activeTab === '3' ? "" : "d-none"}>  {T.translate("Admin Users")} </span>{'\u00A0'}
                             </NavLink>
                         </NavItem>
                     </Nav>
@@ -168,136 +232,28 @@ class AdminEditDevice extends Component {
                             />
                         </TabPane>
                         <TabPane tabId="2">
-                            <Row className="search-container">
-                                <Col xs="12" sm="4" lg="4" >
-                                    <Input type="text" className="input-search" id="input1-group2" name="input1-group2" placeholder="Search User"/>
-                                    <i className="fa fa-search filter-search"></i>
-                                </Col>
-                                <Col xs="12" sm="4" lg="3" >
-                                    <Button onClick={(e) => this.onClickAddNewAdminUser(e)} className="button-add" color="primary">
-                                        <i className="fa fa-link"></i>{'\u00A0'}Link User
-                                    </Button>
-                                </Col>
-                                <Col xs="12" sm="4" lg="3" >
-                                    <Button onClick={(e) => this.onClickAddNewUser(e)} className="button-add" color="primary">
-                                        <i className="fa fa-plus-circle"></i>{'\u00A0'} Add New User
-                                    </Button>
-                                </Col>
-                            </Row>
-                            <Row className="available-slots-container">
-                                <Col md="4">
-                                    <span>{T.translate("editDevice.linkedUsers.AvailableSlots")} <Badge pill color="secondary">2</Badge></span>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col md="12">
-                                    <Table responsive striped>
-                                        <thead>
-                                        <tr>
-                                            <th>{T.translate("editDevice.linkedUsers.IdColTitle")}</th>
-                                            <th>{T.translate("editDevice.linkedUsers.UserNameTitle")}</th>
-                                            <th>{T.translate("editDevice.linkedUsers.FirstNameTitle")}</th>
-                                            <th>{T.translate("editDevice.linkedUsers.SurnameTitle")}</th>
-                                            <th>Role</th>
-                                            <th>&nbsp;</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        { linkedUsers.map((user, i) => {
-
-                                            return (
-                                                <tr key={i}>
-                                                    <td>{user.id}</td>
-                                                    <td>{user.user_name}</td>
-                                                    <td>{user.first_name}</td>
-                                                    <td>{user.last_name}</td>
-                                                    <td>{user.role}</td>
-                                                    <td>
-                                                        <Button onClick={(e) => { this.onClickUnlinkUser(e, user); }} outline color="danger">{T.translate("editDevice.linkedUsers.UnlinkButton")}</Button>{' '}
-                                                    </td>
-                                                </tr>
-                                            );
-                                        })}
-                                        </tbody>
-                                    </Table>
-                                    <Pagination>
-                                        <PaginationItem disabled><PaginationLink previous href="#">Prev</PaginationLink></PaginationItem>
-                                        <PaginationItem active>
-                                            <PaginationLink href="#">1</PaginationLink>
-                                        </PaginationItem>
-                                        <PaginationItem><PaginationLink href="#">2</PaginationLink></PaginationItem>
-                                        <PaginationItem><PaginationLink href="#">3</PaginationLink></PaginationItem>
-                                        <PaginationItem><PaginationLink href="#">4</PaginationLink></PaginationItem>
-                                        <PaginationItem><PaginationLink next href="#">Next</PaginationLink></PaginationItem>
-                                    </Pagination>
-                                </Col>
-                            </Row>
+                            <DeviceEditFormUsersList
+                                availableSlots={slots}
+                                deviceUsers={deviceUsers}
+                                searchId="users"
+                                onClickUnlinkUser={this.onClickUnlinkUser}
+                                matchedUsers={this.props.matchedDeviceUsers}
+                                handleChangeSearchTerm={this.handleChangeSearchTermDeviceUser}
+                                handleLinkItem={this.handleLinkDeviceUser}
+                                onClickAddUser={this.onClickAddNewUser}
+                        />
                         </TabPane>
                         <TabPane tabId="3">
-                            <Row className="search-container">
-                                <Col xs="12" sm="4" lg="4" >
-                                    <Input type="text" className="input-search" id="input1-group2" name="input1-group2" placeholder="Search User"/>
-                                    <i className="fa fa-search filter-search"></i>
-                                </Col>
-                                <Col xs="12" sm="4" lg="3" >
-                                    <Button onClick={(e) => this.onClickLinkAdminUser(e)} className="button-add" color="primary">
-                                        <i className="fa fa-link"></i>{'\u00A0'}Link Admin User
-                                    </Button>
-                                </Col>
-                                <Col xs="12" sm="4" lg="3" >
-                                    <Button onClick={(e) => this.onClickAddNewUser(e)} className="button-add" color="primary">
-                                        <i className="fa fa-plus-circle"></i>{'\u00A0'} Add New Admin User
-                                    </Button>
-                                </Col>
-                            </Row>
-                            <Row className="available-slots-container">
-                                <Col md="4">
-                                    <span>{T.translate("editDevice.linkedUsers.AvailableSlots")} <Badge pill color="secondary">2</Badge></span>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col md="12">
-                                    <Table responsive striped>
-                                        <thead>
-                                        <tr>
-                                            <th>{T.translate("editDevice.linkedUsers.IdColTitle")}</th>
-                                            <th>{T.translate("editDevice.linkedUsers.UserNameTitle")}</th>
-                                            <th>{T.translate("editDevice.linkedUsers.FirstNameTitle")}</th>
-                                            <th>{T.translate("editDevice.linkedUsers.SurnameTitle")}</th>
-                                            <th>Role</th>
-                                            <th>&nbsp;</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        { linkedAdminUsers.map((user, i) => {
-
-                                            return (
-                                                <tr key={i}>
-                                                    <td>{user.id}</td>
-                                                    <td>{user.user_name}</td>
-                                                    <td>{user.first_name}</td>
-                                                    <td>{user.last_name}</td>
-                                                    <td>{user.role}</td>
-                                                    <td>
-                                                        <Button onClick={(e) => { this.onClickUnlinkUser(e, user); }} outline color="danger">{T.translate("editDevice.linkedUsers.UnlinkButton")}</Button>{' '}
-                                                    </td>
-                                                </tr>
-                                            );
-                                        })}
-                                        </tbody>
-                                    </Table>
-                                    <Pagination>
-                                        <PaginationItem disabled><PaginationLink previous href="#">Prev</PaginationLink></PaginationItem>
-                                        <PaginationItem active>
-                                            <PaginationLink href="#">1</PaginationLink>
-                                        </PaginationItem>
-                                        <PaginationItem><PaginationLink href="#">2</PaginationLink></PaginationItem>
-                                        <PaginationItem><PaginationLink href="#">3</PaginationLink></PaginationItem>
-                                        <PaginationItem><PaginationLink href="#">4</PaginationLink></PaginationItem>
-                                        <PaginationItem><PaginationLink next href="#">Next</PaginationLink></PaginationItem>
-                                    </Pagination>
-                                </Col>
-                            </Row>
+                            <DeviceEditFormUsersList
+                                availableSlots={slots}
+                                searchId="admins"
+                                deviceUsers={deviceAdminUsers}
+                                onClickUnlinkUser={this.onClickUnlinkAdminUser}
+                                matchedUsers={this.props.matchedDeviceAdminUsers}
+                                handleChangeSearchTerm={this.handleChangeSearchTermDeviceAdminUser}
+                                handleLinkItem={this.handleLinkAdminDeviceUser}
+                                onClickAddUser={this.onClickAddNewUser}
+                            />
                         </TabPane>
                     </TabContent>
                 </Col>
@@ -308,11 +264,20 @@ class AdminEditDevice extends Component {
 
 const mapStateToProps = ({ adminEditDevicesState }) => ({
     currentEditDevice : adminEditDevicesState.currentEditDevice,
+    matchedDeviceUsers: adminEditDevicesState.matchedDeviceUsers,
+    matchedDeviceAdminUsers: adminEditDevicesState.matchedDeviceAdminUsers,
 });
 
 export default connect (
     mapStateToProps,
     {
         getMyDeviceById,
+        searchAdminAndRawUsers,
+        linkUser2Device,
+        unLinkUser2Device,
+        linkAdminUser2Device,
+        unLinkAdminUser2Device,
+        searchAdminUsers,
+        updateDevice
     }
 )(AdminEditDevice);

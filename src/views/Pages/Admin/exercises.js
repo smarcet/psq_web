@@ -90,28 +90,28 @@ class AdminExams extends Component {
                     <Col xs="12" lg="12">
                         <Card>
                             <CardHeader>
-                                <i className="fa fa-align-justify"></i> {T.translate("admin.exercises.Title")}
+                                <i className="fa fa-align-justify"></i> {T.translate("Title")}
                             </CardHeader>
                             <CardBody>
                                 <Row className="search-container">
                                     <Col xs="12" sm="4" lg="4" >
-                                        <Input type="text" className="input-search" id="input1-group2" name="input1-group2" placeholder="Search Exercise"/>
+                                        <Input type="text" className="input-search" id="input1-group2" name="input1-group2" placeholder={T.translate("Search Exercise")}/>
                                         <i className="fa fa-search filter-search"></i>
                                     </Col>
                                     <Col xs="12" sm="4" lg="3" >
                                         <Button onClick={(e) => this.onClickAddNewExercise(e)} className="button-add" color="primary">
-                                            <i className="fa fa-plus-circle"></i>{'\u00A0'} Add Exercise
+                                            <i className="fa fa-plus-circle"></i>{'\u00A0'} {T.translate("Add Exercise")}
                                         </Button>
                                     </Col>
                                 </Row>
                                 <Table responsive striped>
                                     <thead>
                                     <tr>
-                                        <th>{T.translate("admin.exercises.IdColTitle")}</th>
-                                        <th>{T.translate("admin.exercises.TitleColTitle")}</th>
-                                        <th>{T.translate("admin.exercises.DevicesColTitle")}</th>
-                                        <th>{T.translate("admin.exercises.CreatorColTitle")}</th>
-                                        <th>{T.translate("admin.exercises.TakersColTitle")}</th>
+                                        <th>{T.translate("Id")}</th>
+                                        <th>{T.translate("Title")}</th>
+                                        <th>{T.translate("Devices")}</th>
+                                        <th>{T.translate("Creator")}</th>
+                                        <th>{T.translate("Takers")}</th>
                                         <th>&nbsp;</th>
                                         <th>&nbsp;</th>
                                         <th>&nbsp;</th>
@@ -133,20 +133,19 @@ class AdminExams extends Component {
                                                     {exercise.type == 2 && 'N/A'}
                                                </td>
                                                 <td className="col-button">
-                                                    <Button color="primary" onClick={(e) => this.onClickEditExercise(e, exercise)}outline><i className="fa fa-edit"></i>&nbsp;Edit</Button>
+                                                    <Button color="primary" onClick={(e) => this.onClickEditExercise(e, exercise)}outline><i className="fa fa-edit"></i>&nbsp;{T.translate("Edit")}</Button>
                                                 </td>
                                                 <td className="col-button">
-                                                    <Button color="danger" onClick={(e) => this.onClickDeleteExercise(e, exercise)} outline><i className="fa fa-trash"></i>&nbsp;Delete</Button>
+                                                    <Button color="danger" onClick={(e) => this.onClickDeleteExercise(e, exercise)} outline><i className="fa fa-trash"></i>&nbsp;{T.translate("Delete")}</Button>
                                                 </td>
                                                 <td className="col-button">
-                                                    <Button color="warning" onClick={(e) => this.onClickShareExercise(e, exercise)}outline><i className="fa fa-share-alt"></i>&nbsp;Share</Button>
+                                                    <Button color="warning" onClick={(e) => this.onClickShareExercise(e, exercise)}outline><i className="fa fa-share-alt"></i>&nbsp;{T.translate("Share")}</Button>
                                                 </td>
                                                 <td className="col-button">
                                                     {exercise.type == 2 &&
                                                     <Button color="primary"
                                                             onClick={(e) => this.onClickCreateExercise(e, exercise)}
-                                                            outline><i className="fa fa-copy"></i>&nbsp;Create
-                                                        Exercise</Button>
+                                                            outline><i className="fa fa-copy"></i>&nbsp;{T.translate("Create Exercise")}</Button>
                                                     }
                                                 </td>
                                             </tr>

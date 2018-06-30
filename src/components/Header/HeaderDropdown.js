@@ -37,13 +37,13 @@ class HeaderDropdown extends Component {
 
       switch (currentUser.role){
           case SUPERVISOR:
-            detail += ` (${T.translate("header.profile.supervisor")})`;
+            detail += ` (${T.translate("Supervisor")})`;
           break;
           case TEACHER:
-              detail += ` (${T.translate("header.profile.teacher")})`;
+              detail += ` (${T.translate("Teacher")})`;
               break;
           case STUDENT:
-              detail += ` (${T.translate("header.profile.student")})`;
+              detail += ` (${T.translate("Student")})`;
               break;
       }
       return detail;

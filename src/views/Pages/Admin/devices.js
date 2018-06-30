@@ -7,19 +7,16 @@ import {
     CardHeader,
     CardBody,
     Table,
-    Pagination,
-    PaginationItem,
-    PaginationLink,
     Button,
     Input
 } from 'reactstrap';
 
 import T from 'i18n-react';
 import 'sweetalert2/dist/sweetalert2.css';
-import swal from 'sweetalert2';
 import { connect } from 'react-redux'
 import {getMyDevicesByPage} from "../../../actions/Admin/devices-actions";
 import PaginationContainer from "../../Base/PaginationContainer/PaginationContainer";
+import {DEFAULT_PAGE_SIZE} from "../../../constants";
 
 
 class AdminDevices extends Component {
@@ -36,7 +33,7 @@ class AdminDevices extends Component {
     handleOnChangeSearch(event){
         let {value} = event.target;
         this.setState({...this.state, currentPage: 1});
-        this.props.getMyDevicesByPage(1, 5, value);
+        this.props.getMyDevicesByPage(1, DEFAULT_PAGE_SIZE, value);
     }
 
     componentWillMount () {
@@ -45,6 +42,10 @@ class AdminDevices extends Component {
 
     onClickEditDevice(e, device){
         this.props.history.push(`/auth/admin/devices/${device.id}`);
+    }
+
+    onClickTransferDeviceOwnership(event, device){
+        event.preventDefault();
     }
 
     onPageClick(event, pageNumber){
@@ -72,7 +73,7 @@ class AdminDevices extends Component {
                                                className="input-search"
                                                id="search_devices"
                                                name="search_devices"
-                                               placeholder="Search Devices"
+                                               placeholder={T.translate("Search Devices")}
                                                onChange={this.handleOnChangeSearch}/>
                                         <i className="fa fa-search filter-search"></i>
                                     </Col>
@@ -83,12 +84,12 @@ class AdminDevices extends Component {
                                  <Table responsive striped>
                                     <thead>
                                     <tr>
-                                        <th>{T.translate("superAdmin.devices.IdColTitle")}</th>
-                                        <th>{T.translate("superAdmin.devices.SerialNbrColTitle")}</th>
-                                        <th>{T.translate("superAdmin.devices.FriendlyNameColTitle")}</th>
-                                        <th>{T.translate("superAdmin.devices.OwnerColTitle")}</th>
-                                        <th>{T.translate("superAdmin.devices.SlotsColTitle")}</th>
-                                        <th>{T.translate("superAdmin.devices.StatusColTitle")}</th>
+                                        <th>{T.translate("Id")}</th>
+                                        <th>{T.translate("Serial #")}</th>
+                                        <th>{T.translate("Friendly Name")}</th>
+                                        <th>{T.translate("Owner")}</th>
+                                        <th>{T.translate("Slots")}</th>
+                                        <th>{T.translate("Status")}</th>
                                         <th>&nbsp;</th>
                                         <th>&nbsp;</th>
                                     </tr>
@@ -97,7 +98,7 @@ class AdminDevices extends Component {
 
                                     { devices.map((device, i) => {
                                         let ownerId = device.owner != null ? device.owner.id : null;
-                                        let ownerEmail = device.owner != null ? device.owner.email : 'NOT SET';
+                                        let ownerEmail = device.owner != null ? device.owner.email : T.translate('Not Set');
                                         return (
 
                                             <tr key={device.id}>
@@ -109,21 +110,21 @@ class AdminDevices extends Component {
                                                 <td>
                                                     {
                                                         device.is_active &&
-                                                        <Badge color="success">Active</Badge>
+                                                        <Badge color="success">{T.translate("Active")}</Badge>
                                                     }
                                                     {
                                                         !device.is_active &&
-                                                        <Badge color="secondary">Disabled</Badge>
+                                                        <Badge color="secondary">{T.translate("Disabled")}</Badge>
                                                     }
                                                 </td>
                                                 <td className="col-button">
-                                                    <Button outline color="primary" onClick={(e) => this.onClickEditDevice(e, device)}><i className="fa fa-edit"></i>&nbsp;{T.translate("admin.devices.editButton")}</Button>
+                                                    <Button outline color="primary" onClick={(e) => this.onClickEditDevice(e, device)}><i className="fa fa-edit"></i>&nbsp;{T.translate("Edit")}</Button>
                                                 </td>
                                                 <td className="col-button">
                                                     { ownerId == currentUserIid &&
                                                         <Button outline color="warning"
-                                                                onClick={(e) => this.onClickEditDevice(e, device)}><i
-                                                            className="fa fa-exchange"></i>&nbsp;{T.translate("admin.devices.transferButton")}
+                                                                onClick={(e) => this.onClickTransferDeviceOwnership(e, device)}><i
+                                                            className="fa fa-exchange"></i>&nbsp;{T.translate("Transfer Ownership")}
                                                         </Button>
                                                     }
 
@@ -135,7 +136,7 @@ class AdminDevices extends Component {
                                 </Table>
                                 <PaginationContainer
                                     count={this.props.devicesCount}
-                                    pageSize={5}
+                                    pageSize={DEFAULT_PAGE_SIZE}
                                     currentPage={this.state.currentPage}
                                     onPageClick={this.onPageClick}
                                 />
@@ -149,7 +150,7 @@ class AdminDevices extends Component {
 
 const mapStateToProps = ({ adminDevicesState, loggedUserState }) => ({
     devices : adminDevicesState.items,
-    devicesCount : adminDevicesState.items,
+    devicesCount : adminDevicesState.count,
     currentUser: loggedUserState.currentUser,
 });
 

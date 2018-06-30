@@ -5,20 +5,21 @@ import {
 } from 'reactstrap';
 import T from "i18n-react/dist/i18n-react";
 import {connect} from "react-redux";
-import { createNewAdminUser } from "../../../actions/superAdmin/admin-users-actions";
 import swal from "sweetalert2";
 import UserEditForm from "../user-edit-form";
+import {createNewUser} from '../../../actions/Admin/users-actions';
 
-class SuperAdminNewAdminUser extends Component {
+class AdminNewUser extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            currentEditAdminUser: this.props.currentEditAdminUser,
+            currentEditUser: this.props.currentEditUser,
             errors: {
                 email: true,
                 first_name: true,
                 last_name: true,
+                role:true
             },
         };
         this.handleChange = this.handleChange.bind(this);
@@ -37,10 +38,10 @@ class SuperAdminNewAdminUser extends Component {
 
     onSaveUser(event){
         if(this.isValidForm())
-            this.props.createNewAdminUser(this.state.currentEditAdminUser).then(() => {
+            this.props.createNewUser(this.state.currentEditUser).then(() => {
                 swal(
                     '',
-                    T.translate('Your user has been successfully updated!.'),
+                    T.translate('User has been successfully created!'),
                     'success'
                 );
                 this.props.history.goBack();
@@ -55,7 +56,7 @@ class SuperAdminNewAdminUser extends Component {
     }
 
     handleChange(ev, isValid = null) {
-        let currentEditAdminUser = {...this.state.currentEditAdminUser};
+        let currentEditUser = {...this.state.currentEditUser};
         let {value, id} = ev.target;
         let errors = this.state.errors;
         errors[id] = false;
@@ -72,40 +73,40 @@ class SuperAdminNewAdminUser extends Component {
         }
 
         if (ev.target.type == 'file'){
-            currentEditAdminUser[`${id}_file`] = ev.target.files[0];
+            currentEditUser[`${id}_file`] = ev.target.files[0];
             value = null;
         }
 
-        currentEditAdminUser[id] = value;
-        this.setState({...this.state, currentEditAdminUser: currentEditAdminUser, errors: errors});
+        currentEditUser[id] = value;
+        this.setState({...this.state, currentEditUser: currentEditUser, errors: errors});
     }
 
     render(){
-        let config = { showPassword: false, showBio: false, showPic: false };
+        let config = { showPassword: false, showBio: false, showPic: false, showRole: true };
         return(
-          <Row>
-              <Col xs="12" md="12" className="mb-4">
-              <UserEditForm
-                  onSave={this.onSaveUser}
-                  config={config}
-                  onCancel={this.onCancel}
-                  handleChange={this.handleChange}
-                  errors={this.state.errors}
-                  currentEditUser={this.state.currentEditAdminUser}/>
-              </Col>
-          </Row>
+            <Row>
+                <Col xs="12" md="12" className="mb-4">
+                    <UserEditForm
+                        onSave={this.onSaveUser}
+                        config={config}
+                        onCancel={this.onCancel}
+                        handleChange={this.handleChange}
+                        errors={this.state.errors}
+                        currentEditUser={this.state.currentEditUser}/>
+                </Col>
+            </Row>
         );
     }
 
 }
 
-const mapStateToProps = ({ superAdminNewAdminUserState }) => ({
-    currentEditAdminUser : superAdminNewAdminUserState.currentEditAdminUser,
+const mapStateToProps = ({ adminEditUserState }) => ({
+    currentEditUser : adminEditUserState.currentEditUser,
 });
 
 export default connect (
     mapStateToProps,
     {
-        createNewAdminUser
+        createNewUser
     }
-)(SuperAdminNewAdminUser);
+)(AdminNewUser);

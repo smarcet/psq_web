@@ -4,43 +4,43 @@ import '../../i18n';
 export default {
     items: [
         {
-            name: T.translate("user.sideBar.navLinks.dashboard"),
+            name: T.translate("Dashboard"),
             url: '/auth/user/dashboard',
             icon: 'icon-speedometer',
 
         },
         {
-            name: T.translate("user.sideBar.navLinks.exercises"),
+            name: T.translate("Exercises"),
             url: '/auth/user/exercises',
             icon: 'icon-book-open',
 
         },
         {
-            name: T.translate("user.sideBar.navLinks.exams"),
+            name: T.translate("Exams"),
             url: '/auth/user/exams',
             icon: 'icon-badge',
 
         },
         {
-            name: T.translate("user.sideBar.navLinks.statistics"),
+            name: T.translate("Statistics"),
             url: '/auth/user/statistics',
             icon: 'icon-graph',
 
         },
         {
-            name: T.translate("user.sideBar.navLinks.videos"),
+            name: T.translate("Videos"),
             url: '/auth/user/videos',
             icon: 'icon-camrecorder',
 
         },
         {
-            name: T.translate("user.sideBar.navLinks.settings"),
+            name: T.translate("Settings"),
             url: '/auth/user/settings',
             icon: 'icon-settings',
 
         },
         {
-            name: T.translate("user.sideBar.navLinks.logout"),
+            name: T.translate("Logout"),
             url: '/auth/logout',
             icon: 'icon-logout',
         }

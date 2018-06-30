@@ -13,6 +13,7 @@ import {
     Label,
     Input,
 } from 'reactstrap';
+import T from "i18n-react/dist/i18n-react";
 
 class UserEditForm extends Component {
 
@@ -41,35 +42,35 @@ class UserEditForm extends Component {
                 <Col xs="12" md="12">
                     <Card>
                         <CardHeader>
-                            <strong>{ currentEditUser.id > 0 ? `User #${currentEditUser.id}` : 'New User'}</strong>
+                            <strong>{ currentEditUser.id > 0 ? `User #${currentEditUser.id}` : T.translate('New User')}</strong>
                         </CardHeader>
                         <CardBody>
                             <Form action="" method="post" encType="multipart/form-data" className="form-horizontal">
                                 <FormGroup row>
                                     <Col md="3">
-                                        <Label htmlFor="first_name">First Name</Label>
+                                        <Label htmlFor="first_name">{T.translate('First Name')}</Label>
                                     </Col>
                                     <Col xs="12" md="9">
                                         <Input type="text" id="first_name"
                                                onChange={evt => handleChange(evt, target => target.value.trim() != '') }
                                                invalid={errors.first_name}
-                                               name="first_name" value={currentEditUser.first_name} placeholder="First Name"/>
+                                               name="first_name" value={currentEditUser.first_name} placeholder={T.translate('First Name')}/>
                                     </Col>
                                 </FormGroup>
                                 <FormGroup row>
                                     <Col md="3">
-                                        <Label htmlFor="last_name">Surname</Label>
+                                        <Label htmlFor="last_name">{T.translate('Surname')}</Label>
                                     </Col>
                                     <Col xs="12" md="9">
                                         <Input type="text" id="last_name"
                                                invalid={errors.last_name}
                                                onChange={evt => handleChange(evt, target => target.value.trim() != '') }
-                                               name="last_name" value={currentEditUser.last_name} placeholder="Surname"/>
+                                               name="last_name" value={currentEditUser.last_name} placeholder={T.translate('Surname')}/>
                                     </Col>
                                 </FormGroup>
                                 <FormGroup row>
                                     <Col md="3">
-                                        <Label htmlFor="email">Email</Label>
+                                        <Label htmlFor="email">{T.translate('Email')}</Label>
                                     </Col>
                                     <Col xs="12" md="9">
                                         <Input type="email" id="email"
@@ -79,10 +80,27 @@ class UserEditForm extends Component {
                                                        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
                                                        return target.value.trim() != '' && re.test(String(target.value).toLowerCase());
                                                    })}
-                                               name="email" placeholder="Enter Email" value={currentEditUser.email}/>
-                                        <FormText className="help-block">Please enter your email</FormText>
+                                               name="email" placeholder={T.translate('Enter Email')} value={currentEditUser.email}/>
+                                        <FormText className="help-block">{T.translate('Please enter your email')}</FormText>
                                     </Col>
                                 </FormGroup>
+                                { config.showRole &&
+                                    <FormGroup row>
+                                        <Col md="3">
+                                            <Label htmlFor="role">{T.translate('Role')}</Label>
+                                        </Col>
+                                        <Col xs="12" md="9">
+                                            <Input type="select"
+                                                   name="role" id="role"
+                                                   invalid={errors.role}
+                                                   onChange={handleChange}>
+                                                <option value="0">{T.translate('-- Please select Role --')}</option>
+                                                <option value="2">{T.translate('TEACHER')}</option>
+                                                <option value="1">{T.translate('STUDENT')}</option>
+                                            </Input>
+                                        </Col>
+                                    </FormGroup>
+                                }
                                 {config.showPassword &&
                                     <FormGroup row>
                                         <Col md="3">
@@ -161,8 +179,8 @@ class UserEditForm extends Component {
                             </Form>
                         </CardBody>
                         <CardFooter>
-                            <Button type="submit" size="sm" color="primary" onClick={(e) => onSave(e)}><i className="fa fa-dot-circle-o"></i> { currentEditUser.id > 0 ? 'Save' : 'Create'}</Button>{' '}
-                            <Button type="reset" size="sm" color="danger" onClick={(e) => onCancel(e)}><i className="fa fa-ban"></i> Cancel</Button>
+                            <Button type="submit" size="sm" color="primary" onClick={(e) => onSave(e)}><i className="fa fa-dot-circle-o"></i> { currentEditUser.id > 0 ? T.translate('Save') : T.translate('Create')}</Button>{' '}
+                            <Button type="reset" size="sm" color="danger" onClick={(e) => onCancel(e)}><i className="fa fa-ban"></i> {T.translate('Cancel')}</Button>
                         </CardFooter>
                     </Card>
                 </Col>

@@ -56,12 +56,12 @@ class AdminExercises extends Component {
                     <Col xs="12" lg="12">
                         <Card>
                             <CardHeader>
-                                <i className="fa fa-align-justify"></i> {T.translate("admin.exams.Title")}
+                                <i className="fa fa-align-justify"></i> {T.translate("Title")}
                             </CardHeader>
                             <CardBody>
                                 <Row className="search-container">
                                     <Col xs="12" sm="4" lg="4" >
-                                        <Input type="text" className="input-search" id="input1-group2" name="input1-group2" placeholder="Search Exam"/>
+                                        <Input type="text" className="input-search" id="input1-group2" name="input1-group2" placeholder={T.translate("Search Exam")}/>
                                         <i className="fa fa-search filter-search"></i>
                                     </Col>
                                     <Col xs="12" sm="4" lg="3" >
@@ -71,15 +71,15 @@ class AdminExercises extends Component {
                                 <Table responsive striped>
                                     <thead>
                                     <tr>
-                                        <th>{T.translate("admin.exams.IdColTitle")}</th>
-                                        <th>{T.translate("admin.exams.ExerciseColTitle")}</th>
-                                        <th>{T.translate("admin.exams.TakerFirstNameColTitle")}</th>
-                                        <th>{T.translate("admin.exams.TakerLastNameColTitle")}</th>
-                                        <th>{T.translate("admin.exams.DateColTitle")}</th>
-                                        <th>{T.translate("admin.exams.TimeColTitle")}</th>
-                                        <th>{T.translate("admin.exams.EvaluatorColTitle")}</th>
-                                        <th>{T.translate("admin.exams.EvaluationStatusColTitle")}</th>
-                                        <th>{T.translate("admin.exams.NotesColTitle")}</th>
+                                        <th>{T.translate("Id")}</th>
+                                        <th>{T.translate("Title")}</th>
+                                        <th>{T.translate("First Name")}</th>
+                                        <th>{T.translate("Surname")}</th>
+                                        <th>{T.translate("Date")}</th>
+                                        <th>{T.translate("Time")}</th>
+                                        <th>{T.translate("Evaluator")}</th>
+                                        <th>{T.translate("Status")}</th>
+                                        <th>{T.translate("Notes")}</th>
                                         <th>&nbsp;</th>
                                     </tr>
                                     </thead>
@@ -99,21 +99,21 @@ class AdminExercises extends Component {
                                                 <td>
                                                     {
                                                         !exam.evaluated &&
-                                                        <Badge color="secondary">Pending</Badge>
+                                                        <Badge color="secondary">{T.translate("Pending")}</Badge>
                                                     }
                                                     {
                                                         exam.evaluated && !exam.approved &&
-                                                        <Badge color="danger">Not Approved</Badge>
+                                                        <Badge color="danger">{T.translate("Not Approved")}</Badge>
                                                     }
                                                     {
                                                         exam.evaluated && exam.approved &&
-                                                        <Badge color="success">Approved</Badge>
+                                                        <Badge color="success">{T.translate("Approved")}</Badge>
                                                     }
                                                 </td>
                                                 <td>{exam.notes}</td>
                                                 <td>
                                                     { !exam.evaluated &&
-                                                    <Button color="warning" onClick={(e) => this.onClickEvaluateExam(e, exam)} outline><i className="fa fa-pencil"></i>&nbsp;Evaluate</Button>
+                                                    <Button color="warning" onClick={(e) => this.onClickEvaluateExam(e, exam)} outline><i className="fa fa-pencil"></i>&nbsp;{T.translate("Evaluate")}</Button>
                                                     }
                                                 </td>
                                             </tr>

@@ -4,31 +4,31 @@ import '../../i18n';
 export default {
   items: [
     {
-      name: T.translate("superAdmin.sideBar.navLinks.dashboard"),
+      name: T.translate("Dashboard"),
       url: '/auth/super-admin/dashboard',
       icon: 'icon-speedometer',
 
     },
     {
-        name: T.translate("superAdmin.sideBar.navLinks.devices"),
+        name: T.translate("Devices"),
         url: '/auth/super-admin/devices',
         icon: 'icon-camrecorder',
 
     },
       {
-          name: T.translate("superAdmin.sideBar.navLinks.adminUsers"),
+          name: T.translate("Admin Users"),
           url: '/auth/super-admin/admin-users',
           icon: 'icon-people',
 
       },
       {
-          name: T.translate("superAdmin.sideBar.navLinks.settings"),
+          name: T.translate("Settings"),
           url: '/auth/super-admin/settings',
           icon: 'icon-settings',
 
       },
       {
-          name: T.translate("superAdmin.sideBar.navLinks.logout"),
+          name: T.translate("Logout"),
           url: '/auth/logout',
           icon: 'icon-logout',
 

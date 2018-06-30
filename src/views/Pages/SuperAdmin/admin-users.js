@@ -12,10 +12,10 @@ import {
 } from 'reactstrap';
 import T from 'i18n-react';
 import {connect} from "react-redux";
-import { getAdminUsersByPage, deleteAdminUser, resendUserVerification} from "../../../actions/superAdmin/admin-users-actions";
+import { getAdminUsersByPage, deleteAdminUser} from "../../../actions/superAdmin/admin-users-actions";
 import PaginationContainer from "../../Base/PaginationContainer/PaginationContainer";
 import swal from "sweetalert2";
-
+import {resendUserVerification} from "../../../actions/users-actions";
 
 class SuperAdminAdminUsers extends Component {
 
