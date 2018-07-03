@@ -14,9 +14,9 @@ import {
 import T from 'i18n-react';
 import 'sweetalert2/dist/sweetalert2.css';
 import { connect } from 'react-redux'
-import {getMyDevicesByPage} from "../../../actions/Admin/devices-actions";
 import PaginationContainer from "../../Base/PaginationContainer/PaginationContainer";
 import {DEFAULT_PAGE_SIZE} from "../../../constants";
+import {getMyDevicesByPage} from "../../../actions/Admin/devices-actions";
 
 
 class AdminDevices extends Component {
@@ -30,14 +30,20 @@ class AdminDevices extends Component {
         this.handleOnChangeSearch = this.handleOnChangeSearch.bind(this);
     }
 
+    componentWillMount () {
+        this.props.getMyDevicesByPage(this.state.currentPage);
+    }
+
     handleOnChangeSearch(event){
         let {value} = event.target;
         this.setState({...this.state, currentPage: 1});
         this.props.getMyDevicesByPage(1, DEFAULT_PAGE_SIZE, value);
     }
 
-    componentWillMount () {
-        this.props.getMyDevicesByPage(this.state.currentPage);
+    onPageClick(event, pageNumber){
+        this.setState({...this.state, currentPage: pageNumber});
+        this.props.getMyDevicesByPage(pageNumber);
+        event.preventDefault();
     }
 
     onClickEditDevice(e, device){
@@ -45,12 +51,6 @@ class AdminDevices extends Component {
     }
 
     onClickTransferDeviceOwnership(event, device){
-        event.preventDefault();
-    }
-
-    onPageClick(event, pageNumber){
-        this.setState({...this.state, currentPage: pageNumber});
-        this.props.getMyDevicesByPage(pageNumber);
         event.preventDefault();
     }
 

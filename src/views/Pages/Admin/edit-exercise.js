@@ -1,99 +1,142 @@
 import React, {Component} from 'react';
+import ExerciseEditForm from "./exercise-edit-form";
+import {connect} from "react-redux";
+import swal from "sweetalert2";
+import T from "i18n-react/dist/i18n-react";
 import {
-    Row,
-    Col,
-    Button,
-    Card,
-    CardHeader,
-    CardFooter,
-    CardBody,
-    Form,
-    FormGroup,
-    FormText,
-    Label,
-    Input,
-} from 'reactstrap';
+    getMyExerciseById, updateExercise, addNewExercise, getMyAvailableDevices
+}  from "../../../actions/Admin/exercises-actions";
 
 class AdminEditExercise extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            currentEditExercise: this.props.currentEditExercise,
+            errors: {
+                title: true,
+                abstract:true,
+                max_duration: true,
+                allowed_devices: true,
+            },
+        };
+
+        this.handleChange = this.handleChange.bind(this);
+        this.onSave = this.onSave.bind(this);
+        this.onCancel = this.onCancel.bind(this);
+    }
+
+    isValidForm(){
+        let { errors } = this.state;
+        let isValid = true;
+        Object.keys( errors ).forEach( key => {
+            isValid = isValid && !errors[key];
+        });
+        return isValid;
+    }
+
+    onSave(event){
+        if(this.isValidForm())
+            if(this.state.currentEditExercise.id > 0)
+                this.props.updateExercise(this.state.currentEditExercise).then(() => {
+                    swal(
+                        '',
+                        T.translate("Your exercise has been successfully updated!."),
+                        'success'
+                    );
+                    this.props.history.goBack();
+                });
+            else{
+                this.props.addNewExercise(this.state.currentEditExercise).then(() => {
+                    swal(
+                        '',
+                        T.translate("Your exercise has been successfully created!."),
+                        'success'
+                    );
+                    this.props.history.goBack();
+                });
+            }
+
+        event.preventDefault();
+    }
+
+    onCancel(event){
+        this.props.history.goBack();
+        event.preventDefault();
+    }
+
+    handleChange(ev, isValid = null) {
+        let currentEditExercise = {...this.state.currentEditExercise};
+        let {value, id} = ev.target;
+        let errors = this.state.errors;
+        errors[id] = false;
+
+        if(isValid != null)
+            errors[id] = !isValid(ev.target);
+
+        if (ev.target.type == 'checkbox') {
+            if(ev.target.className.indexOf("multi")){
+                id = 'allowed_devices';
+                value = currentEditExercise[id];
+                if(ev.target.checked){
+                     value = [...value, ev.target.value]
+                }
+                else{
+                    value = value.filter(elem => elem != ev.target.value)
+                }
+                errors[id] = value.length == 0;
+            }
+            else
+                value = ev.target.checked;
+        }
+
+        if (ev.target.type == 'select-one' && value == '0') {
+            value = null;
+        }
+
+        currentEditExercise[id] = value;
+        this.setState({...this.state, currentEditExercise: currentEditExercise, errors: errors});
+    }
+
+    componentWillMount() {
+        let exerciseId = this.props.match.params.exercise_id;
+        if(typeof exerciseId != 'undefined' && exerciseId > 0)
+            this.props.getMyExerciseById(exerciseId);
+        this.props.getMyAvailableDevices();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({ ...this.state, currentEditExercise: nextProps.currentEditExercise});
+    }
+
     render(){
+        let {currentEditExercise} = this.state;
+        let {availableDevices} = this.props;
         return (
-            <Row>
-                <Col xs="12" md="12">
-                    <Card>
-                        <CardHeader>
-                            <strong>New Exercise</strong>
-                        </CardHeader>
-                        <CardBody>
-                            <Form action="" method="post" encType="multipart/form-data" className="form-horizontal">
-
-                                <FormGroup row>
-                                    <Col md="3">
-                                        <Label htmlFor="text-input">Title</Label>
-                                    </Col>
-                                    <Col xs="12" md="9">
-                                        <Input type="text" id="fname-input" name="fname-input" placeholder="Title"/>
-                                    </Col>
-                                </FormGroup>
-                                <FormGroup row>
-                                    <Col md="3">
-                                        <Label htmlFor="textarea-input">Abstract</Label>
-                                    </Col>
-                                    <Col xs="12" md="9">
-                                        <Input type="textarea" name="textarea-input" id="textarea-input" rows="9"
-                                               placeholder="Abstract..."/>
-                                    </Col>
-                                </FormGroup>
-                                <FormGroup row>
-                                    <Col md="3">
-                                        <Label htmlFor="type">Type</Label>
-                                    </Col>
-                                    <Col xs="12" md="9">
-                                        <Input type="select" name="type" id="type">
-                                            <option value="1">Regular</option>
-                                            <option value="2">Tutorial</option>
-                                        </Input>
-                                    </Col>
-                                </FormGroup>
-                                <FormGroup row>
-                                    <Col md="3">
-                                        <Label htmlFor="text-input">Max. Time</Label>
-                                    </Col>
-                                    <Col xs="12" md="9">
-                                        <Input type="time" id="lname-input" name="lname-input"/>
-                                    </Col>
-                                </FormGroup>
-                                <FormGroup row>
-                                    <Col md="3">
-                                        <Label htmlFor="select">Devices</Label>
-                                    </Col>
-                                    <Col xs="12" md="9">
-                                        <FormGroup check inline>
-                                            <Input className="form-check-input" type="checkbox" id="inline-checkbox1" name="inline-checkbox1" value="option1"/>
-                                            <Label className="form-check-label" check htmlFor="inline-checkbox1">Device#1</Label>
-                                        </FormGroup>
-                                        <FormGroup check inline>
-                                            <Input className="form-check-input" type="checkbox" id="inline-checkbox2" name="inline-checkbox2" value="option2"/>
-                                            <Label className="form-check-label" check htmlFor="inline-checkbox2">Device#2</Label>
-                                        </FormGroup>
-                                        <FormGroup check inline>
-                                            <Input className="form-check-input" type="checkbox" id="inline-checkbox3" name="inline-checkbox3" value="option3"/>
-                                            <Label className="form-check-label" check htmlFor="inline-checkbox3">Device#3</Label>
-                                        </FormGroup>
-                                        <FormText className="help-block">Please select devices on which exercise will be available.</FormText>
-                                    </Col>
-                                </FormGroup>
-
-                            </Form>
-                        </CardBody>
-                        <CardFooter>
-                            <Button type="submit" size="sm" color="primary"><i className="fa fa-dot-circle-o"></i> Save</Button>{' '}
-                            <Button type="reset" size="sm" color="danger"><i className="fa fa-ban"></i> Cancel</Button>
-                        </CardFooter>
-                    </Card>
-                </Col>
-            </Row>
+          <ExerciseEditForm
+              currentEditExercise={currentEditExercise}
+              availableDevices={availableDevices}
+              errors={this.state.errors}
+              onSave={this.onSave}
+              onCancel={this.onCancel}
+              handleChange={this.handleChange}
+          />
         );
     }
 }
 
-export default AdminEditExercise;
+
+const mapStateToProps = ({ adminEditExerciseState }) => ({
+    currentEditExercise : adminEditExerciseState.currentEditExercise,
+    availableDevices: adminEditExerciseState.availableDevices
+});
+
+export default connect (
+    mapStateToProps,
+    {
+        getMyExerciseById,
+        addNewExercise,
+        updateExercise,
+        getMyAvailableDevices,
+    }
+)(AdminEditExercise);
