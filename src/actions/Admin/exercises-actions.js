@@ -67,10 +67,10 @@ export const getMyExerciseById = (exerciseId) => (dispatch, getState) => {
         token: token,
     };
 
-    getRequest(
+    return getRequest(
         createAction(START_LOADING),
         createAction(RETRIEVED_MY_EXERCISE),
-        `${apiBaseUrl}/admin-users/me/exercises/${exerciseId}`,
+        `${apiBaseUrl}/exercises/${exerciseId}`,
         authErrorHandler,
     )(params)(dispatch).then((payload) => {
         dispatch({
@@ -94,7 +94,7 @@ export const addNewExercise = (newExercise) => (dispatch, getState) => {
     return postRequest(
         createAction(START_LOADING),
         createAction(ADDED_NEW_EXERCISE)(newExercise),
-        `${apiBaseUrl}/admin-users/me/exercises`,
+        `${apiBaseUrl}/exercises`,
         newExercise,
         authErrorHandler,
     )(params)(dispatch).then((payload) => {
@@ -110,17 +110,17 @@ export const updateExercise = (exercise) => (dispatch, getState) => {
     let {token} = loggedUserState;
     let apiBaseUrl = process.env['API_BASE_URL'];
 
-
     let params = {
         token: token,
     };
 
+    exercise.author = exercise.author.id;
     let exerciseId = exercise.id;
 
     return putRequest(
         createAction(START_LOADING),
         createAction(UPDATED_EXERCISE)(exercise),
-        `${apiBaseUrl}/admin-users/me/exercises/${exerciseId}`,
+        `${apiBaseUrl}/exercises/${exerciseId}`,
         exercise,
         authErrorHandler,
     )(params)(dispatch).then((payload) => {
@@ -147,7 +147,7 @@ export const deleteExercise = (exercise) =>  (dispatch, getState) => {
     return deleteRequest(
         createAction(START_LOADING),
         createAction(DELETED_EXERCISE)(exercise),
-        `${apiBaseUrl}/admin-users/me/exercises/${exerciseId}`,
+        `${apiBaseUrl}/exercises/${exerciseId}`,
         {},
         authErrorHandler,
     )(params)(dispatch).then((payload) => {

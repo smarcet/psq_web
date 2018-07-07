@@ -1,4 +1,4 @@
-import {createAction, getRequest, deleteRequest, putRequest, postRequest} from "./base-actions";
+import {createAction, postRequest} from "./base-actions";
 import {authErrorHandler, START_LOADING, STOP_LOADING} from "./base-actions";
 
 export const resendUserVerification  = (userId) =>  (dispatch, getState) => {

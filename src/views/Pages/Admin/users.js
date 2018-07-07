@@ -126,6 +126,7 @@ class AdminUsers extends Component {
                                         <th>{T.translate("Id")}</th>
                                         <th>{T.translate("First Name")}</th>
                                         <th>{T.translate("Surname")}</th>
+                                        <th>{T.translate("Email")}</th>
                                         <th>{T.translate("Role")}</th>
                                         <th>{T.translate("Status")}</th>
                                         <th>&nbsp;</th>
@@ -142,6 +143,7 @@ class AdminUsers extends Component {
                                                 <td>{user.id}</td>
                                                 <td>{user.first_name}</td>
                                                 <td>{user.last_name}</td>
+                                                <td>{user.email}</td>
                                                 <td>{this.getFriendlyRole(user.role)}</td>
                                                 <td>
                                                     {

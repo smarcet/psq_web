@@ -14,7 +14,8 @@ import swal from 'sweetalert2';
 import classnames from 'classnames';
 import DeviceEditForm from "./device-edit-form";
 import {connect} from "react-redux";
-import { getMyDeviceById,
+import {
+    getMyDeviceById,
     searchAdminAndRawUsers,
     linkUser2Device,
     unLinkUser2Device,
@@ -23,6 +24,8 @@ import { getMyDeviceById,
     searchAdminUsers,
     updateDevice,
 } from "../../../actions/Admin/devices-actions";
+
+import {FormValidator, MandatoryField} from "../../../utils/form-validator";
 
 import DeviceEditFormUsersList from "./device-edit-form-users-list";
 import {DEFAULT_PAGE_SIZE} from "../../../constants";
@@ -35,12 +38,15 @@ class AdminEditDevice extends Component {
         this.state = {
             activeTab: '1',
             currentEditDevice: this.props.currentEditDevice,
-            errors: {
-            },
+            validator: new FormValidator(
+                [
+                    new MandatoryField('friendly_name', 'Friendly Name'),
+                ]
+            )
         };
 
         this.onCancel = this.onCancel.bind(this);
-        this.handleChange   = this.handleChange.bind(this);
+        this.handleChange = this.handleChange.bind(this);
         this.onClickUnlinkUser = this.onClickUnlinkUser.bind(this);
         this.handleChangeSearchTermDeviceUser = this.handleChangeSearchTermDeviceUser.bind(this);
         this.handleLinkDeviceUser = this.handleLinkDeviceUser.bind(this);
@@ -51,71 +57,65 @@ class AdminEditDevice extends Component {
         this.onSave = this.onSave.bind(this);
     }
 
-    handleChangeSearchTermDeviceUser(term){
+    handleChangeSearchTermDeviceUser(term) {
         this.props.searchAdminAndRawUsers(term, DEFAULT_PAGE_SIZE);
     }
 
-    handleChangeSearchTermDeviceAdminUser(term){
+    handleChangeSearchTermDeviceAdminUser(term) {
         this.props.searchAdminUsers(term, DEFAULT_PAGE_SIZE);
     }
 
-    handleLinkDeviceUser(user){
-        if(this.state.currentEditDevice.slots > 0)
+    handleLinkDeviceUser(user) {
+        if (this.state.currentEditDevice.slots > 0)
             this.props.linkUser2Device(this.state.currentEditDevice, user);
     }
 
-    handleLinkAdminDeviceUser(user){
-        if(this.state.currentEditDevice.slots > 0)
+    handleLinkAdminDeviceUser(user) {
+        if (this.state.currentEditDevice.slots > 0)
             this.props.linkAdminUser2Device(this.state.currentEditDevice, user);
     }
 
+    onSave(event) {
 
-    isValidForm(){
-        let { errors } = this.state;
-        let isValid = true;
-        Object.keys( errors ).forEach( key => {
-            isValid = isValid && !errors[key];
-        });
-        return isValid;
-    }
-
-    onSave(event){
-        if(this.isValidForm())
-            this.props.updateDevice(this.state.currentEditDevice).then(() => {
-                swal(
-                    '',
-                    T.translate("Your device has been successfully updated!."),
-                    'success'
-                );
-                this.props.history.goBack();
-            });
-
+        let {currentEditDevice, validator} = this.state;
         event.preventDefault();
+        if (!validator.isValidData(currentEditDevice)) {
+            this.setState({...this.state, validator: validator});
+            return false;
+        }
+
+        this.props.updateDevice(this.state.currentEditDevice).then(() => {
+            swal(
+                '',
+                T.translate("Your device has been successfully updated!."),
+                'success'
+            );
+            this.props.history.goBack();
+        });
     }
 
-    onCancel(event){
+    onCancel(event) {
         this.props.history.goBack();
         event.preventDefault();
     }
 
-    handleChange(ev, isValid = null) {
-        let currentEditDevice = {...this.state.currentEditDevice};
-        let {value, id} = ev.target;
+    handleChange(event) {
+        let {currentEditDevice, validator} = this.state;
+        let {value, id} = event.target;
         let errors = this.state.errors;
         errors[id] = false;
 
-        if(isValid != null)
-            errors[id] = !isValid(ev.target);
-
-        if (ev.target.type == 'checkbox') {
-            value = ev.target.checked;
+        if (event.target.type == 'checkbox') {
+            value = event.target.checked;
         }
 
-        if (ev.target.type == 'select-one' && value == '0') {
-            value = null;
+        if (event.target.type == 'select-one' && value == '0') {
+            value = '';
         }
 
         currentEditDevice[id] = value;
+
+        validator.validate(currentEditDevice);
         this.setState({...this.state, currentEditDevice: currentEditDevice, errors: errors});
     }
 
@@ -134,15 +134,15 @@ class AdminEditDevice extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({ ...this.state, currentEditDevice: nextProps.currentEditDevice});
+        this.setState({...this.state, currentEditDevice: nextProps.currentEditDevice});
     }
 
-    onClickAddNewUser(event){
+    onClickAddNewUser(event) {
         this.props.history.push("/auth/admin/users/new");
         event.preventDefault();
     }
 
-    onClickUnlinkUser(event, user){
+    onClickUnlinkUser(event, user) {
         swal({
             title: T.translate("Are you sure?"),
             text: T.translate("You are about to disassociate this user with current device"),
@@ -152,7 +152,7 @@ class AdminEditDevice extends Component {
             cancelButtonText: T.translate("No, keep it")
         }).then((result) => {
             if (result.value) {
-                this.props.unLinkUser2Device(this.state.currentEditDevice, user).then(()=> {
+                this.props.unLinkUser2Device(this.state.currentEditDevice, user).then(() => {
                     swal(
                         T.translate("Unlinked!"),
                         T.translate("User has been unlinked from this device."),
@@ -164,7 +164,7 @@ class AdminEditDevice extends Component {
         event.preventDefault();
     }
 
-    onClickUnlinkAdminUser(event, user){
+    onClickUnlinkAdminUser(event, user) {
         swal({
             title: T.translate("Are you sure?"),
             text: T.translate("You are about to disassociate this user with current device"),
@@ -174,7 +174,7 @@ class AdminEditDevice extends Component {
             cancelButtonText: T.translate("No, keep it")
         }).then((result) => {
             if (result.value) {
-                this.props.unLinkAdminUser2Device(this.state.currentEditDevice, user).then(()=> {
+                this.props.unLinkAdminUser2Device(this.state.currentEditDevice, user).then(() => {
                     swal(
                         T.translate("Unlinked!"),
                         T.translate("User has been unlinked from this device."),
@@ -186,49 +186,59 @@ class AdminEditDevice extends Component {
         event.preventDefault();
     }
 
-    render(){
-        let { currentEditDevice } = this.state;
+    render() {
+
+        let {currentEditDevice, validator} = this.state;
         let deviceUsers = currentEditDevice.users;
         let deviceAdminUsers = currentEditDevice.admins;
         let slots = currentEditDevice.slots - (currentEditDevice.users.length + currentEditDevice.admins.length);
 
-        return(
+        return (
             <Row>
                 <Col xs="12" md="12" className="mb-4">
                     <Nav tabs>
                         <NavItem>
                             <NavLink
-                                className={classnames({ active: this.state.activeTab === '1' })}
-                                onClick={() => { this.toggleTab('1'); }}>
+                                className={classnames({active: this.state.activeTab === '1'})}
+                                onClick={() => {
+                                    this.toggleTab('1');
+                                }}>
                                 <i className="fa fa-video-camera"></i>
-                                <span className={ this.state.activeTab === '1' ? "" : "d-none"}> {T.translate("Device Data")} </span>{'\u00A0'}
+                                <span
+                                    className={this.state.activeTab === '1' ? "" : "d-none"}> {T.translate("Device Data")} </span>{'\u00A0'}
                             </NavLink>
                         </NavItem>
                         <NavItem>
                             <NavLink
-                                className={classnames({ active: this.state.activeTab === '2' })}
-                                onClick={() => { this.toggleTab('2'); }}>
+                                className={classnames({active: this.state.activeTab === '2'})}
+                                onClick={() => {
+                                    this.toggleTab('2');
+                                }}>
                                 <i className="fa fa-user"></i>
-                                <span className={ this.state.activeTab === '2' ? "" : "d-none"}>  {T.translate("Users Data")} </span>{'\u00A0'}
+                                <span
+                                    className={this.state.activeTab === '2' ? "" : "d-none"}>  {T.translate("Users Data")} </span>{'\u00A0'}
                             </NavLink>
                         </NavItem>
                         <NavItem>
                             <NavLink
-                                className={classnames({ active: this.state.activeTab === '3' })}
-                                onClick={() => { this.toggleTab('3'); }}>
+                                className={classnames({active: this.state.activeTab === '3'})}
+                                onClick={() => {
+                                    this.toggleTab('3');
+                                }}>
                                 <i className="fa fa-user-plus"></i>
-                                <span className={ this.state.activeTab === '3' ? "" : "d-none"}>  {T.translate("Admin Users")} </span>{'\u00A0'}
+                                <span
+                                    className={this.state.activeTab === '3' ? "" : "d-none"}>  {T.translate("Admin Users")} </span>{'\u00A0'}
                             </NavLink>
                         </NavItem>
                     </Nav>
                     <TabContent activeTab={this.state.activeTab}>
                         <TabPane tabId="1">
                             <DeviceEditForm
-                                onSave={this.onSave}
-                                errors={this.state.errors}
-                                handleChange={this.handleChange}
-                                onCancel={this.onCancel}
+                                validator={validator}
                                 device={currentEditDevice}
+                                handleChange={this.handleChange}
+                                onSave={this.onSave}
+                                onCancel={this.onCancel}
                             />
                         </TabPane>
                         <TabPane tabId="2">
@@ -241,7 +251,7 @@ class AdminEditDevice extends Component {
                                 handleChangeSearchTerm={this.handleChangeSearchTermDeviceUser}
                                 handleLinkItem={this.handleLinkDeviceUser}
                                 onClickAddUser={this.onClickAddNewUser}
-                        />
+                            />
                         </TabPane>
                         <TabPane tabId="3">
                             <DeviceEditFormUsersList
@@ -262,13 +272,13 @@ class AdminEditDevice extends Component {
     }
 }
 
-const mapStateToProps = ({ adminEditDevicesState }) => ({
-    currentEditDevice : adminEditDevicesState.currentEditDevice,
+const mapStateToProps = ({adminEditDevicesState}) => ({
+    currentEditDevice: adminEditDevicesState.currentEditDevice,
     matchedDeviceUsers: adminEditDevicesState.matchedDeviceUsers,
     matchedDeviceAdminUsers: adminEditDevicesState.matchedDeviceAdminUsers,
 });
 
-export default connect (
+export default connect(
     mapStateToProps,
     {
         getMyDeviceById,

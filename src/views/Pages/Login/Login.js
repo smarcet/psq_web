@@ -40,14 +40,11 @@ class Login extends Component {
     }
 
     onLoginClick() {
-
         let validUsername = this.validateUserName(this.username.value);
         let validPassword = this.validatePassword(this.password.value);
-
         this.setState({...this.state, invalidUserName: !validUsername , invalidPassword: !validPassword});
         if(!validUsername || !validPassword) return;
         this.props.doLogin(this.username.value, this.password.value);
-
     }
 
     render() {

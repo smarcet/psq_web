@@ -11,7 +11,8 @@ import {
     FormText,
     Label,
     Input,
-    Button
+    Button,
+    FormFeedback
 } from 'reactstrap';
 import T from "i18n-react/dist/i18n-react";
 
@@ -19,7 +20,7 @@ class DeviceEditForm extends Component {
 
     render(){
 
-        let { device, handleChange, errors, onSave, onCancel  } = this.props;
+        let { device, validator, handleChange, onSave, onCancel  } = this.props;
         return(
             <Row>
                 <Col xs="12" md="12" lg="12">
@@ -37,8 +38,7 @@ class DeviceEditForm extends Component {
                                         <Input type="text"
                                                id="serial"
                                                name="serial"
-                                               onChange={evt => handleChange(evt, target => target.value.trim() != '') }
-                                               invalid={errors.serial}
+                                               onChange={handleChange}
                                                value={device.serial} readOnly={true}/>
                                     </Col>
                                 </FormGroup>
@@ -50,10 +50,11 @@ class DeviceEditForm extends Component {
                                         <Input type="text"
                                                id="friendly_name"
                                                name="friendly_name" placeholder={T.translate("Friendly Name")}
-                                               onChange={evt => handleChange(evt, target => target.value.trim() != '') }
-                                               invalid={errors.friendly_name}
+                                               onChange={handleChange}
+                                               invalid={validator.isInvalid('friendly_name')}
                                                value={device.friendly_name}
                                         />
+                                        <FormFeedback valid={validator.isValid('friendly_name')}><i className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('friendly_name')}</FormFeedback>
                                     </Col>
                                 </FormGroup>
                                 <FormGroup row>
@@ -61,9 +62,8 @@ class DeviceEditForm extends Component {
                                         <Label htmlFor="slots">{T.translate("Max. Slots #")}</Label>
                                     </Col>
                                     <Col xs="12" md="9">
-                                        <Input type="number" id="slots" name="slots" value={device.slots}
-                                               onChange={evt => handleChange(evt, target => target.value.trim() != '') }
-                                               invalid={errors.slots}
+                                        <Input type="number" id="slots" name="slots"
+                                               value={device.slots}
                                                readOnly={true}
                                         />
                                         <FormText className="help-block">{T.translate("Max. # Users to associate with device")}</FormText>

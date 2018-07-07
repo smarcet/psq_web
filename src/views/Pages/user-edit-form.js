@@ -12,6 +12,7 @@ import {
     FormText,
     Label,
     Input,
+    FormFeedback
 } from 'reactstrap';
 import T from "i18n-react/dist/i18n-react";
 
@@ -35,7 +36,7 @@ class UserEditForm extends Component {
     }
 
     render(){
-        let { currentEditUser, handleChange, errors, onSave, onCancel, config } = this.props;
+        let { currentEditUser, handleChange, validator, onSave, onCancel, config } = this.props;
         let { showChangePassword } = this.state;
         return(
             <Row>
@@ -52,9 +53,10 @@ class UserEditForm extends Component {
                                     </Col>
                                     <Col xs="12" md="9">
                                         <Input type="text" id="first_name"
-                                               onChange={evt => handleChange(evt, target => target.value.trim() != '') }
-                                               invalid={errors.first_name}
+                                               onChange={handleChange}
+                                               invalid={validator.isInvalid('first_name')}
                                                name="first_name" value={currentEditUser.first_name} placeholder={T.translate('First Name')}/>
+                                        <FormFeedback valid={validator.isValid('first_name')}><i className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('first_name')}</FormFeedback>
                                     </Col>
                                 </FormGroup>
                                 <FormGroup row>
@@ -63,9 +65,10 @@ class UserEditForm extends Component {
                                     </Col>
                                     <Col xs="12" md="9">
                                         <Input type="text" id="last_name"
-                                               invalid={errors.last_name}
-                                               onChange={evt => handleChange(evt, target => target.value.trim() != '') }
+                                               onChange={handleChange}
+                                               invalid={validator.isInvalid('last_name')}
                                                name="last_name" value={currentEditUser.last_name} placeholder={T.translate('Surname')}/>
+                                        <FormFeedback valid={validator.isValid('last_name')}><i className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('last_name')}</FormFeedback>
                                     </Col>
                                 </FormGroup>
                                 <FormGroup row>
@@ -74,14 +77,14 @@ class UserEditForm extends Component {
                                     </Col>
                                     <Col xs="12" md="9">
                                         <Input type="email" id="email"
-                                               invalid={errors.email}
-                                               onChange={
-                                                   evt => handleChange(evt, (target) => {
-                                                       var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-                                                       return target.value.trim() != '' && re.test(String(target.value).toLowerCase());
-                                                   })}
+                                               onChange={handleChange}
+                                               invalid={validator.isInvalid('email')}
+                                               readOnly={!config.canEditEmail}
                                                name="email" placeholder={T.translate('Enter Email')} value={currentEditUser.email}/>
-                                        <FormText className="help-block">{T.translate('Please enter your email')}</FormText>
+                                        { config.showEmailChangeWarning &&
+                                            <FormText className="help-block">{T.translate('if your change your email you will need to re verify it')}</FormText>
+                                        }
+                                        <FormFeedback valid={validator.isValid('email')}><i className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('email')}</FormFeedback>
                                     </Col>
                                 </FormGroup>
                                 { config.showRole &&
@@ -91,13 +94,17 @@ class UserEditForm extends Component {
                                         </Col>
                                         <Col xs="12" md="9">
                                             <Input type="select"
-                                                   name="role" id="role"
-                                                   invalid={errors.role}
-                                                   onChange={handleChange}>
-                                                <option value="0">{T.translate('-- Please select Role --')}</option>
+                                                   name="role"
+                                                   id="role"
+                                                   value={currentEditUser.role}
+                                                   onChange={handleChange}
+                                                   invalid={validator.isInvalid('role')}
+                                            >
+                                                <option value="">{T.translate('-- Please select Role --')}</option>
                                                 <option value="2">{T.translate('TEACHER')}</option>
                                                 <option value="1">{T.translate('STUDENT')}</option>
                                             </Input>
+                                            <FormFeedback valid={validator.isValid('role')}><i className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('role')}</FormFeedback>
                                         </Col>
                                     </FormGroup>
                                 }
@@ -120,35 +127,23 @@ class UserEditForm extends Component {
                                     <Col xs="12" md="9">
                                         <Input type="password" id="password" name="password"
                                                placeholder="Password"
-                                               invalid={errors.password}
-                                               onChange={
-                                                   evt => handleChange(evt, (target) => {
-                                                       let value = target.value.trim();
-                                                       if (value == '') return false;
-                                                       if (value.length <  8 ) return false;
-                                                       return true;
-                                                   })}
+                                               onChange={handleChange}
+                                               invalid={validator.isInvalid('password')}
                                         />
                                         <FormText className="help-block">Please enter a complex password</FormText>
+                                        <FormFeedback valid={validator.isValid('password')}><i className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('password')}</FormFeedback>
                                     </Col>
                                     <Col md="3">
                                         <Label htmlFor="password_confirmation">Confirm Password</Label>
                                     </Col>
                                     <Col xs="12" md="9">
                                         <Input type="password" id="password_confirmation" name="password_confirmation"
-                                               invalid={errors.password_confirmation}
-                                               placeholder="Password Confirmation"
-                                               onChange={
-                                                   evt => handleChange(evt, (target) => {
-                                                       let confirmValue = target.value.trim();;
-                                                       let value = document.getElementById('password').value.trim();
-                                                       if (value == '') return false;
-                                                       if (value != confirmValue) return false;
-                                                       if (value.length <  8 ) return false;
-                                                       return true;
-                                                   })}
+                                               placeholder="Confirm Password"
+                                               onChange={handleChange}
+                                               invalid={validator.isInvalid('password_confirmation')}
                                         />
                                         <FormText className="help-block">Please re enter new password</FormText>
+                                        <FormFeedback valid={validator.isValid('password')}><i className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('password')}</FormFeedback>
                                     </Col>
                                 </FormGroup>
                                 }
@@ -158,8 +153,16 @@ class UserEditForm extends Component {
                                         <Label htmlFor="bio">Bio</Label>
                                     </Col>
                                     <Col xs="12" md="9">
-                                        <Input type="textarea" onChange={handleChange} name="bio" id="bio" rows="9"
-                                               placeholder="Content..." value={currentEditUser.bio}/>
+                                        <Input type="textarea"
+                                               onChange={handleChange}
+                                               name="bio"
+                                               id="bio"
+                                               rows="9"
+                                               placeholder="Content..."
+                                               value={currentEditUser.bio}
+                                               invalid={validator.isInvalid('bio')}
+                                        />
+                                        <FormFeedback valid={validator.isValid('bio')}><i className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('bio')}</FormFeedback>
                                     </Col>
                                 </FormGroup>
                                 }

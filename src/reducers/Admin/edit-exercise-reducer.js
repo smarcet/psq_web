@@ -1,5 +1,8 @@
 import { LOGOUT_USER } from "../../actions/auth-actions";
-import {RETRIEVED_MY_AVAILABLE_DEVICES, RETRIEVED_MY_EXERCISE} from "../../actions/Admin/exercises-actions";
+import {
+    ADDED_NEW_EXERCISE, RETRIEVED_MY_AVAILABLE_DEVICES,
+    RETRIEVED_MY_EXERCISE, RETRIEVED_MY_EXERCISES, UPDATED_EXERCISE
+} from "../../actions/Admin/exercises-actions";
 
 export const DEFAULT_EXERCISE = {
     id: 0,
@@ -19,18 +22,28 @@ const DEFAULT_STATE = {
 const adminEditExerciseReducer = (state = DEFAULT_STATE, action) => {
     const { type, payload } = action;
     switch (type) {
-
-        case RETRIEVED_MY_EXERCISE: return {
-            ...state,
-            currentEditExercise: action.payload.response,
-        };
-            break
+        case RETRIEVED_MY_EXERCISE: {
+            return {
+                ...state,
+                currentEditExercise: action.payload.response,
+            };
+        }
+        break
         case RETRIEVED_MY_AVAILABLE_DEVICES: return {
             ...state,
             availableDevices: action.payload.response.results,
         };
-            break
+        break
         case LOGOUT_USER: {
+            return DEFAULT_STATE;
+        }
+        case RETRIEVED_MY_EXERCISES:{
+            return DEFAULT_STATE;
+        }
+        case ADDED_NEW_EXERCISE: {
+            return DEFAULT_STATE;
+        }
+        case UPDATED_EXERCISE: {
             return DEFAULT_STATE;
         }
         default:

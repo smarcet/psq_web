@@ -1,5 +1,8 @@
-import { LOGOUT_USER } from "../../actions/auth-actions";
-import {UPDATED_USER} from "../../actions/Admin/users-actions";
+import {LOGOUT_USER} from "../../actions/auth-actions";
+import {
+    CREATED_USER, DELETED_USER, RETRIEVED_USER, RETRIEVED_USERS,
+    UPDATED_USER
+} from "../../actions/Admin/users-actions";
 
 export const DEFAULT_USER = {
     id: 0,
@@ -17,17 +20,35 @@ const DEFAULT_STATE = {
 }
 
 const adminEditUserReducer = (state = DEFAULT_STATE, action) => {
-    const { type, payload } = action;
+    const {type, payload} = action;
     switch (type) {
-
-        case UPDATED_USER: return {
-            ...state,
-            currentEditUser: action.payload.response,
-        };
+        case RETRIEVED_USER: {
+            return {
+                ...state,
+                currentEditUser: action.payload.response,
+            };
+        }
             break
+        case RETRIEVED_USERS: {
+            return DEFAULT_STATE;
+        }
+        break;
+        case CREATED_USER: {
+            return DEFAULT_STATE;
+        }
+            break;
+        case DELETED_USER: {
+            return DEFAULT_STATE;
+        }
+            break;
+        case UPDATED_USER: {
+            return DEFAULT_STATE;
+        }
+            break;
         case LOGOUT_USER: {
             return DEFAULT_STATE;
         }
+            break;
         default:
             return state;
     }

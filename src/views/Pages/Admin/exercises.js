@@ -79,7 +79,11 @@ class AdminExams extends Component {
     }
 
     getDevices(exercise){
-
+        let devices ='';
+        for (var device of exercise.allowed_devices) {
+            devices += `${device.friendly_name}, `;
+        }
+        return devices;
     }
 
     getTakers(exercise){
@@ -140,7 +144,7 @@ class AdminExams extends Component {
                                                 <th>{T.translate("Title")}</th>
                                                 <th>{T.translate("Max. Duration")}</th>
                                                 <th>{T.translate("Devices")}</th>
-                                                <th>{T.translate("Creator")}</th>
+                                                <th>{T.translate("Author")}</th>
                                                 <th>{T.translate("Takers")}</th>
                                                 <th>&nbsp;</th>
                                                 <th>&nbsp;</th>

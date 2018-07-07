@@ -5,20 +5,26 @@ import swal from "sweetalert2";
 import T from "i18n-react/dist/i18n-react";
 import {
     getMyExerciseById, updateExercise, addNewExercise, getMyAvailableDevices
-}  from "../../../actions/Admin/exercises-actions";
+} from "../../../actions/Admin/exercises-actions";
+import {FormValidator, GreaterThanField, MandatoryField} from "../../../utils/form-validator";
 
 class AdminEditExercise extends Component {
 
     constructor(props) {
         super(props);
+
         this.state = {
             currentEditExercise: this.props.currentEditExercise,
-            errors: {
-                title: true,
-                abstract:true,
-                max_duration: true,
-                allowed_devices: true,
-            },
+            validator: new FormValidator(
+                [
+                    new MandatoryField('title', 'Title'),
+                    new MandatoryField('abstract', 'Abstract'),
+                    new MandatoryField('max_duration', 'Max. Duration'),
+                    new GreaterThanField('max_duration', 0, 'Max. Duration'),
+                    new MandatoryField('type', 'Type'),
+                    new MandatoryField('allowed_devices', 'Allowed Devices'),
+                ]
+            )
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -26,112 +32,111 @@ class AdminEditExercise extends Component {
         this.onCancel = this.onCancel.bind(this);
     }
 
-    isValidForm(){
-        let { errors } = this.state;
-        let isValid = true;
-        Object.keys( errors ).forEach( key => {
-            isValid = isValid && !errors[key];
-        });
-        return isValid;
-    }
+    onSave(event) {
 
-    onSave(event){
-        if(this.isValidForm())
-            if(this.state.currentEditExercise.id > 0)
-                this.props.updateExercise(this.state.currentEditExercise).then(() => {
-                    swal(
-                        '',
-                        T.translate("Your exercise has been successfully updated!."),
-                        'success'
-                    );
-                    this.props.history.goBack();
-                });
-            else{
-                this.props.addNewExercise(this.state.currentEditExercise).then(() => {
-                    swal(
-                        '',
-                        T.translate("Your exercise has been successfully created!."),
-                        'success'
-                    );
-                    this.props.history.goBack();
-                });
-            }
-
+        let {currentEditExercise, validator} = this.state;
         event.preventDefault();
+        if (!validator.isValidData(currentEditExercise)) {
+            this.setState({...this.state, validator: validator});
+            return false;
+        }
+
+        if (this.state.currentEditExercise.id > 0)
+            this.props.updateExercise(this.state.currentEditExercise).then(() => {
+                swal(
+                    '',
+                    T.translate("Your exercise has been successfully updated!."),
+                    'success'
+                );
+                this.props.history.goBack();
+            });
+        else {
+            this.props.addNewExercise(this.state.currentEditExercise).then(() => {
+                swal(
+                    '',
+                    T.translate("Your exercise has been successfully created!."),
+                    'success'
+                );
+                this.props.history.goBack();
+            });
+        }
+
     }
 
-    onCancel(event){
+    onCancel(event) {
         this.props.history.goBack();
         event.preventDefault();
     }
 
-    handleChange(ev, isValid = null) {
-        let currentEditExercise = {...this.state.currentEditExercise};
+    handleChange(ev) {
+        let {currentEditExercise, validator} = this.state;
         let {value, id} = ev.target;
-        let errors = this.state.errors;
-        errors[id] = false;
-
-        if(isValid != null)
-            errors[id] = !isValid(ev.target);
 
         if (ev.target.type == 'checkbox') {
-            if(ev.target.className.indexOf("multi")){
+            if (ev.target.className.indexOf("multi")) {
                 id = 'allowed_devices';
                 value = currentEditExercise[id];
-                if(ev.target.checked){
-                     value = [...value, ev.target.value]
+                if (ev.target.checked) {
+                    value = [...value, parseInt(ev.target.value)]
                 }
-                else{
-                    value = value.filter(elem => elem != ev.target.value)
+                else {
+                    value = value.filter(elem => elem != parseInt(ev.target.value))
                 }
-                errors[id] = value.length == 0;
             }
-            else
-                value = ev.target.checked;
         }
 
         if (ev.target.type == 'select-one' && value == '0') {
-            value = null;
+            value = '';
         }
 
         currentEditExercise[id] = value;
-        this.setState({...this.state, currentEditExercise: currentEditExercise, errors: errors});
+
+        validator.validate(currentEditExercise);
+
+        this.setState({...this.state, currentEditExercise: currentEditExercise, validator: validator});
     }
 
     componentWillMount() {
         let exerciseId = this.props.match.params.exercise_id;
-        if(typeof exerciseId != 'undefined' && exerciseId > 0)
-            this.props.getMyExerciseById(exerciseId);
+        if (typeof exerciseId != 'undefined' && exerciseId > 0) {
+            this.props.getMyExerciseById(exerciseId).then(() => this.props.getMyAvailableDevices());
+            return;
+        }
         this.props.getMyAvailableDevices();
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({ ...this.state, currentEditExercise: nextProps.currentEditExercise});
+        this.setState({...this.state,
+            currentEditExercise: {
+                ...nextProps.currentEditExercise,
+                allowed_devices: nextProps.currentEditExercise.allowed_devices.map(item => item.id)
+            }
+        });
     }
 
-    render(){
-        let {currentEditExercise} = this.state;
+    render() {
+        let {currentEditExercise, validator} = this.state;
         let {availableDevices} = this.props;
         return (
-          <ExerciseEditForm
-              currentEditExercise={currentEditExercise}
-              availableDevices={availableDevices}
-              errors={this.state.errors}
-              onSave={this.onSave}
-              onCancel={this.onCancel}
-              handleChange={this.handleChange}
-          />
+            <ExerciseEditForm
+                currentEditExercise={currentEditExercise}
+                availableDevices={availableDevices}
+                validator={validator}
+                onSave={this.onSave}
+                onCancel={this.onCancel}
+                handleChange={this.handleChange}
+            />
         );
     }
 }
 
 
-const mapStateToProps = ({ adminEditExerciseState }) => ({
-    currentEditExercise : adminEditExerciseState.currentEditExercise,
+const mapStateToProps = ({adminEditExerciseState}) => ({
+    currentEditExercise: adminEditExerciseState.currentEditExercise,
     availableDevices: adminEditExerciseState.availableDevices
 });
 
-export default connect (
+export default connect(
     mapStateToProps,
     {
         getMyExerciseById,
