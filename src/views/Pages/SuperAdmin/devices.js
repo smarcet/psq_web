@@ -84,6 +84,7 @@ class SuperAdminDevices extends Component {
                                     <thead>
                                     <tr>
                                         <th>{T.translate("superAdmin.devices.IdColTitle")}</th>
+                                        <th>{T.translate("MAC Address")}</th>
                                         <th>{T.translate("superAdmin.devices.SerialNbrColTitle")}</th>
                                         <th>{T.translate("superAdmin.devices.FriendlyNameColTitle")}</th>
                                         <th>{T.translate("superAdmin.devices.OwnerColTitle")}</th>
@@ -102,6 +103,7 @@ class SuperAdminDevices extends Component {
 
                                             <tr key={device.id}>
                                                 <td>{device.id}</td>
+                                                <td>{device.mac_address}</td>
                                                 <td>{device.serial}</td>
                                                 <td>{device.friendly_name}</td>
                                                 <td>

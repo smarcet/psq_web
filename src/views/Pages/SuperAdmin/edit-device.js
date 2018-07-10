@@ -141,6 +141,19 @@ class SuperAdminEditDevice extends Component {
                                 </FormGroup>
                                 <FormGroup row>
                                     <Col md="3">
+                                        <Label htmlFor="text-input">MAC Address</Label>
+                                    </Col>
+                                    <Col xs="12" md="9">
+                                        <Input type="text"
+                                               readOnly={true}
+                                               id="mac_address"
+                                               value={currentEditDevice.mac_address}
+                                               name="mac_address"
+                                               />
+                                    </Col>
+                                </FormGroup>
+                                <FormGroup row>
+                                    <Col md="3">
                                         <Label htmlFor="text-input">Friendly Name</Label>
                                     </Col>
                                     <Col xs="12" md="9">

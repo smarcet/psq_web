@@ -90,7 +90,8 @@ export const addNewExercise = (newExercise) => (dispatch, getState) => {
     };
 
     newExercise.author = currentUser.id;
-
+    // convert from minutes to seconds
+    newExercise.max_duration = newExercise.max_duration * 60;
     return postRequest(
         createAction(START_LOADING),
         createAction(ADDED_NEW_EXERCISE)(newExercise),
@@ -116,7 +117,8 @@ export const updateExercise = (exercise) => (dispatch, getState) => {
 
     exercise.author = exercise.author.id;
     let exerciseId = exercise.id;
-
+    // convert from minutes to seconds
+    exercise.max_duration = exercise.max_duration * 60;
     return putRequest(
         createAction(START_LOADING),
         createAction(UPDATED_EXERCISE)(exercise),
