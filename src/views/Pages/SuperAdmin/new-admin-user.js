@@ -8,6 +8,7 @@ import {connect} from "react-redux";
 import { createNewAdminUser } from "../../../actions/superAdmin/admin-users-actions";
 import swal from "sweetalert2";
 import UserEditForm from "../user-edit-form";
+import {FormValidator, EmailField, MandatoryField, EqualToField, MinSizeField} from "../../../utils/form-validator";
 
 class SuperAdminNewAdminUser extends Component {
 
@@ -15,29 +16,33 @@ class SuperAdminNewAdminUser extends Component {
         super(props);
         this.state = {
             currentEditAdminUser: this.props.currentEditAdminUser,
-            errors: {
-                email: true,
-                first_name: true,
-                last_name: true,
-            },
+            validator: new FormValidator(
+                [
+                    new MandatoryField('first_name', 'First Name'),
+                    new MandatoryField('last_name', 'Surname'),
+                    new MandatoryField('email', 'Email'),
+                    new EmailField('email', 'Email'),
+                    new MandatoryField('role', 'Role'),
+                    new EqualToField('password', 'password_confirmation'),
+                    new MinSizeField('password',8, 'Password'),
+                    new MinSizeField('password_confirmation',8,'Password Confirmation')
+                ]
+            )
         };
         this.handleChange = this.handleChange.bind(this);
         this.onSaveUser = this.onSaveUser.bind(this);
         this.onCancel   = this.onCancel.bind(this);
     }
-
-    isValidForm(){
-        let { errors } = this.state;
-        let isValid = true;
-        Object.keys( errors ).forEach( key => {
-            isValid = isValid && !errors[key];
-        });
-        return isValid;
-    }
-
     onSaveUser(event){
-        if(this.isValidForm())
-            this.props.createNewAdminUser(this.state.currentEditAdminUser).then(() => {
+
+        let {currentEditUser, validator} = this.state;
+        event.preventDefault();
+        if (!validator.isValidData(currentEditUser)) {
+            this.setState({...this.state, validator: validator});
+            return false;
+        }
+
+        this.props.createNewAdminUser(this.state.currentEditAdminUser).then(() => {
                 swal(
                     '',
                     T.translate('Your user has been successfully updated!.'),
@@ -54,14 +59,10 @@ class SuperAdminNewAdminUser extends Component {
         event.preventDefault();
     }
 
-    handleChange(ev, isValid = null) {
-        let currentEditAdminUser = {...this.state.currentEditAdminUser};
+    handleChange(ev) {
+        let {currentEditAdminUser, validator} = this.state;
         let {value, id} = ev.target;
-        let errors = this.state.errors;
-        errors[id] = false;
 
-        if(isValid != null)
-            errors[id] = !isValid(ev.target);
 
         if (ev.target.type == 'checkbox') {
             value = ev.target.checked;
@@ -77,7 +78,9 @@ class SuperAdminNewAdminUser extends Component {
         }
 
         currentEditAdminUser[id] = value;
-        this.setState({...this.state, currentEditAdminUser: currentEditAdminUser, errors: errors});
+        validator.validate(currentEditAdminUser);
+
+        this.setState({...this.state, currentEditAdminUser: currentEditAdminUser, validator: validator});
     }
 
     render(){
@@ -90,7 +93,7 @@ class SuperAdminNewAdminUser extends Component {
                   config={config}
                   onCancel={this.onCancel}
                   handleChange={this.handleChange}
-                  errors={this.state.errors}
+                  validator={this.state.validator}
                   currentEditUser={this.state.currentEditAdminUser}/>
               </Col>
           </Row>
