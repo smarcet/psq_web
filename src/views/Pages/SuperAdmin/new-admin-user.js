@@ -84,7 +84,7 @@ class SuperAdminNewAdminUser extends Component {
     }
 
     render(){
-        let config = { showPassword: false, showBio: false, showPic: false };
+        let config = { showPassword: false, showBio: false, showPic: false, canEditEmail: true};
         return(
           <Row>
               <Col xs="12" md="12" className="mb-4">
