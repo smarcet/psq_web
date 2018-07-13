@@ -17,6 +17,7 @@ import adminUsersReducer from "./reducers/Admin/users-reducer";
 import adminEditUserReducer from "./reducers/Admin/edit-user-reducer";
 import adminExercisesReducer from "./reducers/Admin/exercises-reducer";
 import adminEditExerciseReducer from "./reducers/Admin/edit-exercise-reducer";
+import adminExamsReducer from "./reducers/Admin/exams-reducer";
 
 // default: localStorage if web, AsyncStorage if react-native
 
@@ -42,6 +43,7 @@ const reducers = persistCombineReducers(config, {
     adminEditUserState: adminEditUserReducer,
     adminExercisesState: adminExercisesReducer,
     adminEditExerciseState: adminEditExerciseReducer,
+    adminExamsState: adminExamsReducer,
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

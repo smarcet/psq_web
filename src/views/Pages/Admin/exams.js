@@ -7,16 +7,44 @@ import {
     CardHeader,
     CardBody,
     Table,
-    Pagination,
-    PaginationItem,
-    PaginationLink,
     Button,
     Input
 } from 'reactstrap';
 
 import T from "i18n-react/dist/i18n-react";
 
+import { connect } from 'react-redux'
+import PaginationContainer from "../../Base/PaginationContainer/PaginationContainer";
+import {DEFAULT_PAGE_SIZE} from "../../../constants";
+import {geExamsByPage} from "../../../actions/Admin/exams-actions";
+
 class AdminExercises extends Component {
+
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            currentPage: 1,
+        };
+        this.onPageClick = this.onPageClick.bind(this);
+        this.handleOnChangeSearch = this.handleOnChangeSearch.bind(this);
+    }
+
+    componentWillMount () {
+        this.props.geExamsByPage(this.state.currentPage);
+    }
+
+    handleOnChangeSearch(event){
+        let {value} = event.target;
+        this.setState({...this.state, currentPage: 1});
+        this.props.geExamsByPage(1, DEFAULT_PAGE_SIZE, value);
+    }
+
+    onPageClick(event, pageNumber){
+        this.setState({...this.state, currentPage: pageNumber});
+        this.props.geExamsByPage(pageNumber);
+        event.preventDefault();
+    }
 
     onClickEvaluateExam(e, exam){
         this.props.history.push(`/auth/admin/exams/${exam.id}/evaluate`);
@@ -24,44 +52,24 @@ class AdminExercises extends Component {
     }
 
     render(){
-        let exams = [
-            {
-                id:1,
-                exercise_title: 'Exercise #1',
-                taker_fname: 'John',
-                taker_lname: 'Doe',
-                date : '2018-01-01',
-                time: '10:00 AM',
-                evaluator: 'Admin#1',
-                evaluated: true,
-                approved: false,
-                notes: 'not approved :('
-            },
-            {
-                id:2,
-                exercise_title: 'Exercise #1',
-                taker_fname: 'John',
-                taker_lname: 'Doe',
-                date : '2018-01-01',
-                time: '11:00 AM',
-                evaluator: 'N/A',
-                evaluated: false,
-                approved: false,
-                notes: ''
-            },
-        ];
+        let { exams } = this.props;
         return (
             <div className="animated fadeIn">
                 <Row>
                     <Col xs="12" lg="12">
                         <Card>
                             <CardHeader>
-                                <i className="fa fa-align-justify"></i> {T.translate("Title")}
+                                <i className="fa fa-align-justify"></i> {T.translate("Exams")}
                             </CardHeader>
                             <CardBody>
                                 <Row className="search-container">
                                     <Col xs="12" sm="4" lg="4" >
-                                        <Input type="text" className="input-search" id="input1-group2" name="input1-group2" placeholder={T.translate("Search Exam")}/>
+                                        <Input type="text"
+                                               className="input-search"
+                                               id="search_exams"
+                                               name="search_exams"
+                                               placeholder={T.translate("Search Exams")}
+                                               onChange={this.handleOnChangeSearch}/>
                                         <i className="fa fa-search filter-search"></i>
                                     </Col>
                                     <Col xs="12" sm="4" lg="3" >
@@ -73,6 +81,7 @@ class AdminExercises extends Component {
                                     <tr>
                                         <th>{T.translate("Id")}</th>
                                         <th>{T.translate("Title")}</th>
+                                        <th>{T.translate("Device")}</th>
                                         <th>{T.translate("First Name")}</th>
                                         <th>{T.translate("Surname")}</th>
                                         <th>{T.translate("Date")}</th>
@@ -86,33 +95,34 @@ class AdminExercises extends Component {
                                     <tbody>
 
                                     { exams.map((exam ,i) => {
-
+                                        let {taker, evaluator, exercise, device} = exam;
                                         return (
                                             <tr key={exam.id}>
                                                 <td>{exam.id}</td>
-                                                <td>{exam.exercise_title}</td>
-                                                <td>{exam.taker_fname}</td>
-                                                <td>{exam.taker_lname}</td>
-                                                <td>{exam.date}</td>
-                                                <td>{exam.time}</td>
-                                                <td>{exam.evaluator}</td>
+                                                <td>{exercise.title}</td>
+                                                <td>{device.friendly_name}</td>
+                                                <td>{taker.first_name}</td>
+                                                <td>{taker.last_name}</td>
+                                                <td>{exam.created}</td>
+                                                <td>{`${Math.floor(exam.duration/60)}:${exam.duration % 60}`}</td>
+                                                <td>{evaluator != null ? evaluator.email : T.translate("N/A")}</td>
                                                 <td>
                                                     {
-                                                        !exam.evaluated &&
+                                                        evaluator == null &&
                                                         <Badge color="secondary">{T.translate("Pending")}</Badge>
                                                     }
                                                     {
-                                                        exam.evaluated && !exam.approved &&
+                                                        evaluator != null && !exam.approved &&
                                                         <Badge color="danger">{T.translate("Not Approved")}</Badge>
                                                     }
                                                     {
-                                                        exam.evaluated && exam.approved &&
+                                                        evaluator != null && exam.approved &&
                                                         <Badge color="success">{T.translate("Approved")}</Badge>
                                                     }
                                                 </td>
                                                 <td>{exam.notes}</td>
                                                 <td>
-                                                    { !exam.evaluated &&
+                                                    { evaluator == null &&
                                                     <Button color="warning" onClick={(e) => this.onClickEvaluateExam(e, exam)} outline><i className="fa fa-pencil"></i>&nbsp;{T.translate("Evaluate")}</Button>
                                                     }
                                                 </td>
@@ -122,16 +132,12 @@ class AdminExercises extends Component {
 
                                     </tbody>
                                 </Table>
-                                <Pagination>
-                                    <PaginationItem disabled><PaginationLink previous href="#">Prev</PaginationLink></PaginationItem>
-                                    <PaginationItem active>
-                                        <PaginationLink href="#">1</PaginationLink>
-                                    </PaginationItem>
-                                    <PaginationItem><PaginationLink href="#">2</PaginationLink></PaginationItem>
-                                    <PaginationItem><PaginationLink href="#">3</PaginationLink></PaginationItem>
-                                    <PaginationItem><PaginationLink href="#">4</PaginationLink></PaginationItem>
-                                    <PaginationItem><PaginationLink next href="#">Next</PaginationLink></PaginationItem>
-                                </Pagination>
+                                <PaginationContainer
+                                    count={this.props.examsCount}
+                                    pageSize={DEFAULT_PAGE_SIZE}
+                                    currentPage={this.state.currentPage}
+                                    onPageClick={this.onPageClick}
+                                />
                             </CardBody>
                         </Card>
                     </Col>
@@ -140,4 +146,14 @@ class AdminExercises extends Component {
     }
 }
 
-export default AdminExercises;
+const mapStateToProps = ({ adminExamsState }) => ({
+    exams : adminExamsState.items,
+    examsCount : adminExamsState.count,
+});
+
+export default connect (
+    mapStateToProps,
+    {
+        geExamsByPage,
+    }
+)(AdminExercises);
