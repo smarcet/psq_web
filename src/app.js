@@ -18,6 +18,7 @@ class App extends React.PureComponent {
                         <AuthorizedRoute isLoggedUser={this.props.isLoggedUser}
                                          path='/auth'
                                          currentUser={this.props.currentUser}
+                                         loading={this.props.loading}
                                          component={Full} />
                         <Route path="/404" component={Page404} />
                         <PropsRoute path="/users/validate/:token" component={ActivateUser} doActivateUser={this.props.doActivateUser}/>
@@ -28,9 +29,10 @@ class App extends React.PureComponent {
     }
 };
 
-const mapStateToProps = ({ loggedUserState }) => ({
+const mapStateToProps = ({ loggedUserState, baseState }) => ({
     isLoggedUser: loggedUserState.isLoggedUser,
     currentUser: loggedUserState.currentUser,
+    loading: baseState.loading
 });
 
 export default connect(mapStateToProps, {

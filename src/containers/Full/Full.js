@@ -11,12 +11,14 @@ import SuperAdminLayout from '../../layouts/superadmin-layout';
 import AdminLayout from '../../layouts/admin-layout';
 import UserLayout from '../../layouts/user-layout';
 import {SUPERVISOR, TEACHER} from "../../constants";
+import {AjaxLoader} from "../../components/ajax-loader";
 
 class Full extends Component {
   render() {
     let { currentUser } = this.props;
     return (
       <div className="app">
+        <AjaxLoader show={this.props.loading} size={150}/>
         <Header currentUser={currentUser}/>
         <div className="app-body">
           <Sidebar {...this.props}/>
