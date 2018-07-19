@@ -43,5 +43,6 @@ export const updateMyUserPic = (file) => (dispatch, getState) => {
         authErrorHandler,
     )(params)(dispatch).then((payload) => {
         dispatch(createAction(UPDATED_MY_USER_INFO_PIC)(payload));
+        dispatch(createAction(STOP_LOADING)({}));
     });
 }

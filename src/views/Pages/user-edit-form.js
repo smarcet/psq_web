@@ -98,9 +98,11 @@ class UserEditForm extends Component {
                                                    id="role"
                                                    value={currentEditUser.role}
                                                    onChange={handleChange}
-                                                   invalid={validator.isInvalid('role')}
-                                            >
+                                                   invalid={validator.isInvalid('role')}>
                                                 <option value="">{T.translate('-- Please select Role --')}</option>
+                                                {config.showRoleSuperAdmin &&
+                                                    <option value="3">{T.translate('SUPER ADMIN')}</option>
+                                                }
                                                 <option value="2">{T.translate('TEACHER')}</option>
                                                 <option value="1">{T.translate('STUDENT')}</option>
                                             </Input>

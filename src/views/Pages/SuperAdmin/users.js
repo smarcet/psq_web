@@ -12,12 +12,12 @@ import {
 } from 'reactstrap';
 import T from 'i18n-react';
 import {connect} from "react-redux";
-import { getAdminUsersByPage, deleteAdminUser} from "../../../actions/superAdmin/admin-users-actions";
 import PaginationContainer from "../../Base/PaginationContainer/PaginationContainer";
 import swal from "sweetalert2";
-import {resendUserVerification} from "../../../actions/users-actions";
+import {getUsersByPage, deleteUser, resendUserVerification} from "../../../actions/users-actions";
+import {DEFAULT_PAGE_SIZE, STUDENT, TEACHER} from "../../../constants";
 
-class SuperAdminAdminUsers extends Component {
+class SuperAdminUsers extends Component {
 
     constructor(props) {
         super(props);
@@ -31,44 +31,44 @@ class SuperAdminAdminUsers extends Component {
     handleOnChangeSearch(event){
         let {value} = event.target;
         this.setState({...this.state, currentPage: 1});
-        this.props.getAdminUsersByPage(1, 5, value);
+        this.props.getUsersByPage(1, 5, value);
     }
 
     componentWillMount () {
-        this.props.getAdminUsersByPage(this.state.currentPage);
+        this.props.getUsersByPage(this.state.currentPage);
     }
 
     onClickAddNewAdminUser(event){
-        this.props.history.push("/auth/super-admin/admin-users/new");
+        this.props.history.push("/auth/super-admin/users/new");
         event.preventDefault();
     }
 
     onClickEditAdminUser(event, user){
-        this.props.history.push(`/auth/super-admin/admin-users/${user.id}`);
+        this.props.history.push(`/auth/super-admin/users/${user.id}`);
         event.preventDefault();
     }
 
     onClickReSendVerification(event, user){
         this.props.resendUserVerification(user.id).then(() =>  swal(
-            'Success!',
-            'Your user has been notified.',
+            T.translate('Success!'),
+            T.translate('Your user has been notified.'),
             'success'
         ))
     }
 
     onClickDeleteAdminUser(event, user){
         swal({
-            title: 'Are you sure?',
-            text: 'You will not be able to recover this user!',
+            title: T.translate('Are you sure?'),
+            text: T.translate('You will not be able to recover this user!'),
             type: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'No, keep it'
+            confirmButtonText: T.translate('Yes, delete it!'),
+            cancelButtonText: T.translate('No, keep it')
         }).then((result) => {
             if (result.value) {
-                this.props.deleteAdminUser(user.id).then(() =>  swal(
-                    'Deleted!',
-                    'Your user has been deleted.',
+                this.props.deleteUser(user.id).then(() =>  swal(
+                    T.translate('Deleted!'),
+                    T.translate('Your user has been deleted.'),
                     'success'
                 ))
             }
@@ -78,19 +78,28 @@ class SuperAdminAdminUsers extends Component {
 
     onPageClick(event, pageNumber){
         this.setState({...this.state, currentPage: pageNumber});
-        this.props.getAdminUsersByPage(pageNumber);
+        this.props.getUsersByPage(pageNumber);
         event.preventDefault();
     }
 
+    getFriendlyRole(role){
+        if(role == TEACHER)
+            return T.translate('Teacher');
+        if(role == STUDENT)
+            return T.translate('Student');
+
+        return T.translate('Super Admin');
+    }
+
     render(){
-        let users = this.props.adminUsers;
+        let users = this.props.users;
         return (
             <div className="animated fadeIn">
                 <Row>
                     <Col xs="12" lg="12">
                         <Card>
                             <CardHeader>
-                                <i className="fa fa-align-justify"></i> Admin Users
+                                <i className="fa fa-align-justify"></i>&nbsp;{T.translate('Users')}
                             </CardHeader>
                             <CardBody>
                                 <Row className="search-container">
@@ -100,31 +109,34 @@ class SuperAdminAdminUsers extends Component {
                                                id="search_user"
                                                name="search_user"
                                                onChange={this.handleOnChangeSearch}
-                                               placeholder="Search User"/>
+                                               placeholder={T.translate('Search User')}/>
                                         <i className="fa fa-search filter-search"></i>
                                     </Col>
                                     <Col xs="12" sm="4" lg="3" >
                                         <Button onClick={(e) => this.onClickAddNewAdminUser(e)} className="button-add" color="primary">
-                                            <i className="fa fa-plus-circle"></i>{'\u00A0'} Add Admin User
+                                            <i className="fa fa-plus-circle"></i>{'\u00A0'}&nbsp;{T.translate('Add User')}
                                         </Button>
                                     </Col>
                                 </Row>
-                                <Table responsive striped>
+                                {
+                                    users.length > 0 &&
+                                    <Table responsive striped>
                                     <thead>
                                     <tr>
-                                        <th>{T.translate("superAdmin.adminUsers.IdColTitle")}</th>
-                                        <th>Email</th>
-                                        <th>{T.translate("superAdmin.adminUsers.FirstNameColTitle")}</th>
-                                        <th>{T.translate("superAdmin.adminUsers.SurNameColTitle")}</th>
-                                        <th>{T.translate("superAdmin.adminUsers.StatusColTitle")}</th>
-                                        <th>&nbsp;</th>
-                                        <th>&nbsp;</th>
-                                        <th>&nbsp;</th>
+                                    <th>{T.translate("Id")}</th>
+                                    <th>{T.translate('Email')}</th>
+                                    <th>{T.translate("First Name")}</th>
+                                    <th>{T.translate("Surname")}</th>
+                                    <th>{T.translate("Role")}</th>
+                                    <th>{T.translate("Status")}</th>
+                                    <th>&nbsp;</th>
+                                    <th>&nbsp;</th>
+                                    <th>&nbsp;</th>
                                     </tr>
                                     </thead>
                                     <tbody>
 
-                                    {users.map((user,i) => {
+                                    {users.map((user, i) => {
 
                                         return (
                                             <tr key={user.id}>
@@ -132,14 +144,15 @@ class SuperAdminAdminUsers extends Component {
                                                 <td>{user.email}</td>
                                                 <td>{user.first_name}</td>
                                                 <td>{user.last_name}</td>
+                                                <td>{this.getFriendlyRole(user.role)}</td>
                                                 <td>
                                                     {
                                                         user.is_active &&
-                                                        <Badge color="success">Active</Badge>
+                                                        <Badge color="success">{T.translate('Active')}</Badge>
                                                     }
                                                     {
                                                         !user.is_active &&
-                                                        <Badge color="secondary">Inactive</Badge>
+                                                        <Badge color="secondary">{T.translate('Inactive')}</Badge>
                                                     }
                                                 </td>
                                                 <td className="col-button">
@@ -147,28 +160,36 @@ class SuperAdminAdminUsers extends Component {
                                                     !user.is_verified &&
                                                     < Button color="danger" outline
                                                              onClick={(e) => this.onClickReSendVerification(e, user)}><i
-                                                        className="fa fa-envelope"></i>&nbsp;Re-send
-                                                        verification</Button>
+                                                        className="fa fa-envelope"></i>&nbsp;{T.translate('Re-send verification')}
+                                                    </Button>
                                                     }
                                                 </td>
                                                 <td className="col-button">
-                                                    <Button color="primary" outline onClick={(e) => this.onClickEditAdminUser(e, user)}><i className="fa fa-edit"></i>&nbsp;Edit</Button>{' '}
+                                                    <Button color="primary" outline
+                                                            onClick={(e) => this.onClickEditAdminUser(e, user)}><i
+                                                        className="fa fa-edit"></i>&nbsp;{T.translate('Edit')}
+                                                    </Button>{' '}
                                                 </td>
                                                 <td className="col-button">
-                                                    <Button color="danger" outline onClick={(e) => this.onClickDeleteAdminUser(e, user)}><i className="fa fa-trash"></i>&nbsp;Delete</Button>{' '}
+                                                    <Button color="danger" outline
+                                                            onClick={(e) => this.onClickDeleteAdminUser(e, user)}><i
+                                                        className="fa fa-trash"></i>&nbsp;{T.translate('Delete')}
+                                                    </Button>{' '}
                                                 </td>
                                             </tr>
                                         );
                                     })}
 
                                     </tbody>
-                                </Table>
+                                    </Table>
+                                }
                                 <PaginationContainer
-                                    count={this.props.adminUsersCount}
-                                    pageSize={5}
+                                    count={this.props.usersCount}
+                                    pageSize={DEFAULT_PAGE_SIZE}
                                     currentPage={this.state.currentPage}
                                     onPageClick={this.onPageClick}
                                 />
+
                             </CardBody>
                         </Card>
                     </Col>
@@ -177,16 +198,16 @@ class SuperAdminAdminUsers extends Component {
     }
 }
 
-const mapStateToProps = ({ superAdminAdminUsersState }) => ({
-    adminUsers : superAdminAdminUsersState.items,
-    adminUsersCount:  superAdminAdminUsersState.count,
+const mapStateToProps = ({ superAdminUsersState }) => ({
+    users : superAdminUsersState.items,
+    usersCount:  superAdminUsersState.count,
 });
 
 export default connect (
     mapStateToProps,
     {
-        getAdminUsersByPage,
-        deleteAdminUser,
+        getUsersByPage,
+        deleteUser,
         resendUserVerification,
     }
-)(SuperAdminAdminUsers);
+)(SuperAdminUsers);

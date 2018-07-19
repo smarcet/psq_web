@@ -16,8 +16,8 @@ export default {
 
     },
       {
-          name: T.translate("Admin Users"),
-          url: '/auth/super-admin/admin-users',
+          name: T.translate("Users"),
+          url: '/auth/super-admin/users',
           icon: 'icon-people',
 
       },

@@ -11,15 +11,15 @@ export const DEFAULT_DEVICE = {
 }
 
 const DEFAULT_STATE = {
-    currentEditDevice: DEFAULT_DEVICE,
+    currentEditDevice: {...DEFAULT_DEVICE},
     availableAdminsList : [],
 }
 
-const superAdminEditDevicesReducer = (state = DEFAULT_STATE, action) => {
+const superAdminEditDevicesReducer = (state = {...DEFAULT_STATE}, action) => {
     const { type, payload } = action;
     switch (type) {
       case RETRIEVED_DEVICES:{
-          return DEFAULT_STATE;
+          return {...DEFAULT_STATE};
       }
       case RETRIEVED_DEVICE:{
             return {
@@ -39,7 +39,7 @@ const superAdminEditDevicesReducer = (state = DEFAULT_STATE, action) => {
         };
         break
         case LOGOUT_USER: {
-            return DEFAULT_STATE;
+            return {...DEFAULT_STATE};
         }
         default:
             return state;

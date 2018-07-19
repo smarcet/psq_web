@@ -7,7 +7,7 @@ import T from "i18n-react/dist/i18n-react";
 import {connect} from "react-redux";
 import swal from "sweetalert2";
 import UserEditForm from "../user-edit-form";
-import {createNewUser, getUserById, updateUser} from '../../../actions/Admin/users-actions';
+import {createNewUser, getUserById, updateUser} from '../../../actions/users-actions';
 import {FormValidator, EmailField, MandatoryField, EqualToField, MinSizeField} from "../../../utils/form-validator";
 
 class AdminEditUser extends Component {
@@ -15,7 +15,7 @@ class AdminEditUser extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentEditUser: this.props.currentEditUser,
+            currentEditUser: {...this.props.currentEditUser},
             validator: new FormValidator(
                 [
                     new MandatoryField('first_name', 'First Name'),
@@ -29,6 +29,7 @@ class AdminEditUser extends Component {
                 ]
             )
         };
+
         this.handleChange = this.handleChange.bind(this);
         this.onSaveUser = this.onSaveUser.bind(this);
         this.onCancel = this.onCancel.bind(this);

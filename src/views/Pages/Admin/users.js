@@ -14,10 +14,10 @@ import T from 'i18n-react';
 import 'sweetalert2/dist/sweetalert2.css';
 import swal from 'sweetalert2';
 import {connect} from "react-redux";
-import {getMyUsersByPage, deleteUser} from "../../../actions/Admin/users-actions";
+import {getMyUsersByPage} from "../../../actions/Admin/users-actions";
+import {deleteUser, resendUserVerification} from "../../../actions/users-actions";
 import {DEFAULT_PAGE_SIZE, STUDENT, TEACHER} from "../../../constants";
 import PaginationContainer from "../../Base/PaginationContainer/PaginationContainer";
-import {resendUserVerification} from "../../../actions/users-actions";
 
 class AdminUsers extends Component {
 
@@ -127,7 +127,7 @@ class AdminUsers extends Component {
                                         <th>{T.translate("First Name")}</th>
                                         <th>{T.translate("Surname")}</th>
                                         <th>{T.translate("Email")}</th>
-                                        <th>{T.translate("Role")}</th>
+                                        <th>{T.translate("Rol")}</th>
                                         <th>{T.translate("Status")}</th>
                                         <th>&nbsp;</th>
                                         <th>&nbsp;</th>

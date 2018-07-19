@@ -5,17 +5,17 @@ import {
 } from 'reactstrap';
 import T from "i18n-react/dist/i18n-react";
 import {connect} from "react-redux";
-import { createNewAdminUser } from "../../../actions/superAdmin/admin-users-actions";
+import { createNewUser, getUserById, updateUser } from "../../../actions/users-actions";
 import swal from "sweetalert2";
 import UserEditForm from "../user-edit-form";
 import {FormValidator, EmailField, MandatoryField, EqualToField, MinSizeField} from "../../../utils/form-validator";
 
-class SuperAdminNewAdminUser extends Component {
+class SuperAdminEditUser extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            currentEditAdminUser: this.props.currentEditAdminUser,
+            currentEditUser: {...this.props.currentEditUser},
             validator: new FormValidator(
                 [
                     new MandatoryField('first_name', 'First Name'),
@@ -29,10 +29,28 @@ class SuperAdminNewAdminUser extends Component {
                 ]
             )
         };
+
         this.handleChange = this.handleChange.bind(this);
         this.onSaveUser = this.onSaveUser.bind(this);
         this.onCancel   = this.onCancel.bind(this);
     }
+
+    componentWillMount() {
+        let userId = this.props.match.params.user_id;
+        if (typeof userId != 'undefined' && userId > 0) {
+            this.props.getUserById(userId);
+            return;
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({...this.state,
+            currentEditUser: {
+                ...nextProps.currentEditUser
+            }
+        });
+    }
+
     onSaveUser(event){
 
         let {currentEditUser, validator} = this.state;
@@ -42,7 +60,8 @@ class SuperAdminNewAdminUser extends Component {
             return false;
         }
 
-        this.props.createNewAdminUser(this.state.currentEditAdminUser).then(() => {
+        if(currentEditUser.id > 0){
+            this.props.updateUser(this.state.currentEditUser).then(() => {
                 swal(
                     '',
                     T.translate('Your user has been successfully updated!.'),
@@ -50,8 +69,18 @@ class SuperAdminNewAdminUser extends Component {
                 );
                 this.props.history.goBack();
             });
+            return;
+        }
 
-        event.preventDefault();
+        this.props.createNewUser(this.state.currentEditUser).then(() => {
+            swal(
+                '',
+                T.translate('Your user has been successfully created!.'),
+                'success'
+            );
+            this.props.history.goBack();
+        });
+
     }
 
     onCancel(event){
@@ -60,7 +89,7 @@ class SuperAdminNewAdminUser extends Component {
     }
 
     handleChange(ev) {
-        let {currentEditAdminUser, validator} = this.state;
+        let {currentEditUser, validator} = this.state;
         let {value, id} = ev.target;
 
 
@@ -73,42 +102,52 @@ class SuperAdminNewAdminUser extends Component {
         }
 
         if (ev.target.type == 'file'){
-            currentEditAdminUser[`${id}_file`] = ev.target.files[0];
+            currentEditUser[`${id}_file`] = ev.target.files[0];
             value = null;
         }
 
-        currentEditAdminUser[id] = value;
-        validator.validate(currentEditAdminUser);
+        currentEditUser[id] = value;
+        validator.validate(currentEditUser);
 
-        this.setState({...this.state, currentEditAdminUser: currentEditAdminUser, validator: validator});
+        this.setState({...this.state, currentEditUser: currentEditUser, validator: validator});
     }
 
     render(){
-        let config = { showPassword: false, showBio: false, showPic: false, canEditEmail: true};
+        let { validator, currentEditUser} = this.state;
+        let config = {
+            showPassword: false,
+            showBio: false,
+            showPic: false,
+            canEditEmail: !currentEditUser.is_verified,
+            showRole:true,
+            showRoleSuperAdmin: true
+        };
         return(
-          <Row>
-              <Col xs="12" md="12" className="mb-4">
-              <UserEditForm
-                  onSave={this.onSaveUser}
-                  config={config}
-                  onCancel={this.onCancel}
-                  handleChange={this.handleChange}
-                  validator={this.state.validator}
-                  currentEditUser={this.state.currentEditAdminUser}/>
-              </Col>
-          </Row>
+            <Row>
+                <Col xs="12" md="12" className="mb-4">
+                    <UserEditForm
+                        onSave={this.onSaveUser}
+                        config={config}
+                        onCancel={this.onCancel}
+                        handleChange={this.handleChange}
+                        validator={validator}
+                        currentEditUser={currentEditUser}/>
+                </Col>
+            </Row>
         );
     }
 
 }
 
-const mapStateToProps = ({ superAdminNewAdminUserState }) => ({
-    currentEditAdminUser : superAdminNewAdminUserState.currentEditAdminUser,
+const mapStateToProps = ({ superAdminEditUserState }) => ({
+    currentEditUser : superAdminEditUserState.currentEditUser,
 });
 
 export default connect (
     mapStateToProps,
     {
-        createNewAdminUser
+        createNewUser,
+        getUserById,
+        updateUser,
     }
-)(SuperAdminNewAdminUser);
+)(SuperAdminEditUser);

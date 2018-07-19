@@ -100,7 +100,7 @@ export class MandatoryField extends CustomValidatorRule
 
     constructor(fieldName, friendlyFieldName = '', customErrorMessage = ''){
         super(fieldName, (value) => {
-           if(value.toString().trim() == '' || value == 0 || (Array.isArray(value) && value.length == 0))
+           if(value == null || value.toString().trim() == '' || value == 0 || (Array.isArray(value) && value.length == 0))
                return new FormValidatorResult(this._fieldName, false, T.translate( this._getErrorMessage(), { field: this._friendlyFieldName}))
            return new FormValidatorResult(this._fieldName, true);
         }, friendlyFieldName, customErrorMessage);

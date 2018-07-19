@@ -7,9 +7,8 @@ import { persistStore, persistCombineReducers } from 'redux-persist'
 import storage from 'redux-persist/es/storage'
 import superAdminDevicesReducer from "./reducers/superAdmin/devices-reducer";
 import superAdminEditDevicesReducer from "./reducers/superAdmin/edit-device-reducer";
-import superAdminAdminUsersReducer from "./reducers/superAdmin/admin-users-reducer";
-import superAdminEditAdminUserReducer from "./reducers/superAdmin/edit-admin-user-reducer";
-import superAdminNewAdminUserReducer from "./reducers/superAdmin/new-admin-user-reducer";
+import superAdminUsersReducer from "./reducers/superAdmin/users-reducer";
+import superAdminEditUserReducer from "./reducers/superAdmin/edit-user-reducer";
 import SettingsReducer from "./reducers/settings-reducer";
 import adminDevicesReducer from "./reducers/Admin/devices-reducer";
 import adminEditDevicesReducer from "./reducers/Admin/edit-device-reducer";
@@ -19,6 +18,7 @@ import adminExercisesReducer from "./reducers/Admin/exercises-reducer";
 import adminEditExerciseReducer from "./reducers/Admin/edit-exercise-reducer";
 import adminExamsReducer from "./reducers/Admin/exams-reducer";
 import adminExamReducer from "./reducers/Admin/edit-exam-reducer";
+import superAdminDashboardReducer from "./reducers/superAdmin/dashboard_reducer";
 
 // default: localStorage if web, AsyncStorage if react-native
 
@@ -33,9 +33,11 @@ const reducers = persistCombineReducers(config, {
     // super admin
     superAdminDevicesState: superAdminDevicesReducer,
     superAdminEditDevicesState: superAdminEditDevicesReducer,
-    superAdminAdminUsersState: superAdminAdminUsersReducer,
-    superAdminEditAdminUserState: superAdminEditAdminUserReducer,
-    superAdminNewAdminUserState:superAdminNewAdminUserReducer,
+    // users
+    superAdminUsersState: superAdminUsersReducer,
+    superAdminEditUserState: superAdminEditUserReducer,
+    // dashboard
+    superAdminDashboardState: superAdminDashboardReducer,
     // admin
     adminDevicesState: adminDevicesReducer,
     settingsState: SettingsReducer,

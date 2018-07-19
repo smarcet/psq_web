@@ -1,4 +1,4 @@
-import { RETRIEVED_ADMIN_USERS, DELETED_ADMIN_USER } from '../../actions/superAdmin/admin-users-actions';
+import { RETRIEVED_USERS, DELETED_USER } from '../../actions/users-actions';
 import{ LOGOUT_USER } from '../../actions/auth-actions';
 
 const DEFAULT_STATE = {
@@ -6,10 +6,10 @@ const DEFAULT_STATE = {
     count: 0,
 }
 
-const superAdminAdminUsersReducer = (state = DEFAULT_STATE, action) => {
+const superAdminUsersReducer = (state = DEFAULT_STATE, action) => {
     const { type, payload } = action;
     switch (type) {
-        case RETRIEVED_ADMIN_USERS: {
+        case RETRIEVED_USERS: {
             return {
                 ...state,
                 items: action.payload.response.results,
@@ -17,7 +17,7 @@ const superAdminAdminUsersReducer = (state = DEFAULT_STATE, action) => {
             };
         }
             break;
-        case DELETED_ADMIN_USER: {
+        case DELETED_USER: {
             let {userId} = payload;
             return {
                 ...state,
@@ -35,4 +35,4 @@ const superAdminAdminUsersReducer = (state = DEFAULT_STATE, action) => {
     }
 }
 
-export default superAdminAdminUsersReducer;
+export default superAdminUsersReducer;

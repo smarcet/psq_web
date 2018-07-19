@@ -12,25 +12,30 @@ import {
     FormText,
     Label,
     Input,
+    FormFeedback
 
 } from 'reactstrap';
 import 'sweetalert2/dist/sweetalert2.css';
 import swal from 'sweetalert2';
 import T from "i18n-react/dist/i18n-react";
-import classnames from 'classnames';
-import { connect } from 'react-redux'
-import { getDeviceById, updateDevice, getAvailableAdmins } from '../../../actions/superAdmin/devices-actions';
+import {connect} from 'react-redux'
+import {getDeviceById, updateDevice, getAvailableAdmins} from '../../../actions/superAdmin/devices-actions';
+import {FormValidator, MandatoryField, GreaterThanField} from "../../../utils/form-validator";
 
 class SuperAdminEditDevice extends Component {
 
     constructor(props) {
         super(props);
-        this.toggleTab = this.toggleTab.bind(this);
         this.state = {
-            activeTab: '1',
-            currentEditDevice: this.props.currentEditDevice,
+            currentEditDevice: {...this.props.currentEditDevice},
             availableAdminsList: this.props.availableAdminsList,
-            errors: {},
+            validator: new FormValidator(
+                [
+                    new MandatoryField('friendly_name', T.translate('Friendly Name')),
+                    new MandatoryField('slots', T.translate('Available Slots #')),
+                    new GreaterThanField('slots', 0,  T.translate('Available Slots #')),
+                ]
+            )
         };
         this.handleChange = this.handleChange.bind(this);
     }
@@ -39,85 +44,75 @@ class SuperAdminEditDevice extends Component {
         let deviceId = this.props.match.params.device_id;
         this.props.getAvailableAdmins().then(() => {
             this.props.getDeviceById(deviceId);
-        });;
+        });
     }
 
     componentWillReceiveProps(nextProps) {
         if (this.props.currentEditDevice.id != nextProps.currentEditDevice.id) {
-            this.setState({ ...this.state, currentEditDevice: nextProps.currentEditDevice});
+            this.setState({...this.state, currentEditDevice: nextProps.currentEditDevice});
         }
-        if(this.props.availableAdminsList != nextProps.availableAdminsList){
-            this.setState({ ...this.state, availableAdminsList: nextProps.availableAdminsList});
+        if (this.props.availableAdminsList != nextProps.availableAdminsList) {
+            this.setState({...this.state, availableAdminsList: nextProps.availableAdminsList});
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
 
     }
 
-    handleChange(ev, isValid = null) {
-        let currentEditDevice = {...this.state.currentEditDevice};
-        let {value, id} = ev.target;
-        let errors = this.state.errors;
-        errors[id] = false;
+    handleChange(event) {
 
-        if(isValid != null)
-            errors[id] = !isValid(ev.target);
+        let {currentEditDevice, validator} = this.state;
+        let {value, id} = event.target;
 
-        if (ev.target.type == 'checkbox') {
-            value = ev.target.checked;
+        if (event.target.type == 'checkbox') {
+            value = event.target.checked;
         }
-        if (ev.target.type == 'select-one' && value == '0') {
-            value = null;
+
+        if (event.target.type == 'select-one' && value == '0') {
+            value = '';
         }
+
         currentEditDevice[id] = value;
-        this.setState({...this.state, currentEditDevice: currentEditDevice, errors: errors});
+
+        validator.validate(currentEditDevice);
+        this.setState({...this.state, currentEditDevice: currentEditDevice, validator: validator});
     }
 
-    toggleTab(tab) {
-        if (this.state.activeTab !== tab) {
-            this.setState({
-                ...this.state,
-                activeTab: tab
-            });
+    onSaveDevice(event) {
+
+        let {currentEditDevice, validator} = this.state;
+        event.preventDefault();
+        if (!validator.isValidData(currentEditDevice)) {
+            this.setState({...this.state, validator: validator});
+            return false;
         }
-    }
 
-    onSaveDevice(event){
-        if(this.isValidForm())
-            this.props.updateDevice(this.state.currentEditDevice).then(() => {
-                swal(
-                    '',
-                    'Your device has been successfully updated!.',
-                    'success'
-                );
-                this.props.history.goBack();
-            });
+        this.props.updateDevice(this.state.currentEditDevice).then(() => {
+            swal(
+                '',
+                T.translate('Your device has been successfully updated!.'),
+                'success'
+            );
+            this.props.history.goBack();
+        });
 
         event.preventDefault();
     }
 
-    onCancelEdit(event){
+    onCancelEdit(event) {
         this.props.history.goBack();
         event.preventDefault();
     }
 
-    isValidForm(){
-        let { errors } = this.state;
-        let isValid = true;
-        Object.keys( errors ).forEach( key => {
-            isValid = isValid && !errors[key];
-        });
-        return isValid;
-    }
-
-    render(){
+    render() {
         let deviceId = this.props.match.params.device_id;
         let currentEditDevice = this.state.currentEditDevice;
         let availableAdminsList = this.state.availableAdminsList;
-        console.log('render form');
-        let deviceTitle = deviceId != null ? `Device # ${deviceId}` : 'New Device';
-        return(
+        let validator = this.state.validator;
+
+        let deviceTitle = deviceId != null ? T.translate('Device # ${device_id}', {device_id: deviceId}) : T.translate('New Device');
+        return (
             <Row>
                 <Col xs="12" md="12" lg="12">
                     <Card>
@@ -128,20 +123,22 @@ class SuperAdminEditDevice extends Component {
                             <Form action="" method="post" encType="multipart/form-data" className="form-horizontal">
                                 <FormGroup row>
                                     <Col md="3">
-                                        <Label htmlFor="text-input">Serial #</Label>
+                                        <Label htmlFor="text-input">{T.translate('Serial #')}</Label>
                                     </Col>
                                     <Col xs="12" md="9">
                                         <Input type="text"
-                                               invalid={this.state.errors.serial}
+                                               invalid={validator.isInvalid('serial')}
                                                id="serial"
                                                value={currentEditDevice.serial}
-                                               name="serial" placeholder="Serial Number"
-                                               onChange={evt => this.handleChange(evt, target => target.value.trim() != '') } />
+                                               name="serial"
+                                               placeholder={T.translate('Serial Number')}
+                                               onChange={this.handleChange}/>
+                                        <FormFeedback valid={validator.isValid('serial')}><i className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('serial')}</FormFeedback>
                                     </Col>
                                 </FormGroup>
                                 <FormGroup row>
                                     <Col md="3">
-                                        <Label htmlFor="text-input">MAC Address</Label>
+                                        <Label htmlFor="text-input">{T.translate('MAC Address')}</Label>
                                     </Col>
                                     <Col xs="12" md="9">
                                         <Input type="text"
@@ -149,46 +146,54 @@ class SuperAdminEditDevice extends Component {
                                                id="mac_address"
                                                value={currentEditDevice.mac_address}
                                                name="mac_address"
-                                               />
+                                        />
                                     </Col>
                                 </FormGroup>
                                 <FormGroup row>
                                     <Col md="3">
-                                        <Label htmlFor="text-input">Friendly Name</Label>
+                                        <Label htmlFor="text-input">{T.translate('Friendly Name')}</Label>
                                     </Col>
                                     <Col xs="12" md="9">
                                         <Input type="text"
-                                               invalid={this.state.errors.friendly_name}
-                                               id="friendly_name" value={currentEditDevice.friendly_name} name="friendly_name" placeholder="Friendly Name"
-                                               onChange={evt => this.handleChange(evt, target => target.value.trim() != '') } />
+                                               invalid={validator.isInvalid('friendly_name')}
+                                               id="friendly_name"
+                                               value={currentEditDevice.friendly_name}
+                                               name="friendly_name"
+                                               placeholder={T.translate('Friendly Name')}
+                                               onChange={this.handleChange}/>
+                                        <FormFeedback valid={validator.isValid('friendly_name')}><i className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('friendly_name')}</FormFeedback>
                                     </Col>
                                 </FormGroup>
                                 <FormGroup row>
                                     <Col md="3">
-                                        <Label htmlFor="slots">Available Slots #</Label>
+                                        <Label htmlFor="slots">{T.translate('Available Slots #')}</Label>
                                     </Col>
                                     <Col xs="12" md="9">
                                         <Input type="number" id="slots" name="slots" value={currentEditDevice.slots}
-                                               invalid={this.state.errors.slots}
-                                               placeholder="Available Slots #" onChange={(evt) => this.handleChange(evt, (target) => parseInt(target.value) > 0) }/>
+                                               invalid={validator.isInvalid('slots')}
+                                               placeholder={T.translate('Available Slots #')}
+                                               onChange={this.handleChange}/>
                                         <FormText className="help-block">Please enter available slots #</FormText>
+                                        <FormFeedback valid={validator.isValid('slots')}><i className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('slots')}</FormFeedback>
                                     </Col>
                                 </FormGroup>
                                 <FormGroup row>
                                     <Col md="3">
-                                        <Label htmlFor="select">Admin Owner</Label>
+                                        <Label htmlFor="owner">{T.translate('Admin Owner')}</Label>
                                     </Col>
                                     <Col xs="12" md="9">
                                         <Input type="select"
                                                name="owner"
                                                id="owner"
-                                               value={currentEditDevice.owner != null ? (currentEditDevice.owner.hasOwnProperty('id') ? currentEditDevice.owner.id :  currentEditDevice.owner) : ''}
+                                               invalid={validator.isInvalid('owner')}
+                                               value={currentEditDevice.owner != null ? (currentEditDevice.owner.hasOwnProperty('id') ? currentEditDevice.owner.id : currentEditDevice.owner) : ''}
                                                onChange={this.handleChange}>
-                                            <option value="0">-- Please select Owner --</option>
+                                            <option value="0">{T.translate('-- Please select Owner --')}</option>
                                             {
-                                                availableAdminsList.map((item, idx)=>
+                                                availableAdminsList.map((item, idx) =>
                                                     <option
-                                                        key={item.id} value={item.id.toString()}>{item.first_name+' '+item.last_name}</option>
+                                                        key={item.id}
+                                                        value={item.id.toString()}>{item.first_name + ' ' + item.last_name}</option>
                                                 )
                                             }
                                         </Input>
@@ -196,22 +201,25 @@ class SuperAdminEditDevice extends Component {
                                 </FormGroup>
                                 <FormGroup row>
                                     <Col md="3">
-                                        <Label>Is Enable?</Label>
+                                        <Label>{T.translate('Is Enable?')}</Label>
                                     </Col>
                                     <Col md="9">
                                         <FormGroup check inline>
                                             <Input className="form-check-input"
                                                    type="checkbox"
                                                    checked={currentEditDevice.is_active}
-                                                   id="is_active" name="is_active" onChange={this.handleChange}/>
+                                                   id="is_active" name="is_active"
+                                                   onChange={this.handleChange}/>
                                         </FormGroup>
                                     </Col>
                                 </FormGroup>
                             </Form>
                         </CardBody>
                         <CardFooter>
-                            <Button type="submit" size="sm" color="primary" onClick={(e) => this.onSaveDevice(e)}><i className="fa fa-dot-circle-o"></i> Save</Button>{' '}
-                            <Button type="reset" size="sm" color="danger" onClick={(e) => this.onCancelEdit(e)}><i className="fa fa-ban"></i> Cancel</Button>
+                            <Button type="submit" size="sm" color="primary" onClick={(e) => this.onSaveDevice(e)}><i
+                                className="fa fa-dot-circle-o"></i>&nbsp;{T.translate('Save')}</Button>{' '}
+                            <Button type="reset" size="sm" color="danger" onClick={(e) => this.onCancelEdit(e)}><i
+                                className="fa fa-ban"></i>&nbsp;{T.translate('Cancel')}</Button>
                         </CardFooter>
                     </Card>
                 </Col>
@@ -220,12 +228,12 @@ class SuperAdminEditDevice extends Component {
     }
 }
 
-const mapStateToProps = ({ superAdminEditDevicesState }) => ({
-    currentEditDevice : superAdminEditDevicesState.currentEditDevice,
+const mapStateToProps = ({superAdminEditDevicesState}) => ({
+    currentEditDevice: superAdminEditDevicesState.currentEditDevice,
     availableAdminsList: superAdminEditDevicesState.availableAdminsList,
 });
 
-export default connect (
+export default connect(
     mapStateToProps,
     {
         getDeviceById,

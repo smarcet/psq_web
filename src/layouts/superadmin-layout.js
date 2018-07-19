@@ -3,11 +3,9 @@ import {Switch, Route, Redirect} from 'react-router-dom';
 import SuperAdminDashBoard from '../views/Pages/SuperAdmin/dashboard';
 import UserSettings from "../views/Pages/user-settings";
 import SuperAdminDevices from "../views/Pages/SuperAdmin/devices";
-import SuperAdminAdminUsers from "../views/Pages/SuperAdmin/admin-users";
-import SuperAdminNewAdminUser from "../views/Pages/SuperAdmin/new-admin-user";
-import SuperAdminNewDevice from "../views/Pages/SuperAdmin/new-device";
-import SuperAdminEditAdminUser from "../views/Pages/SuperAdmin/edit-admin-user";
+import SuperAdminUsers from "../views/Pages/SuperAdmin/users";
 import SuperAdminEditDevice from "../views/Pages/SuperAdmin/edit-device";
+import SuperAdminEditUser from "../views/Pages/SuperAdmin/edit-user";
 
 class SuperAdminLayout extends Component {
     render() {
@@ -15,12 +13,11 @@ class SuperAdminLayout extends Component {
             <div>
                 <Switch>
                     <Route path="/auth/super-admin/dashboard" component={SuperAdminDashBoard}></Route>
-                    <Route exact path="/auth/super-admin/devices/new" component={SuperAdminNewDevice}></Route>
                     <Route exact path="/auth/super-admin/devices/:device_id" component={SuperAdminEditDevice}></Route>
                     <Route path="/auth/super-admin/devices" component={SuperAdminDevices}></Route>
-                    <Route exact path="/auth/super-admin/admin-users/new" component={SuperAdminNewAdminUser}></Route>
-                    <Route exact path="/auth/super-admin/admin-users/:user_id" component={SuperAdminEditAdminUser}></Route>
-                    <Route path="/auth/super-admin/admin-users" component={SuperAdminAdminUsers}></Route>
+                    <Route exact path="/auth/super-admin/users/new" component={SuperAdminEditUser}></Route>
+                    <Route exact path="/auth/super-admin/users/:user_id" component={SuperAdminEditUser}></Route>
+                    <Route path="/auth/super-admin/users" component={SuperAdminUsers}></Route>
                     <Route path="/auth/super-admin/settings" component={UserSettings}></Route>
                     <Redirect from="/auth/super-admin" to="/auth/super-admin/dashboard"/>
                 </Switch>

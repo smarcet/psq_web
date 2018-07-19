@@ -6,7 +6,7 @@ const DEFAULT_STATE = {
     count: 0,
 }
 
-const superAdminDevicesReducer = (state = DEFAULT_STATE, action) => {
+const superAdminDevicesReducer = (state = {...DEFAULT_STATE}, action) => {
     const { type, payload } = action;
     switch (type) {
         case RETRIEVED_DEVICES: {
@@ -27,7 +27,7 @@ const superAdminDevicesReducer = (state = DEFAULT_STATE, action) => {
         }
         break;
         case LOGOUT_USER: {
-            return DEFAULT_STATE;
+            return {...DEFAULT_STATE};
         }
         break;
         default:

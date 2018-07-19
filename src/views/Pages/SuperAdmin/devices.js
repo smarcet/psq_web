@@ -7,9 +7,6 @@ import {
     CardHeader,
     CardBody,
     Table,
-    Pagination,
-    PaginationItem,
-    PaginationLink,
     Button
 } from 'reactstrap';
 
@@ -18,22 +15,45 @@ import 'sweetalert2/dist/sweetalert2.css';
 import swal from 'sweetalert2';
 import { connect } from 'react-redux'
 import { getDevicesByPage, deleteDevice, verifyDevice } from '../../../actions/superAdmin/devices-actions';
+import PaginationContainer from "../../Base/PaginationContainer/PaginationContainer";
+import {DEFAULT_PAGE_SIZE} from "../../../constants";
 
 class SuperAdminDevices extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            currentPage: 1,
+        };
+        this.onPageClick = this.onPageClick.bind(this);
+        this.handleOnChangeSearch = this.handleOnChangeSearch.bind(this);
+    }
+
     componentWillMount () {
-        this.props.getDevicesByPage();
+        this.props.getDevicesByPage(this.state.currentPage);
+    }
+
+    handleOnChangeSearch(event){
+        let {value} = event.target;
+        this.setState({...this.state, currentPage: 1});
+        this.props.getDevicesByPage(1, DEFAULT_PAGE_SIZE, value);
+    }
+
+    onPageClick(event, pageNumber){
+        this.setState({...this.state, currentPage: pageNumber});
+        this.props.getDevicesByPage(pageNumber);
+        event.preventDefault();
     }
 
     onClickVerifyDevice(event, device){
         swal({
-            title: 'Enter a Friendly name for device',
+            title: T.translate('Enter a Friendly name for device'),
             input: 'text',
             inputAttributes: {
                 autocapitalize: 'off'
             },
             showCancelButton: true,
-            confirmButtonText: 'Verify It!',
+            confirmButtonText: T.translate('Verify It!'),
             showLoaderOnConfirm: true,
             preConfirm: (friendlyName) => {
                 this.props.verifyDevice(device.id, friendlyName).then(() => {});
@@ -47,17 +67,17 @@ class SuperAdminDevices extends Component {
     onClickDeleteDevice(event, device){
 
         swal({
-            title: 'Are you sure?',
-            text: 'You will not be able to recover this device!',
+            title:  T.translate('Are you sure?'),
+            text:  T.translate('You will not be able to recover this device!'),
             type: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'No, keep it'
+            confirmButtonText:  T.translate('Yes, delete it!'),
+            cancelButtonText:  T.translate('No, keep it')
         }).then((result) => {
             if (result.value) {
                 this.props.deleteDevice(device.id).then(() =>  swal(
-                    'Deleted!',
-                    'Your device has been deleted.',
+                    T.translate('Deleted!'),
+                    T.translate('Your device has been deleted.'),
                     'success'
                 ))
             }
@@ -83,13 +103,13 @@ class SuperAdminDevices extends Component {
                                 <Table responsive striped>
                                     <thead>
                                     <tr>
-                                        <th>{T.translate("superAdmin.devices.IdColTitle")}</th>
+                                        <th>{T.translate("Id")}</th>
                                         <th>{T.translate("MAC Address")}</th>
-                                        <th>{T.translate("superAdmin.devices.SerialNbrColTitle")}</th>
-                                        <th>{T.translate("superAdmin.devices.FriendlyNameColTitle")}</th>
-                                        <th>{T.translate("superAdmin.devices.OwnerColTitle")}</th>
-                                        <th>{T.translate("superAdmin.devices.SlotsColTitle")}</th>
-                                        <th>{T.translate("superAdmin.devices.StatusColTitle")}</th>
+                                        <th>{T.translate("Serial #")}</th>
+                                        <th>{T.translate("Friendly Name")}</th>
+                                        <th>{T.translate("Owner")}</th>
+                                        <th>{T.translate("Slots #")}</th>
+                                        <th>{T.translate("Status")}</th>
                                         <th>&nbsp;</th>
                                         <th>&nbsp;</th>
                                         <th>&nbsp;</th>
@@ -108,31 +128,31 @@ class SuperAdminDevices extends Component {
                                                 <td>{device.friendly_name}</td>
                                                 <td>
                                                     {device.owner != null && device.owner.email}
-                                                    {device.owner == null && 'NOT SET'}
+                                                    {device.owner == null && T.translate('NOT SET')}
                                                 </td>
                                                 <td>{device.slots}</td>
                                                 <td>
                                                     {
                                                         device.is_active &&
-                                                        <Badge color="success">Active</Badge>
+                                                        <Badge color="success">{T.translate('Active')}</Badge>
                                                     }
                                                     {
                                                         !device.is_active &&
-                                                        <Badge color="secondary">Disabled</Badge>
+                                                        <Badge color="secondary">{T.translate('Disabled')}</Badge>
                                                     }
                                                 </td>
                                                 <td className="col-button">
-                                                    <Button outline color="primary" onClick={(e) => this.onClickEditDevice(e, device)}><i className="fa fa-edit"></i>&nbsp;{T.translate("superAdmin.devices.EditButton")}</Button>{' '}
+                                                    <Button outline color="primary" onClick={(e) => this.onClickEditDevice(e, device)}><i className="fa fa-edit"></i>&nbsp;{T.translate("Edit")}</Button>{' '}
                                                 </td>
                                                 <td className="col-button">
-                                                    <Button outline color="danger" onClick={(e) => this.onClickDeleteDevice(e, device)}><i className="fa fa-trash"></i>&nbsp;{T.translate("superAdmin.devices.DeleteButton")}</Button>{' '}
+                                                    <Button outline color="danger" onClick={(e) => this.onClickDeleteDevice(e, device)}><i className="fa fa-trash"></i>&nbsp;{T.translate("Delete")}</Button>{' '}
                                                 </td>
                                                 <td className="col-button">
                                                     {
                                                         !device.is_verified &&
                                                         <Button outline color="primary"
                                                                 onClick={(e) => this.onClickVerifyDevice(e, device)}><i
-                                                            className="fa fa-edit"></i>&nbsp;{T.translate("superAdmin.devices.VerifyButton")}
+                                                            className="fa fa-edit"></i>&nbsp;{T.translate("Verify It")}
                                                         </Button>
                                                     }
                                                 </td>
@@ -141,16 +161,12 @@ class SuperAdminDevices extends Component {
                                     })}
                                     </tbody>
                                 </Table>
-                                <Pagination>
-                                    <PaginationItem disabled><PaginationLink previous href="#">Prev</PaginationLink></PaginationItem>
-                                    <PaginationItem active>
-                                        <PaginationLink href="#">1</PaginationLink>
-                                    </PaginationItem>
-                                    <PaginationItem><PaginationLink href="#">2</PaginationLink></PaginationItem>
-                                    <PaginationItem><PaginationLink href="#">3</PaginationLink></PaginationItem>
-                                    <PaginationItem><PaginationLink href="#">4</PaginationLink></PaginationItem>
-                                    <PaginationItem><PaginationLink next href="#">Next</PaginationLink></PaginationItem>
-                                </Pagination>
+                                <PaginationContainer
+                                    count={this.props.devicesCount}
+                                    pageSize={DEFAULT_PAGE_SIZE}
+                                    currentPage={this.state.currentPage}
+                                    onPageClick={this.onPageClick}
+                                />
                             </CardBody>
                         </Card>
                     </Col>
@@ -161,6 +177,7 @@ class SuperAdminDevices extends Component {
 
 const mapStateToProps = ({ superAdminDevicesState }) => ({
     devices : superAdminDevicesState.items,
+    devicesCount: superAdminDevicesState.count
 });
 
 export default connect (

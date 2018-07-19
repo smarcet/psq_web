@@ -105,6 +105,7 @@ export const verifyDevice = (deviceId, friendlyName) =>  (dispatch, getState) =>
             type: STOP_LOADING,
             payload: {}
         });
+
     });
 }
 
@@ -113,7 +114,6 @@ export const getDeviceById = (deviceId) => (dispatch, getState) => {
     let {loggedUserState} = getState();
     let {token} = loggedUserState;
     let apiBaseUrl = process.env['API_BASE_URL'];
-
 
     let params = {
         token: token,

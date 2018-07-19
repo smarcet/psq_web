@@ -16,10 +16,10 @@ export const DEFAULT_USER = {
 }
 
 const DEFAULT_STATE = {
-    currentEditUser: DEFAULT_USER,
+    currentEditUser: {...DEFAULT_USER},
 }
 
-const adminEditUserReducer = (state = DEFAULT_STATE, action) => {
+const adminEditUserReducer = (state = {...DEFAULT_STATE}, action) => {
     const {type, payload} = action;
     switch (type) {
         case RETRIEVED_USER: {
@@ -30,23 +30,23 @@ const adminEditUserReducer = (state = DEFAULT_STATE, action) => {
         }
             break
         case RETRIEVED_USERS: {
-            return DEFAULT_STATE;
+            return {...DEFAULT_STATE};
         }
         break;
         case CREATED_USER: {
-            return DEFAULT_STATE;
+            return {...DEFAULT_STATE};
         }
             break;
         case DELETED_USER: {
-            return DEFAULT_STATE;
+            return {...DEFAULT_STATE};
         }
             break;
         case UPDATED_USER: {
-            return DEFAULT_STATE;
+            return {...DEFAULT_STATE};
         }
             break;
         case LOGOUT_USER: {
-            return DEFAULT_STATE;
+            return {...DEFAULT_STATE};
         }
             break;
         default:

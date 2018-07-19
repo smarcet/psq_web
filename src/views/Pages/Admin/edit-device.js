@@ -102,8 +102,6 @@ class AdminEditDevice extends Component {
     handleChange(event) {
         let {currentEditDevice, validator} = this.state;
         let {value, id} = event.target;
-        let errors = this.state.errors;
-        errors[id] = false;
 
         if (event.target.type == 'checkbox') {
             value = event.target.checked;
@@ -116,7 +114,7 @@ class AdminEditDevice extends Component {
         currentEditDevice[id] = value;
 
         validator.validate(currentEditDevice);
-        this.setState({...this.state, currentEditDevice: currentEditDevice, errors: errors});
+        this.setState({...this.state, currentEditDevice: currentEditDevice, validator: validator});
     }
 
     toggleTab(tab) {

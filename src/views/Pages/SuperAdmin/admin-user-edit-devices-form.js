@@ -31,12 +31,12 @@ class SuperAdminAdminUserEditDevicesForm extends Component {
 
     onUnLinkDeviceClicked(device){
         swal({
-            title: 'Are you sure?',
-            text: 'you are about to the device from this user',
+            title: T.translate('Are you sure?'),
+            text:  T.translate('you are about to the device from this user'),
             type: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Yes, unlink it!',
-            cancelButtonText: 'No, keep it'
+            confirmButtonText:  T.translate('Yes, unlink it!'),
+            cancelButtonText: T.translate('No, keep it')
         }).then((result) => {
             if (result.value) {
                 this.props.unLinkDevice(device);
