@@ -9,7 +9,7 @@ export const RETRIEVED_AVAILABLE_DEVICES = 'RETRIEVED_AVAILABLE_DEVICES';
 export const RETRIEVED_OWNED_DEVICES = 'RETRIEVED_OWNED_DEVICES';
 export const UNLINKED_DEVICE = 'UNLINKED_DEVICE';
 export const LINK_DEVICE = 'LINK_DEVICE';
-export const NEW_USER = 'NEW_ADMIN_USER';
+export const NEW_USER = 'NEW_USER';
 
 export const resendUserVerification  = (userId) =>  (dispatch, getState) => {
 

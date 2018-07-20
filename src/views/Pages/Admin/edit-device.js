@@ -214,7 +214,7 @@ class AdminEditDevice extends Component {
                                 }}>
                                 <i className="fa fa-user"></i>
                                 <span
-                                    className={this.state.activeTab === '2' ? "" : "d-none"}>  {T.translate("Users Data")} </span>{'\u00A0'}
+                                    className={this.state.activeTab === '2' ? "" : "d-none"}>  {T.translate("Users")} </span>{'\u00A0'}
                             </NavLink>
                         </NavItem>
                         <NavItem>

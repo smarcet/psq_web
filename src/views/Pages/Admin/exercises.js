@@ -9,12 +9,12 @@ import {
     Button,
     Input
 } from 'reactstrap';
-
+import swal from "sweetalert2";
 import T from 'i18n-react';
 import 'sweetalert2/dist/sweetalert2.css';
 import {connect} from 'react-redux'
 import {DEFAULT_PAGE_SIZE} from "../../../constants";
-import {getMyExercisesByPage} from "../../../actions/Admin/exercises-actions";
+import { getMyExercisesByPage, deleteExercise} from "../../../actions/Admin/exercises-actions";
 import PaginationContainer from "../../Base/PaginationContainer/PaginationContainer";
 
 class AdminExams extends Component {
@@ -59,11 +59,14 @@ class AdminExams extends Component {
             cancelButtonText: T.translate('No, keep it')
         }).then((result) => {
             if (result.value) {
-                swal(
-                    T.translate('Deleted!'),
-                    T.translate('Your exercise has been deleted.'),
-                    'success'
-                )
+
+                this.props.deleteExercise(exercise).then(() => {
+                    swal(
+                        T.translate('Deleted!'),
+                        T.translate('Your exercise has been deleted.'),
+                        'success'
+                    )
+                })
             }
         })
         event.preventDefault();
@@ -160,7 +163,7 @@ class AdminExams extends Component {
                                                     <tr key={exercise.id}>
                                                         <td>{exercise.id}</td>
                                                         <td>{exercise.title}</td>
-                                                        <td>{exercise.max_duration} {T.translate("Minutes")}</td>
+                                                        <td>{exercise.max_duration/60} {T.translate("Minutes")}</td>
                                                         <td>{this.getDevices(exercise)}</td>
                                                         <td>{this.getAuthorDisplayName(exercise)}</td>
                                                         <td>
@@ -231,5 +234,6 @@ export default connect(
     mapStateToProps,
     {
         getMyExercisesByPage,
+        deleteExercise
     }
 )(AdminExams);

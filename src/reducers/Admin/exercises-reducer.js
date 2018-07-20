@@ -1,5 +1,5 @@
 import{ LOGOUT_USER } from '../../actions/auth-actions';
-import {RETRIEVED_MY_EXERCISES} from "../../actions/Admin/exercises-actions";
+import {DELETED_EXERCISE, RETRIEVED_MY_EXERCISES} from "../../actions/Admin/exercises-actions";
 
 const DEFAULT_STATE = {
     items: [],
@@ -17,7 +17,15 @@ const adminExercisesReducer = (state = DEFAULT_STATE, action) => {
             };
         }
             break;
-
+        case DELETED_EXERCISE:{
+            let {exerciseId} = payload;
+            return {
+                ...state,
+                count: state.count - 1,
+                items: state.items.filter(item => item.id !== exerciseId),
+            };
+        }
+            break;
         case LOGOUT_USER: {
             return DEFAULT_STATE;
         }

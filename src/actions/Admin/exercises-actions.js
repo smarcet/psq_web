@@ -148,7 +148,7 @@ export const deleteExercise = (exercise) =>  (dispatch, getState) => {
 
     return deleteRequest(
         createAction(START_LOADING),
-        createAction(DELETED_EXERCISE)(exercise),
+        createAction(DELETED_EXERCISE)({exerciseId}),
         `${apiBaseUrl}/exercises/${exerciseId}`,
         {},
         authErrorHandler,

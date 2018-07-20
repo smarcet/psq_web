@@ -39,7 +39,6 @@ class AdminEditUser extends Component {
         let userId = this.props.match.params.user_id;
         if (typeof userId != 'undefined' && userId > 0) {
             this.props.getUserById(userId);
-            return;
         }
     }
 

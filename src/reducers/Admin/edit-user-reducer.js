@@ -1,8 +1,8 @@
 import {LOGOUT_USER} from "../../actions/auth-actions";
 import {
-    CREATED_USER, DELETED_USER, RETRIEVED_USER, RETRIEVED_USERS,
+    NEW_USER, DELETED_USER, RETRIEVED_USER, RETRIEVED_USERS,
     UPDATED_USER
-} from "../../actions/Admin/users-actions";
+} from "../../actions/users-actions";
 
 export const DEFAULT_USER = {
     id: 0,
@@ -28,12 +28,12 @@ const adminEditUserReducer = (state = {...DEFAULT_STATE}, action) => {
                 currentEditUser: action.payload.response,
             };
         }
-            break
+        break
         case RETRIEVED_USERS: {
             return {...DEFAULT_STATE};
         }
         break;
-        case CREATED_USER: {
+        case NEW_USER: {
             return {...DEFAULT_STATE};
         }
             break;

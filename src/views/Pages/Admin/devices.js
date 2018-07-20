@@ -64,7 +64,7 @@ class AdminDevices extends Component {
                     <Col xs="12" lg="12">
                         <Card>
                             <CardHeader>
-                                <i className="fa fa-align-justify"></i>&nsbp;{T.translate('Devices')}
+                                <i className="fa fa-align-justify"></i>&nbsp;{T.translate('Devices')}
                             </CardHeader>
                             <CardBody>
                                 <Row className="search-container">

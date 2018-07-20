@@ -38,9 +38,10 @@ class SuperAdminDashBoard extends Component {
         ];
 
         const now = new Date();
-        let monthQty = 6;
+        const monthQty = 6;
+        let monthQtyAux = monthQty;
         let monthLabels = [];
-        for(let i = now.getMonth(); monthQty > 0; --monthQty, --i){
+        for(let i = now.getMonth(); monthQtyAux > 0; --monthQtyAux, --i){
             monthLabels.push(monthNames[i])
         }
         monthLabels = monthLabels.reverse();
@@ -51,7 +52,7 @@ class SuperAdminDashBoard extends Component {
             labels:monthLabels,
             datasets: [
                 {
-                    label: T.translate('Devices'),
+                    label: T.translate('Registered Devices'),
                     backgroundColor: brandPrimary,
                     borderColor: 'rgba(255,255,255,.55)',
                     data: this.props.devices_per_month
@@ -155,8 +156,8 @@ class SuperAdminDashBoard extends Component {
                     <Col xs="12" sm="6" lg="6">
                         <Card className="text-white bg-primary">
                             <CardBody className="pb-0">
-                                <h4 className="mb-0">{this.props.devices_qty}</h4>
-                                <p>{T.translate("Registered Devices")}</p>
+                                <h4 className="mb-0">{T.translate("Total Registered Devices {devices}", {devices: this.props.devices_qty})}</h4>
+                                <p>{T.translate('Registered Devices in last {months} months',{ months : monthQty })}</p>
                             </CardBody>
                             <div className="chart-wrapper px-3" style={{height: '120px'}}>
                                 <Line data={cardChartData1} options={cardChartOpts1} height={70}/>
@@ -166,8 +167,8 @@ class SuperAdminDashBoard extends Component {
                     <Col xs="12" sm="6" lg="6">
                         <Card className="text-white bg-info">
                             <CardBody className="pb-0">
-                                <h4 className="mb-0">{totalUsers}</h4>
-                                <p>{T.translate("Registered Users")}</p>
+                                <h4 className="mb-0">{T.translate("Total Registered Users {users}", {users: totalUsers})}</h4>
+                                <p>{T.translate('Registered Users in last {months} months',{ months : monthQty })}</p>
                             </CardBody>
                             <div className="chart-wrapper px-3" style={{height: '120px'}}>
                                 <Line data={cardChartData2} options={cardChartOpts2} height={70}/>

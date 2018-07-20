@@ -25,7 +25,7 @@ const adminEditExerciseReducer = (state = DEFAULT_STATE, action) => {
         case RETRIEVED_MY_EXERCISE: {
             return {
                 ...state,
-                currentEditExercise: action.payload.response,
+                currentEditExercise: {...action.payload.response, max_duration: action.payload.response.max_duration /60 },
             };
         }
         break
