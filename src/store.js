@@ -21,6 +21,8 @@ import adminExamReducer from "./reducers/Admin/edit-exam-reducer";
 import superAdminDashboardReducer from "./reducers/superAdmin/dashboard_reducer";
 import adminUserGroupsReducer from "./reducers/Admin/user-groups-reducer";
 import adminEditUserGroupReducer from "./reducers/Admin/edit-user-group-reducer";
+import adminNewsReducer from "./reducers/Admin/news-reducer";
+import adminEditNewsReducer from "./reducers/Admin/edit-news-reducer";
 
 // default: localStorage if web, AsyncStorage if react-native
 
@@ -50,6 +52,8 @@ const reducers = persistCombineReducers(config, {
     adminExamState: adminExamReducer,
     adminUserGroupsState: adminUserGroupsReducer,
     adminEditUserGroupState : adminEditUserGroupReducer,
+    adminNewsState: adminNewsReducer,
+    adminEditNewsState: adminEditNewsReducer,
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

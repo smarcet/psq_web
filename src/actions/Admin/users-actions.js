@@ -3,9 +3,8 @@ import {authErrorHandler, START_LOADING, STOP_LOADING} from "../base-actions";
 import {DEFAULT_PAGE_SIZE} from "../../constants";
 
 export const RETRIEVED_MY_USERS = 'RETRIEVED_MY_USERS';
-export const RETRIEVED_MY_MATCHED_USERS = 'RETRIEVED_MY_MATCHED_USERS';
 
-export const getMyUsersByPage = (currentPage = 1, pageSize = DEFAULT_PAGE_SIZE, searchTerm = '', ordering = '', postAction = RETRIEVED_MY_USERS) => (dispatch, getState) => {
+export const getMyUsersByPage = (currentPage = 1, pageSize = DEFAULT_PAGE_SIZE, searchTerm = '', ordering = '') => (dispatch, getState) => {
     let { loggedUserState } = getState();
     let { token }           = loggedUserState;
     let apiBaseUrl          = process.env['API_BASE_URL'];
@@ -28,7 +27,7 @@ export const getMyUsersByPage = (currentPage = 1, pageSize = DEFAULT_PAGE_SIZE, 
 
     getRequest(
         createAction(START_LOADING),
-        createAction(postAction),
+        createAction(RETRIEVED_MY_USERS),
         `${apiBaseUrl}/users/created-by/me`,
         authErrorHandler,
     )(params)(dispatch).then((payload) => {

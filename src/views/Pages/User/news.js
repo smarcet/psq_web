@@ -36,7 +36,7 @@ class UserNews extends Component {
                     <Col xs="12" lg="12">
                         <Card>
                             <CardHeader>
-                                <i className="fa fa-align-justify"></i> {T.translate("user.news.Title")}
+                                <i className="fa fa-align-justify"></i> {T.translate("News")}
                             </CardHeader>
                             <CardBody>
                                 <ListGroup>

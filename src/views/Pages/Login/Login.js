@@ -39,12 +39,17 @@ class Login extends Component {
         return usernameValue != '';
     }
 
-    onLoginClick() {
+    onLoginClick(event) {
+        event.preventDefault();
         let validUsername = this.validateUserName(this.username.value);
         let validPassword = this.validatePassword(this.password.value);
         this.setState({...this.state, invalidUserName: !validUsername , invalidPassword: !validPassword});
         if(!validUsername || !validPassword) return;
         this.props.doLogin(this.props.history, this.username.value, this.password.value);
+    }
+
+    onForgotPasswordClick(event){
+        event.preventDefault();
     }
 
     render() {
@@ -85,7 +90,8 @@ class Login extends Component {
                                                         onClick={(e) => this.onLoginClick(e)}>{T.translate("Login")}</Button>
                                             </Col>
                                             <Col xs="6" className="text-right">
-                                                <Button color="link" className="px-0">{T.translate("Forgot Password?")}</Button>
+                                                <Button color="link" className="px-0"
+                                                        onClick={(e) => this.onForgotPasswordClick(e)}>{T.translate("Forgot Password?")}</Button>
                                             </Col>
                                         </Row>
                                     </CardBody>

@@ -77,8 +77,6 @@ class AdminEditUserGroup extends Component {
         let {currentEditGroup, validator} = this.state;
         let {value, id} = event.target;
 
-
-
         if (event.target.type == 'select-one' && value == '0') {
             value = '';
         }
@@ -252,7 +250,6 @@ class AdminEditUserGroup extends Component {
         );
     }
 }
-
 
 const mapStateToProps = ({adminEditUserGroupState}) => ({
     currentEditGroup: adminEditUserGroupState.currentEditGroup,

@@ -28,7 +28,7 @@ class AdminLayout extends Component {
                     <Route path="/auth/admin/exercises/:exercise_id" component={AdminEditExercise}></Route>
                     <Route path="/auth/admin/exercises" component={AdminExercises}></Route>
                     <Route path="/auth/admin/news/new" component={AdminEditNewsItem}></Route>
-                    <Route path="/auth/admin/news/:news_item_id" component={AdminEditNewsItem}></Route>
+                    <Route path="/auth/admin/news/:news_id" component={AdminEditNewsItem}></Route>
                     <Route path="/auth/admin/news" component={AdminNews}></Route>
                     <Route path="/auth/admin/users/new" component={AdminEditUser}></Route>
                     <Route path="/auth/admin/users/:user_id" component={AdminEditUser}></Route>

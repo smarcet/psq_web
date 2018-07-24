@@ -6,65 +6,81 @@ import {
     CardHeader,
     CardBody,
     Table,
-    Pagination,
-    PaginationItem,
-    PaginationLink,
     Button,
     Input
 } from 'reactstrap';
 import T from "i18n-react/dist/i18n-react";
 import 'sweetalert2/dist/sweetalert2.css';
 import swal from 'sweetalert2';
+import {connect} from "react-redux";
+import {getNewsByPage, deleteNews} from "../../../actions/Admin/news-actions";
+import {DEFAULT_PAGE_SIZE} from "../../../constants";
+import PaginationContainer from "../../Base/PaginationContainer/PaginationContainer";
 
 class AdminNews extends Component {
 
-    onClickAddNewsItem(e){
-        this.props.history.push("/auth/admin/news/new");
+    constructor(props) {
+        super(props);
+        this.state = {
+            currentPage: 1,
+        };
+        this.onPageClick = this.onPageClick.bind(this);
+        this.handleOnChangeSearch = this.handleOnChangeSearch.bind(this);
     }
 
-    onClickDeleteNewsItem(event, exercise){
+    componentWillMount() {
+        this.props.getNewsByPage(this.state.currentPage);
+    }
+
+    handleOnChangeSearch(event) {
+        let {value} = event.target;
+        this.setState({...this.state, currentPage: 1});
+        this.props.getNewsByPage(1, DEFAULT_PAGE_SIZE, value);
+    }
+
+    onPageClick(event, pageNumber) {
+        this.setState({...this.state, currentPage: pageNumber});
+        this.props.getNewsByPage(pageNumber);
+        event.preventDefault();
+    }
+
+    onClickDeleteNewsItem(event, newsItem) {
 
         swal({
             title: T.translate("Are you sure?"),
             text: T.translate("You will not be able to recover this news item!"),
             type: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'No, keep it'
+            confirmButtonText: T.translate('Yes, delete it!'),
+            cancelButtonText: T.translate('No, keep it')
         }).then((result) => {
+
             if (result.value) {
-                swal(
-                    T.translate("Deleted!"),
-                    T.translate("Your news item has been deleted."),
-                    'success'
-                )
+                this.props.deleteNews(newsItem).then(() => {
+                    swal(
+                        T.translate("Deleted!"),
+                        T.translate("Your news item has been deleted."),
+                        'success'
+                    )
+                });
             }
         })
         event.preventDefault();
     }
 
-    onClickEditNewsItem(event, newsItem){
+    onClickEditNewsItem(event, newsItem) {
         this.props.history.push(`/auth/admin/news/${newsItem.id}`);
         event.preventDefault();
     }
 
-    render(){
+    onClickAddNews(event) {
+        this.props.history.push(`/auth/admin/news/new`);
+        event.preventDefault();
+    }
 
-        let news = [
-            {
-                id:1,
-                title: 'News #1',
-                desc: 'Lorep ip sum',
-                date: "01/01/2018 10:00 AM",
+    render() {
 
-            },
-            {
-                id:2,
-                title: 'News #2',
-                desc: 'Lorep ip sum',
-                date: "01/01/2018 10:30 AM",
-            },
-        ];
+        let {news, newsCount} = this.props;
 
         return (
             <div className="animated fadeIn">
@@ -72,64 +88,88 @@ class AdminNews extends Component {
                     <Col xs="12" lg="12">
                         <Card>
                             <CardHeader>
-                                <i className="fa fa-align-justify"></i> {T.translate("Title")}
+                                <i className="fa fa-align-justify"></i> {T.translate("News")}
                             </CardHeader>
                             <CardBody>
                                 <Row className="search-container">
-                                    <Col xs="12" sm="4" lg="4" >
-                                        <Input type="text" className="input-search" id="input1-group2" name="input1-group2" placeholder={T.translate("Search New")}/>
+                                    <Col xs="12" sm="4" lg="4">
+                                        <Input type="text"
+                                               className="input-search"
+                                               id="search_news"
+                                               name="search_news"
+                                               onChange={this.handleOnChangeSearch}
+                                               placeholder={T.translate("Search News")}/>
                                         <i className="fa fa-search filter-search"></i>
                                     </Col>
-                                    <Col xs="12" sm="4" lg="3" >
-                                        <Button onClick={(e) => this.onClickAddNewsItem(e)} className="button-add" color="primary">
-                                            <i className="fa fa-plus-circle"></i>{'\u00A0'} {T.translate("Add Bew")}
+                                    <Col xs="12" sm="4" lg="3">
+                                        <Button onClick={(e) => this.onClickAddNews(e)} className="button-add"
+                                                color="primary">
+                                            <i className="fa fa-plus-circle"></i>{'\u00A0'} {T.translate("Add News")}
                                         </Button>
                                     </Col>
                                 </Row>
-                                <Table responsive striped>
-                                    <thead>
-                                    <tr>
-                                        <th>{T.translate("Id")}</th>
-                                        <th>{T.translate("Title")}</th>
-                                        <th>{T.translate("Description")}</th>
-                                        <th>{T.translate("Date")}</th>
-                                        <th>&nbsp;</th>
-                                        <th>&nbsp;</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-
-                                    { news.map((news_item ,i) => {
-
-                                        return (
-                                            <tr key={news_item.id}>
-                                                <td>{news_item.id}</td>
-                                                <td>{news_item.title}</td>
-                                                <td>{news_item.desc}</td>
-                                                <td>{news_item.date}</td>
-                                                <td className="col-button">
-                                                    <Button color="primary" onClick={(e) => this.onClickEditNewsItem(e, news_item)}outline><i className="fa fa-edit"></i>&nbsp;{T.translate("Edit")}</Button>
-                                                </td>
-                                                <td className="col-button">
-                                                    <Button color="danger" onClick={(e) => this.onClickDeleteNewsItem(e, news_item)} outline><i className="fa fa-trash"></i>&nbsp;{T.translate("Delete")}</Button>
-                                                </td>
-
+                                {
+                                    news.length == 0 &&
+                                    <Row>
+                                        <Col xs="12" sm="12" lg="12">
+                                            <p>{T.translate("List is empty")}</p>
+                                        </Col>
+                                    </Row>
+                                }
+                                { news.length > 0 &&
+                                <Row>
+                                    <Col xs="12" sm="12" lg="12">
+                                        <Table responsive striped>
+                                            <thead>
+                                            <tr>
+                                                <th>{T.translate("Id")}</th>
+                                                <th>{T.translate("Title")}</th>
+                                                <th>{T.translate("Body")}</th>
+                                                <th>{T.translate("Created Date")}</th>
+                                                <th>&nbsp;</th>
+                                                <th>&nbsp;</th>
                                             </tr>
-                                        );
-                                    })}
+                                            </thead>
+                                            <tbody>
 
-                                    </tbody>
-                                </Table>
-                                <Pagination>
-                                    <PaginationItem disabled><PaginationLink previous href="#">Prev</PaginationLink></PaginationItem>
-                                    <PaginationItem active>
-                                        <PaginationLink href="#">1</PaginationLink>
-                                    </PaginationItem>
-                                    <PaginationItem><PaginationLink href="#">2</PaginationLink></PaginationItem>
-                                    <PaginationItem><PaginationLink href="#">3</PaginationLink></PaginationItem>
-                                    <PaginationItem><PaginationLink href="#">4</PaginationLink></PaginationItem>
-                                    <PaginationItem><PaginationLink next href="#">Next</PaginationLink></PaginationItem>
-                                </Pagination>
+                                            {news.map((news_item, i) => {
+
+                                                return (
+                                                    <tr key={news_item.id}>
+                                                        <td>{news_item.id}</td>
+                                                        <td>{news_item.title}</td>
+                                                        <td>{news_item.body}</td>
+                                                        <td>{news_item.created}</td>
+                                                        <td className="col-button">
+                                                            <Button color="primary"
+                                                                    onClick={(e) => this.onClickEditNewsItem(e, news_item)}
+                                                                    outline><i
+                                                                className="fa fa-edit"></i>&nbsp;{T.translate("Edit")}
+                                                            </Button>
+                                                        </td>
+                                                        <td className="col-button">
+                                                            <Button color="danger"
+                                                                    onClick={(e) => this.onClickDeleteNewsItem(e, news_item)}
+                                                                    outline><i
+                                                                className="fa fa-trash"></i>&nbsp;{T.translate("Delete")}
+                                                            </Button>
+                                                        </td>
+
+                                                    </tr>
+                                                );
+                                            })}
+
+                                            </tbody>
+                                        </Table>
+                                        <PaginationContainer
+                                            count={newsCount}
+                                            pageSize={DEFAULT_PAGE_SIZE}
+                                            currentPage={this.state.currentPage}
+                                            onPageClick={this.onPageClick}
+                                        />
+                                    </Col>
+                                </Row>
+                                }
                             </CardBody>
                         </Card>
                     </Col>
@@ -138,4 +178,16 @@ class AdminNews extends Component {
     }
 }
 
-export default AdminNews;
+const mapStateToProps = ({adminNewsState, loggedUserState}) => ({
+    news: adminNewsState.items,
+    newsCount: adminNewsState.count,
+    currentUser: loggedUserState.currentUser,
+});
+
+export default connect(
+    mapStateToProps,
+    {
+        getNewsByPage,
+        deleteNews,
+    }
+)(AdminNews);

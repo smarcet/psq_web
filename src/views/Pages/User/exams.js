@@ -57,7 +57,7 @@ class UserExams extends Component {
                     <Col xs="12" lg="12">
                         <Card>
                             <CardHeader>
-                                <i className="fa fa-align-justify"></i> {T.translate("user.exams.Title")}
+                                <i className="fa fa-align-justify"></i> {T.translate("Exams")}
                             </CardHeader>
                             <CardBody>
                                 <Row className="search-container">
@@ -72,13 +72,12 @@ class UserExams extends Component {
                                 <Table responsive striped>
                                     <thead>
                                     <tr>
-                                        <th>{T.translate("user.exams.IdColTitle")}</th>
-                                        <th>{T.translate("user.exams.ExerciseColTitle")}</th>
-                                        <th>{T.translate("user.exams.DateColTitle")}</th>
-                                        <th>{T.translate("user.exams.TimeColTitle")}</th>
-                                        <th>{T.translate("user.exams.EvaluatorColTitle")}</th>
-                                        <th>{T.translate("user.exams.EvaluationStatusColTitle")}</th>
-                                        <th>{T.translate("user.exams.NotesColTitle")}</th>
+                                        <th>{T.translate("Id")}</th>
+                                        <th>{T.translate("Date")}</th>
+                                        <th>{T.translate("Time")}</th>
+                                        <th>{T.translate("Evaluator")}</th>
+                                        <th>{T.translate("Status")}</th>
+                                        <th>{T.translate("Notes")}</th>
                                         <th>&nbsp;</th>
                                     </tr>
                                     </thead>

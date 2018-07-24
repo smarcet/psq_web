@@ -47,7 +47,7 @@ class UserVideos extends Component {
                     <Col xs="12" lg="12">
                         <Card>
                             <CardHeader>
-                                <i className="fa fa-align-justify"></i> {T.translate("user.videos.Title")}
+                                <i className="fa fa-align-justify"></i> {T.translate("Videos")}
                             </CardHeader>
                             <CardBody>
                                 <Row className="search-container">
