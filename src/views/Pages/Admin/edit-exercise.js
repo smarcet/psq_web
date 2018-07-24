@@ -74,13 +74,15 @@ class AdminEditExercise extends Component {
 
         if (ev.target.type == 'checkbox') {
             if (ev.target.className.indexOf("multi")) {
-                id = 'allowed_devices';
+                let { availableDevices } = this.props;
+                id    = 'allowed_devices';
+                let selectedDevice = availableDevices.filter((i) => i.id == value)[0];
                 value = currentEditExercise[id];
                 if (ev.target.checked) {
-                    value = [...value, parseInt(ev.target.value)]
+                    value = [...value, selectedDevice]
                 }
                 else {
-                    value = value.filter(elem => elem != parseInt(ev.target.value))
+                    value = value.filter(i => i.id != selectedDevice.id)
                 }
             }
         }
@@ -88,6 +90,9 @@ class AdminEditExercise extends Component {
         if (ev.target.type == 'select-one' && value == '0') {
             value = '';
         }
+
+        if(id == 'max_duration')
+            value = value * 60;
 
         currentEditExercise[id] = value;
 
@@ -106,12 +111,10 @@ class AdminEditExercise extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({...this.state,
-            currentEditExercise: {
-                ...nextProps.currentEditExercise,
-                allowed_devices: nextProps.currentEditExercise.allowed_devices.map(item => item.id)
-            }
-        });
+        if (nextProps.currentEditExercise.id != this.state.currentEditExercise.id)
+            this.setState({...this.state,
+                currentEditExercise: {...nextProps.currentEditExercise}
+            });
     }
 
     render() {

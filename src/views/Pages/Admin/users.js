@@ -30,41 +30,41 @@ class AdminUsers extends Component {
         this.handleOnChangeSearch = this.handleOnChangeSearch.bind(this);
     }
 
-    handleOnChangeSearch(event){
+    handleOnChangeSearch(event) {
         let {value} = event.target;
         this.setState({...this.state, currentPage: 1});
         this.props.getMyUsersByPage(1, DEFAULT_PAGE_SIZE, value);
     }
 
-    componentWillMount () {
+    componentWillMount() {
         this.props.getMyUsersByPage(this.state.currentPage);
     }
 
-    onPageClick(event, pageNumber){
+    onPageClick(event, pageNumber) {
         this.setState({...this.state, currentPage: pageNumber});
         this.props.getMyUsersByPage(pageNumber);
         event.preventDefault();
     }
 
-    onClickAddNewAdminUser(event){
+    onClickAddNewAdminUser(event) {
         this.props.history.push("/auth/admin/users/new");
         event.preventDefault();
     }
 
-    onClickEditAdminUser(event, user){
+    onClickEditAdminUser(event, user) {
         this.props.history.push(`/auth/admin/users/${user.id}`);
         event.preventDefault();
     }
 
-    onClickReSendVerification(event, user){
-        this.props.resendUserVerification(user.id).then(() =>  swal(
+    onClickReSendVerification(event, user) {
+        this.props.resendUserVerification(user.id).then(() => swal(
             T.translate('Success!'),
             T.translate('Your user has been notified.'),
             'success'
         ))
     }
 
-    onClickDeleteAdminUser(event, user){
+    onClickDeleteAdminUser(event, user) {
         swal({
             title: T.translate('Are you sure?'),
             text: T.translate('You will not be able to recover this user!'),
@@ -74,7 +74,7 @@ class AdminUsers extends Component {
             cancelButtonText: T.translate('No, keep it')
         }).then((result) => {
             if (result.value) {
-                this.props.deleteUser(user.id, user.role).then(() =>  swal(
+                this.props.deleteUser(user.id, user.role).then(() => swal(
                     T.translate('Deleted!'),
                     T.translate('Your user has been deleted.'),
                     'success'
@@ -85,16 +85,16 @@ class AdminUsers extends Component {
         event.preventDefault();
     }
 
-    getFriendlyRole(role){
-        if(role == TEACHER)
+    getFriendlyRole(role) {
+        if (role == TEACHER)
             return T.translate('Teacher');
-        if(role == STUDENT)
+        if (role == STUDENT)
             return T.translate('Student');
         return T.translate('Not Set');
     }
 
-    render(){
-        let { users } = this.props;
+    render() {
+        let {users} = this.props;
         return (
             <div className="animated fadeIn">
                 <Row>
@@ -105,7 +105,7 @@ class AdminUsers extends Component {
                             </CardHeader>
                             <CardBody>
                                 <Row className="search-container">
-                                    <Col xs="12" sm="4" lg="4" >
+                                    <Col xs="12" sm="4" lg="4">
                                         <Input type="text"
                                                className="input-search"
                                                id="search_users"
@@ -114,73 +114,96 @@ class AdminUsers extends Component {
                                                placeholder={T.translate("Search User")}/>
                                         <i className="fa fa-search filter-search"></i>
                                     </Col>
-                                    <Col xs="12" sm="4" lg="3" >
-                                        <Button onClick={(e) => this.onClickAddNewAdminUser(e)} className="button-add" color="primary">
+                                    <Col xs="12" sm="4" lg="3">
+                                        <Button onClick={(e) => this.onClickAddNewAdminUser(e)} className="button-add"
+                                                color="primary">
                                             <i className="fa fa-plus-circle"></i>{'\u00A0'} {T.translate("Add User")}
                                         </Button>
                                     </Col>
                                 </Row>
-                                <Table responsive striped>
-                                    <thead>
-                                    <tr>
-                                        <th>{T.translate("Id")}</th>
-                                        <th>{T.translate("First Name")}</th>
-                                        <th>{T.translate("Surname")}</th>
-                                        <th>{T.translate("Email")}</th>
-                                        <th>{T.translate("Rol")}</th>
-                                        <th>{T.translate("Status")}</th>
-                                        <th>&nbsp;</th>
-                                        <th>&nbsp;</th>
-                                        <th>&nbsp;</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-
-                                    {users.map((user,i) => {
-
-                                        return (
-                                            <tr key={user.id}>
-                                                <td>{user.id}</td>
-                                                <td>{user.first_name}</td>
-                                                <td>{user.last_name}</td>
-                                                <td>{user.email}</td>
-                                                <td>{this.getFriendlyRole(user.role)}</td>
-                                                <td>
-                                                    {
-                                                        user.is_active &&
-                                                        <Badge color="success">{T.translate("Active")}</Badge>
-                                                    }
-                                                    {
-                                                        !user.is_active &&
-                                                        <Badge color="secondary">{T.translate("Disabled")}</Badge>
-                                                    }
-                                                </td>
-                                                <td className="col-button">
-                                                    {!user.is_active &&
-                                                    !user.is_verified &&
-                                                    < Button color="danger" outline
-                                                             onClick={(e) => this.onClickReSendVerification(e, user)}><i
-                                                        className="fa fa-envelope"></i>&nbsp;{T.translate('Re-send verification')}</Button>
-                                                    }
-                                                </td>
-                                                <td className="col-button">
-                                                    <Button color="primary" outline onClick={(e) => this.onClickEditAdminUser(e, user)}><i className="fa fa-edit"></i>&nbsp;{T.translate("Edit")}</Button>{' '}
-                                                </td>
-                                                <td className="col-button">
-                                                    <Button color="danger" outline onClick={(e) => this.onClickDeleteAdminUser(e, user)}><i className="fa fa-trash"></i>&nbsp;{T.translate("Delete")}</Button>{' '}
-                                                </td>
+                                {
+                                    users.length == 0 &&
+                                    <Row>
+                                        <Col xs="12" sm="12" lg="12">
+                                            <p>{T.translate("List is empty")}</p>
+                                        </Col>
+                                    </Row>
+                                }
+                                { users.length > 0 &&
+                                <Row>
+                                    <Col xs="12" sm="12" lg="12">
+                                        <Table responsive striped>
+                                            <thead>
+                                            <tr>
+                                                <th>{T.translate("Id")}</th>
+                                                <th>{T.translate("First Name")}</th>
+                                                <th>{T.translate("Surname")}</th>
+                                                <th>{T.translate("Email")}</th>
+                                                <th>{T.translate("Rol")}</th>
+                                                <th>{T.translate("Status")}</th>
+                                                <th>&nbsp;</th>
+                                                <th>&nbsp;</th>
+                                                <th>&nbsp;</th>
                                             </tr>
-                                        );
-                                    })}
+                                            </thead>
+                                            <tbody>
 
-                                    </tbody>
-                                </Table>
-                                <PaginationContainer
-                                    count={this.props.usersCount}
-                                    pageSize={DEFAULT_PAGE_SIZE}
-                                    currentPage={this.state.currentPage}
-                                    onPageClick={this.onPageClick}
-                                />
+                                            {users.map((user, i) => {
+
+                                                return (
+                                                    <tr key={user.id}>
+                                                        <td>{user.id}</td>
+                                                        <td>{user.first_name}</td>
+                                                        <td>{user.last_name}</td>
+                                                        <td>{user.email}</td>
+                                                        <td>{this.getFriendlyRole(user.role)}</td>
+                                                        <td>
+                                                            {
+                                                                user.is_active &&
+                                                                <Badge color="success">{T.translate("Active")}</Badge>
+                                                            }
+                                                            {
+                                                                !user.is_active &&
+                                                                <Badge
+                                                                    color="secondary">{T.translate("Disabled")}</Badge>
+                                                            }
+                                                        </td>
+                                                        <td className="col-button">
+                                                            {!user.is_active &&
+                                                            !user.is_verified &&
+                                                            < Button color="danger" outline
+                                                                     onClick={(e) => this.onClickReSendVerification(e, user)}><i
+                                                                className="fa fa-envelope"></i>&nbsp;{T.translate('Re-send verification')}
+                                                            </Button>
+                                                            }
+                                                        </td>
+                                                        <td className="col-button">
+                                                            <Button color="primary" outline
+                                                                    onClick={(e) => this.onClickEditAdminUser(e, user)}><i
+                                                                className="fa fa-edit"></i>&nbsp;{T.translate("Edit")}
+                                                            </Button>{' '}
+                                                        </td>
+                                                        <td className="col-button">
+                                                            <Button color="danger" outline
+                                                                    onClick={(e) => this.onClickDeleteAdminUser(e, user)}><i
+                                                                className="fa fa-trash"></i>&nbsp;{T.translate("Delete")}
+                                                            </Button>{' '}
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            })}
+
+                                            </tbody>
+                                        </Table>
+                                        <PaginationContainer
+                                            count={this.props.usersCount}
+                                            pageSize={DEFAULT_PAGE_SIZE}
+                                            currentPage={this.state.currentPage}
+                                            onPageClick={this.onPageClick}
+                                        />
+                                    </Col>
+                                </Row>
+                                }
                             </CardBody>
                         </Card>
                     </Col>
@@ -189,13 +212,13 @@ class AdminUsers extends Component {
     }
 }
 
-const mapStateToProps = ({ adminUsersState, loggedUserState }) => ({
-    users : adminUsersState.items,
-    usersCount : adminUsersState.count,
+const mapStateToProps = ({adminUsersState, loggedUserState}) => ({
+    users: adminUsersState.items,
+    usersCount: adminUsersState.count,
     currentUser: loggedUserState.currentUser,
 });
 
-export default connect (
+export default connect(
     mapStateToProps,
     {
         getMyUsersByPage,

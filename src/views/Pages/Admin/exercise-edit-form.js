@@ -19,6 +19,13 @@ import DevicesSelectorControl from "./devices-selector-control";
 
 class ExerciseEditForm extends Component{
 
+    getFriendlyType(exercise){
+        if(exercise.type == 1){
+            return T.translate('Regular')
+        }
+        return T.translate('Tutorial');
+    }
+
     render(){
         let {onSave, onCancel, handleChange, currentEditExercise, availableDevices, validator} = this.props;
         return(
@@ -61,9 +68,10 @@ class ExerciseEditForm extends Component{
                                     <Col md="3">
                                         <Label htmlFor="type">{T.translate('Type')}</Label>
                                     </Col>
+                                    {currentEditExercise.id == 0 &&
                                     <Col xs="12" md="9">
                                         <Input type="select"
-                                               readOnly={currentEditExercise.id > 0 }
+                                               readOnly={currentEditExercise.id > 0}
                                                onChange={handleChange}
                                                invalid={validator.isInvalid('type')}
                                                value={currentEditExercise.type}
@@ -72,8 +80,23 @@ class ExerciseEditForm extends Component{
                                             <option value="1">{T.translate('Regular')}</option>
                                             <option value="2">{T.translate('Tutorial')}</option>
                                         </Input>
-                                        <FormFeedback valid={validator.isValid('type')}><i className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('type')}</FormFeedback>
+                                        <FormFeedback valid={validator.isValid('type')}><i
+                                            className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('type')}
+                                        </FormFeedback>
                                     </Col>
+                                    }
+                                    {currentEditExercise.id > 0 &&
+                                        <Col xs="12" md="9">
+                                            <Input
+                                                value={currentEditExercise.type}
+                                                type="hidden" id="type" name="type"/>
+
+                                            <Input
+                                                readOnly={true}
+                                                value={this.getFriendlyType(currentEditExercise)}
+                                                type="text" id="type_friendly" name="type_friendly"/>
+                                        </Col>
+                                    }
                                 </FormGroup>
                                 <FormGroup row>
                                     <Col md="3">
@@ -83,7 +106,7 @@ class ExerciseEditForm extends Component{
                                         <Input
                                             onChange={handleChange}
                                             invalid={validator.isInvalid('max_duration')}
-                                            value={currentEditExercise.max_duration}
+                                            value={currentEditExercise.max_duration > 0 ? currentEditExercise.max_duration / 60 : ""}
                                             type="number" id="max_duration" name="max_duration"/>
                                         <FormFeedback valid={validator.isValid('max_duration')}><i className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('max_duration')}</FormFeedback>
                                         <FormText className="help-block">{T.translate('Please set the max. exercise duration in minutes.')}</FormText>

@@ -1,5 +1,6 @@
 import {createAction, getRequest, postRequest} from "./base-actions";
 import {authErrorHandler} from "./base-actions";
+import {getBackURL} from "../utils/methods";
 
 export const SET_LOGGED_USER   = 'SET_LOGGED_USER';
 export const LOGOUT_USER       = 'LOGOUT_USER';
@@ -8,11 +9,9 @@ export const RECEIVE_USER_INFO = 'RECEIVE_USER_INFO';
 export const REQUEST_AUTH      = 'REQUEST_AUTH';
 export const RECEIVE_AUTH      = 'RECEIVE_AUTH';
 
-export const doLogin = (username, password ) => (dispatch) => {
+export const doLogin = (history, username, password ) => (dispatch) => {
 
-    console.log(`username ${username} - password ${password}`);
-
-    let apiBaseUrl        = process.env['API_BASE_URL'];
+    let apiBaseUrl = process.env['API_BASE_URL'];
 
     postRequest(
         createAction(REQUEST_AUTH),
@@ -25,13 +24,17 @@ export const doLogin = (username, password ) => (dispatch) => {
         authErrorHandler,
     )({})(dispatch).then((payload) => {
         let { response } = payload;
+        let backUrl = getBackURL();
         return getRequest
         (
             createAction(REQUEST_USER_INFO),
             createAction(RECEIVE_USER_INFO),
             `${apiBaseUrl}/users/me?token=${response.token}`,
             authErrorHandler
-        )({})(dispatch);
+        )({})(dispatch).then(payload => {
+            if(backUrl != '' && backUrl != null)
+                history.push(backUrl);
+        });
     });
 
 }

@@ -44,7 +44,7 @@ class Login extends Component {
         let validPassword = this.validatePassword(this.password.value);
         this.setState({...this.state, invalidUserName: !validUsername , invalidPassword: !validPassword});
         if(!validUsername || !validPassword) return;
-        this.props.doLogin(this.username.value, this.password.value);
+        this.props.doLogin(this.props.history, this.username.value, this.password.value);
     }
 
     render() {
