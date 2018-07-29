@@ -23,6 +23,7 @@ import adminUserGroupsReducer from "./reducers/Admin/user-groups-reducer";
 import adminEditUserGroupReducer from "./reducers/Admin/edit-user-group-reducer";
 import adminNewsReducer from "./reducers/Admin/news-reducer";
 import adminEditNewsReducer from "./reducers/Admin/edit-news-reducer";
+import adminDashboardReducer from "./reducers/Admin/dashboard_reducer";
 
 // default: localStorage if web, AsyncStorage if react-native
 
@@ -54,6 +55,7 @@ const reducers = persistCombineReducers(config, {
     adminEditUserGroupState : adminEditUserGroupReducer,
     adminNewsState: adminNewsReducer,
     adminEditNewsState: adminEditNewsReducer,
+    adminDashboardState:adminDashboardReducer,
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

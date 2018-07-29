@@ -27,7 +27,7 @@ class Login extends Component {
 
     handleKeyPress(event){
         if (event.charCode == 13) {
-            this.onLoginClick()
+            this.onLoginClick(event)
         }
     }
 

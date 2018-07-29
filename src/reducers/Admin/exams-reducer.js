@@ -16,7 +16,7 @@ const adminExamsReducer = (state = DEFAULT_STATE, action) => {
                 count: action.payload.response.count,
             };
         }
-            break;
+        break;
 
         case LOGOUT_USER: {
             return DEFAULT_STATE;

@@ -11,21 +11,29 @@ import {
     FormGroup,
     Label,
     Input,
-
+    FormFeedback,
 } from 'reactstrap';
 import T from "i18n-react/dist/i18n-react";
 import 'sweetalert2/dist/sweetalert2.css';
 import swal from 'sweetalert2';
 import { connect } from 'react-redux'
-import {getExamById, } from "../../../actions/Admin/exams-actions";
+import {getExamById, approveExam, rejectExam} from "../../../actions/Admin/exams-actions";
+import {FormValidator, MandatoryField} from "../../../utils/form-validator";
 
 class AdmimEvaluateExam extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            currentEditExam: this.props.currentEditExam,
+            currentEditExam: { ... this.props.currentEditExam },
+            validator: new FormValidator(
+                [
+                    new MandatoryField('notes', 'Notes'),
+                ]
+            )
         };
+
+        this.handleChange = this.handleChange.bind(this);
     }
 
     componentWillMount() {
@@ -44,7 +52,35 @@ class AdmimEvaluateExam extends Component {
         });
     }
 
+    handleChange(event) {
+
+        let {currentEditExam, validator } = this.state;
+        let {value, id} = event.target;
+
+
+        if (event.target.type == 'checkbox') {
+            value = event.target.checked;
+        }
+
+        if (event.target.type == 'select-one' && value == '0') {
+            value = '';
+        }
+
+        currentEditExam[id] = value;
+
+        validator.validate(currentEditExam);
+
+        this.setState({...this.state, currentEditExam: currentEditExam, validator: validator});
+    }
+
     onClickApprove(event){
+
+        let {currentEditExam, validator} = this.state;
+        event.preventDefault();
+        if (!validator.isValidData(currentEditExam)) {
+            this.setState({...this.state, validator: validator});
+            return false;
+        }
 
         swal({
             title: T.translate('Are you sure?'),
@@ -55,18 +91,28 @@ class AdmimEvaluateExam extends Component {
             cancelButtonText:  T.translate('No')
         }).then((result) => {
             if (result.value) {
-                swal(
-                    T.translate('Approved!'),
-                    T.translate('Exam has been Approved.'),
-                    'success'
-                );
-                this.props.history.push("/auth/admin/exams");
+
+                this.props.approveExam(this.state.currentEditExam).then(() => {
+                    swal(
+                        T.translate('Approved!'),
+                        T.translate('Exam has been Approved.'),
+                        'success'
+                    );
+                    this.props.history.push("/auth/admin/exams");
+                })
             }
         })
         event.preventDefault();
     }
 
     onClickReject(event){
+
+        let {currentEditExam, validator} = this.state;
+        event.preventDefault();
+        if (!validator.isValidData(currentEditExam)) {
+            this.setState({...this.state, validator: validator});
+            return false;
+        }
 
         swal({
             title: T.translate('Are you sure?'),
@@ -77,19 +123,23 @@ class AdmimEvaluateExam extends Component {
             cancelButtonText:  T.translate('No')
         }).then((result) => {
             if (result.value) {
-                swal(
-                    T.translate('Rejected!'),
-                    T.translate('Exam has been rejected.'),
-                    'success'
-                )
-                this.props.history.push("/auth/admin/exams");
+
+                this.props.rejectExam(this.state.currentEditExam).then(() => {
+                    swal(
+                        T.translate('Rejected!'),
+                        T.translate('Exam has been rejected.'),
+                        'success'
+                    )
+                    this.props.history.push("/auth/admin/exams");
+                })
+
             }
         })
         event.preventDefault();
     }
 
     render(){
-        let { currentEditExam } = this.state;
+        let { currentEditExam, validator } = this.state;
         if(currentEditExam == null || currentEditExam.id == 0) return null;
         let {taker, exercise, device, videos } = currentEditExam;
         if(taker == null) return null;
@@ -141,7 +191,10 @@ class AdmimEvaluateExam extends Component {
                                             <Label htmlFor="email-input">{T.translate('Video')}</Label>
                                         </Col>
                                         <Col xs="12" md="9" xs="12">
-                                           <video className="rounded img-fluid mx-auto d-block" controls src={videos[0].video_url}>
+                                           <video className="rounded img-fluid mx-auto d-block" controls>
+                                               { videos.map((video, idx) =>
+                                                   <source src={video.video_url} key={idx} type={video.type}></source>
+                                               )}
                                            </video>
                                         </Col>
                                     </FormGroup>
@@ -151,18 +204,25 @@ class AdmimEvaluateExam extends Component {
                                             <Label htmlFor="notes">{T.translate('Notes')}</Label>
                                         </Col>
                                         <Col xs="12" md="9">
-                                            <Input type="textarea" name="notes" id="notes" rows="9"
-                                                   placeholder="Notes..."/>
+                                            <Input type="textarea"
+                                                   name="notes"
+                                                   id="notes"
+                                                   rows="9"
+                                                   value={currentEditExam.notes}
+                                                   invalid={validator.isInvalid('notes')}
+                                                   onChange={this.handleChange}
+                                                   placeholder={T.translate("Leave your evaluation notes ...")}/>
+                                            <FormFeedback valid={validator.isValid('notes')}><i className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('notes')}</FormFeedback>
                                         </Col>
                                     </FormGroup>
 
                                 </Form>
                             </CardBody>
                             <CardFooter>
-                                <Button onClick={(e) => this.onClickApprove(e)} type="submit" size="sm" color="primary">
+                                <Button disabled={videos.length == 0} onClick={(e) => this.onClickApprove(e)} type="submit" size="sm" color="primary">
                                     <i className="fa fa-dot-circle-o"></i>&nbsp;{T.translate('Approve')}
                                 </Button>{' '}
-                                <Button onClick={(e) => this.onClickReject(e)} type="reset" size="sm" color="danger">
+                                <Button disabled={videos.length == 0} onClick={(e) => this.onClickReject(e)} type="reset" size="sm" color="danger">
                                     <i className="fa fa-ban"></i>&nbsp;{T.translate('Reject')}</Button>
                             </CardFooter>
                         </Card>
@@ -182,5 +242,7 @@ export default connect (
     mapStateToProps,
     {
         getExamById,
+        approveExam,
+        rejectExam,
     }
 )(AdmimEvaluateExam);

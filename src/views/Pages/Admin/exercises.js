@@ -89,6 +89,15 @@ class AdminExams extends Component {
         return devices;
     }
 
+    genFriendlyType(type){
+        if(type == 1 ){
+            return T.translate("Regular");
+        }
+        if(type == 2 ){
+            return T.translate("Tutorial");
+        }
+    }
+
     getTakers(exercise){
 
     }
@@ -146,6 +155,7 @@ class AdminExams extends Component {
                                                 <th>{T.translate("Id")}</th>
                                                 <th>{T.translate("Title")}</th>
                                                 <th>{T.translate("Max. Duration")}</th>
+                                                <th>{T.translate("Type")}</th>
                                                 <th>{T.translate("Devices")}</th>
                                                 <th>{T.translate("Author")}</th>
                                                 <th>{T.translate("Takers")}</th>
@@ -164,6 +174,7 @@ class AdminExams extends Component {
                                                         <td>{exercise.id}</td>
                                                         <td>{exercise.title}</td>
                                                         <td>{exercise.max_duration/60} {T.translate("Minutes")}</td>
+                                                        <td>{this.genFriendlyType(exercise.type)}</td>
                                                         <td>{this.getDevices(exercise)}</td>
                                                         <td>{this.getAuthorDisplayName(exercise)}</td>
                                                         <td>
