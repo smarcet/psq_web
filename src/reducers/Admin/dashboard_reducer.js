@@ -1,5 +1,5 @@
 import{ LOGOUT_USER } from '../../actions/auth-actions';
-import {RETRIEVED_DASHBOARD_REPORT} from "../../actions/admin/dashboard-actions";
+import {RETRIEVED_DASHBOARD_REPORT} from "../../actions/Admin/dashboard-actions";
 
 const DEFAULT_STATE = {
     exams_evaluated_per_month:[],
