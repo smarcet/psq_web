@@ -9,7 +9,7 @@ import Widget02 from "../../Widgets/Widget02";
 import {Bar, Line} from 'react-chartjs-2';
 import T from 'i18n-react';
 import {connect} from 'react-redux'
-import {getAdminDashBoardReport} from "../../../actions/admin/dashboard-actions";
+import {getAdminDashBoardReport} from "../../../actions/Admin/dashboard-actions"
 
 const brandPrimary = '#20a8d8';
 const brandSuccess = '#4dbd74';
