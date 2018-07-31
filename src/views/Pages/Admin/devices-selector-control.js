@@ -20,7 +20,7 @@ class DevicesSelectorControl extends Component{
                      {availableDevices && availableDevices.map((device, i) => {
                          return (
                              <FormGroup check inline key={device.id}>
-                                 <Input className="form-check-input multi"
+                                 <Input className="form-check-input multi devices"
                                         type="checkbox"
                                         id={`device_${device.id}`}
                                         onChange={handleChange}

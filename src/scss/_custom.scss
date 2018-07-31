@@ -48,16 +48,22 @@
   width: 5%;
 }
 
+
 .dropdown-add {
   width: 100% !important;
   .btn {
-    width: 100% !important;
+    width: 0% !important;
   }
   padding-bottom: 10px;
 }
 
 .search-container{
   padding-bottom: 10px;
+  .dropdown-menu{
+    width: auto;
+    z-index: 99999999999999;
+    margin-left: 30%;
+  }
 }
 
 .user-pic

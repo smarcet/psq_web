@@ -162,7 +162,6 @@ class AdminExams extends Component {
                                                 <th>&nbsp;</th>
                                                 <th>&nbsp;</th>
                                                 <th>&nbsp;</th>
-                                                <th>&nbsp;</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -201,15 +200,6 @@ class AdminExams extends Component {
                                                                     outline><i
                                                                 className="fa fa-share-alt"></i>&nbsp;{T.translate("Share")}
                                                             </Button>
-                                                        </td>
-                                                        <td className="col-button">
-                                                            {exercise.type == 2 &&
-                                                            <Button color="primary"
-                                                                    onClick={(e) => this.onClickCreateExercise(e, exercise)}
-                                                                    outline><i
-                                                                className="fa fa-copy"></i>&nbsp;{T.translate("Create Exercise")}
-                                                            </Button>
-                                                            }
                                                         </td>
                                                     </tr>
                                                 );

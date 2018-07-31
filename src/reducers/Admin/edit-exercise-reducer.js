@@ -1,6 +1,6 @@
 import { LOGOUT_USER } from "../../actions/auth-actions";
 import {
-    ADDED_NEW_EXERCISE, RETRIEVED_MY_AVAILABLE_DEVICES,
+    ADDED_NEW_EXERCISE, RETRIEVED_MY_AVAILABLE_DEVICES, RETRIEVED_MY_AVAILABLE_TUTORIALS,
     RETRIEVED_MY_EXERCISE, RETRIEVED_MY_EXERCISES, UPDATED_EXERCISE
 } from "../../actions/Admin/exercises-actions";
 
@@ -12,14 +12,16 @@ export const DEFAULT_EXERCISE = {
     type: 0,
     author: 0,
     allowed_devices: [],
+    allowed_tutorials: [],
 }
 
 const DEFAULT_STATE = {
     currentEditExercise: DEFAULT_EXERCISE,
     availableDevices: [],
+    availableTutorials : []
 }
 
-const adminEditExerciseReducer = (state = DEFAULT_STATE, action) => {
+const adminEditExerciseReducer = (state = {...DEFAULT_STATE}, action) => {
     const { type, payload } = action;
     switch (type) {
         case RETRIEVED_MY_EXERCISE: {
@@ -34,6 +36,11 @@ const adminEditExerciseReducer = (state = DEFAULT_STATE, action) => {
             availableDevices: action.payload.response.results,
         };
         break
+        case RETRIEVED_MY_AVAILABLE_TUTORIALS: return {
+            ...state,
+            availableTutorials: action.payload.response.results,
+        };
+            break
         case LOGOUT_USER: {
             return DEFAULT_STATE;
         }

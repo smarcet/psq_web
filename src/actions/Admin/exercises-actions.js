@@ -8,6 +8,7 @@ export const RETRIEVED_MY_AVAILABLE_DEVICES = 'RETRIEVED_MY_AVAILABLE_DEVICES';
 export const ADDED_NEW_EXERCISE = 'ADDED_NEW_EXERCISE';
 export const UPDATED_EXERCISE = 'UPDATED_EXERCISE';
 export const DELETED_EXERCISE = 'DELETED_EXERCISE';
+export const RETRIEVED_MY_AVAILABLE_TUTORIALS = 'RETRIEVED_MY_AVAILABLE_TUTORIALS';
 
 export const getMyExercisesByPage = (currentPage = 1, pageSize = DEFAULT_PAGE_SIZE, searchTerm = '', ordering = 'id') =>
     (dispatch, getState) => {
@@ -45,10 +46,34 @@ export const getMyAvailableDevices = () => (dispatch, getState) => {
         page_size : 9999999999,
     };
 
-    getRequest(
+    return getRequest(
         createAction(START_LOADING),
         createAction(RETRIEVED_MY_AVAILABLE_DEVICES),
         `${apiBaseUrl}/admin-users/me/devices`,
+        authErrorHandler,
+    )(params)(dispatch).then((payload) => {
+        dispatch({
+            type: STOP_LOADING,
+            payload: {}
+        });
+    });
+}
+
+export const getMyAvailableTutorials = () => (dispatch, getState) => {
+    let {loggedUserState} = getState();
+    let {token} = loggedUserState;
+    let apiBaseUrl = process.env['API_BASE_URL'];
+
+    let params = {
+        token: token,
+        page: 1,
+        page_size : 9999999999,
+    };
+
+    getRequest(
+        createAction(START_LOADING),
+        createAction(RETRIEVED_MY_AVAILABLE_TUTORIALS),
+        `${apiBaseUrl}/tutorials`,
         authErrorHandler,
     )(params)(dispatch).then((payload) => {
         dispatch({
@@ -93,6 +118,7 @@ export const addNewExercise = (newExercise) => (dispatch, getState) => {
     // convert relations to pk
 
     newExercise.allowed_devices = newExercise.allowed_devices.map(i => i.id);
+    newExercise.allowed_tutorials = newExercise.allowed_tutorials.map(i => i.id);
 
     return postRequest(
         createAction(START_LOADING),
@@ -123,6 +149,7 @@ export const updateExercise = (exercise) => (dispatch, getState) => {
     // convert relations to pk
 
     exercise.allowed_devices = exercise.allowed_devices.map(i => i.id);
+    exercise.allowed_tutorials = exercise.allowed_tutorials.map(i => i.id);
 
     return putRequest(
         createAction(START_LOADING),

@@ -104,8 +104,8 @@ class SearchBar extends Component {
                     <ButtonDropdown className="dropdown-add" isOpen={this.state.isOpenDropDown} toggle={() => {
                         this.toggleDropDown();}}>
                         <DropdownToggle>
-                            <Input type="text" onChange={this.onChangeSearchInput} id={`search_term_${searchId}`} name={`search_term_${searchId}`} placeholder={searchPlaceHolder}/>
                         </DropdownToggle>
+                        <Input type="text" onChange={this.onChangeSearchInput} id={`search_term_${searchId}`} name={`search_term_${searchId}`} placeholder={searchPlaceHolder}/>
                         <DropdownMenu right>
                             { currentItems.map((item, i) => {
 

@@ -16,6 +16,7 @@ import {
 } from 'reactstrap';
 import T from "i18n-react/dist/i18n-react";
 import DevicesSelectorControl from "./devices-selector-control";
+import TutorialsSelectorControl from './tutorials-selector-control';
 
 class ExerciseEditForm extends Component{
 
@@ -27,7 +28,7 @@ class ExerciseEditForm extends Component{
     }
 
     render(){
-        let {onSave, onCancel, handleChange, currentEditExercise, availableDevices, validator} = this.props;
+        let {onSave, onCancel, handleChange, currentEditExercise, availableDevices, availableTutorials, validator} = this.props;
         return(
             <Row>
                 <Col xs="12" md="12">
@@ -126,6 +127,23 @@ class ExerciseEditForm extends Component{
                                          availableDevices={availableDevices}/>
                                     </Col>
                                 </FormGroup>
+                                { currentEditExercise.type == 1 && availableTutorials.length > 0 &&
+
+                                <FormGroup row>
+                                    <Col md="3">
+                                        <Label htmlFor="select">{T.translate("Allowed Tutorials")}</Label>
+                                    </Col>
+                                    <Col xs="12" md="9">
+                                        <TutorialsSelectorControl
+                                            onChange={handleChange}
+                                            validator={validator}
+                                            fieldName={"allowed_tutorials"}
+                                            handleChange={handleChange}
+                                            selectedTutorials={currentEditExercise.allowed_tutorials}
+                                            availableTutorials={availableTutorials}/>
+                                    </Col>
+                                </FormGroup>
+                                }
                             </Form>
                         </CardBody>
                         <CardFooter>

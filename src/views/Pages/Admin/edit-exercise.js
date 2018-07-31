@@ -4,7 +4,8 @@ import {connect} from "react-redux";
 import swal from "sweetalert2";
 import T from "i18n-react/dist/i18n-react";
 import {
-    getMyExerciseById, updateExercise, addNewExercise, getMyAvailableDevices
+    getMyExerciseById, updateExercise, addNewExercise, getMyAvailableDevices,
+    getMyAvailableTutorials
 } from "../../../actions/Admin/exercises-actions";
 import {FormValidator, GreaterThanField, MandatoryField} from "../../../utils/form-validator";
 
@@ -14,7 +15,7 @@ class AdminEditExercise extends Component {
         super(props);
 
         this.state = {
-            currentEditExercise: this.props.currentEditExercise,
+            currentEditExercise: {...this.props.currentEditExercise},
             validator: new FormValidator(
                 [
                     new MandatoryField('title', 'Title'),
@@ -73,7 +74,7 @@ class AdminEditExercise extends Component {
         let {value, id} = ev.target;
 
         if (ev.target.type == 'checkbox') {
-            if (ev.target.className.indexOf("multi")) {
+            if (ev.target.className.indexOf("devices")>=0) {
                 let { availableDevices } = this.props;
                 id    = 'allowed_devices';
                 let selectedDevice = availableDevices.filter((i) => i.id == value)[0];
@@ -85,10 +86,23 @@ class AdminEditExercise extends Component {
                     value = value.filter(i => i.id != selectedDevice.id)
                 }
             }
+            if (ev.target.className.indexOf("tutorials")>=0) {
+                let { availableTutorials } = this.props;
+                id    = 'allowed_tutorials';
+                let selectedTutorial = availableTutorials.filter((i) => i.id == value)[0];
+                value = currentEditExercise[id];
+                if (ev.target.checked) {
+                    value = [...value, selectedTutorial]
+                }
+                else {
+                    value = value.filter(i => i.id != selectedTutorial.id)
+                }
+            }
         }
 
-        if (ev.target.type == 'select-one' && value == '0') {
-            value = '';
+        if (ev.target.type == 'select-one') {
+            if(value == '0')
+                value = '';
         }
 
         if(id == 'max_duration')
@@ -104,10 +118,10 @@ class AdminEditExercise extends Component {
     componentWillMount() {
         let exerciseId = this.props.match.params.exercise_id;
         if (typeof exerciseId != 'undefined' && exerciseId > 0) {
-            this.props.getMyExerciseById(exerciseId).then(() => this.props.getMyAvailableDevices());
+            this.props.getMyExerciseById(exerciseId).then(() => this.props.getMyAvailableDevices().then(() => this.props.getMyAvailableTutorials()));
             return;
         }
-        this.props.getMyAvailableDevices();
+        this.props.getMyAvailableDevices().then(() => this.props.getMyAvailableTutorials());
     }
 
     componentWillReceiveProps(nextProps) {
@@ -119,11 +133,12 @@ class AdminEditExercise extends Component {
 
     render() {
         let {currentEditExercise, validator} = this.state;
-        let {availableDevices} = this.props;
+        let {availableDevices, availableTutorials} = this.props;
         return (
             <ExerciseEditForm
                 currentEditExercise={currentEditExercise}
                 availableDevices={availableDevices}
+                availableTutorials={availableTutorials}
                 validator={validator}
                 onSave={this.onSave}
                 onCancel={this.onCancel}
@@ -136,7 +151,8 @@ class AdminEditExercise extends Component {
 
 const mapStateToProps = ({adminEditExerciseState}) => ({
     currentEditExercise: adminEditExerciseState.currentEditExercise,
-    availableDevices: adminEditExerciseState.availableDevices
+    availableDevices: adminEditExerciseState.availableDevices,
+    availableTutorials: adminEditExerciseState.availableTutorials,
 });
 
 export default connect(
@@ -146,5 +162,6 @@ export default connect(
         addNewExercise,
         updateExercise,
         getMyAvailableDevices,
+        getMyAvailableTutorials
     }
 )(AdminEditExercise);
