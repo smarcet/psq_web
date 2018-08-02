@@ -50,7 +50,7 @@ class StreamPlayer extends Component {
             signature,
             expires).then(()=>{
             let slug = this.props.device.slug;
-            let stream_host = 'http://35.231.198.7';
+            let stream_host = process.env['STREAMING_SERVER_BASE_URL'];
 
             if (window.MediaSource && this.player != null) {
                 this.player.attachSource(`${stream_host}/dash/${slug}/index.mpd`);
