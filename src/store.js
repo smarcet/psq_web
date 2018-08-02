@@ -24,6 +24,7 @@ import adminEditUserGroupReducer from "./reducers/Admin/edit-user-group-reducer"
 import adminNewsReducer from "./reducers/Admin/news-reducer";
 import adminEditNewsReducer from "./reducers/Admin/edit-news-reducer";
 import adminDashboardReducer from "./reducers/Admin/dashboard_reducer";
+import StreamPlayerReducer from "./reducers/stream-player-reducer";
 
 // default: localStorage if web, AsyncStorage if react-native
 
@@ -35,6 +36,7 @@ const config = {
 const reducers = persistCombineReducers(config, {
     loggedUserState: loggedUserReducer,
     baseState: baseReducer,
+    StreamPlayerState: StreamPlayerReducer,
     // super admin
     superAdminDevicesState: superAdminDevicesReducer,
     superAdminEditDevicesState: superAdminEditDevicesReducer,

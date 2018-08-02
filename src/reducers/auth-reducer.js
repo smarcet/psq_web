@@ -7,6 +7,7 @@ const DEFAULT_STATE = {
     token: null,
     decodedToken: null,
     currentUser: null,
+    isValidGuestUser: false,
 };
 
 const loggedUserReducer = (state = DEFAULT_STATE, action) => {

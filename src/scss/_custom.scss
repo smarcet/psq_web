@@ -83,3 +83,18 @@
   }
 }
 
+
+.login-button-container{
+  text-align: center;
+}
+
+@media only screen and (min-width: 700px) {
+  #videoPlayer {
+    min-width: 680px;
+    min-height: 430px;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+
+}
