@@ -10,6 +10,7 @@ export const RETRIEVED_OWNED_DEVICES = 'RETRIEVED_OWNED_DEVICES';
 export const UNLINKED_DEVICE = 'UNLINKED_DEVICE';
 export const LINK_DEVICE = 'LINK_DEVICE';
 export const NEW_USER = 'NEW_USER';
+export const NEW_GUEST_USER = 'NEW_GUEST_USER';
 
 export const resendUserVerification  = (userId) =>  (dispatch, getState) => {
 
@@ -243,6 +244,23 @@ export const deleteUser = (userId) =>  (dispatch, getState) => {
         {},
         authErrorHandler,
     )(params)(dispatch).then((payload) => {
+        dispatch({
+            type: STOP_LOADING,
+            payload: {}
+        });
+    });
+}
+
+export const registerGuestUser = (guestUser) => (dispatch, getState) => {
+    let apiBaseUrl = process.env['API_BASE_URL'];
+
+    return postRequest(
+        createAction(START_LOADING),
+        createAction(NEW_GUEST_USER),
+        `${apiBaseUrl}/guest-users`,
+        guestUser,
+        authErrorHandler,
+    )({})(dispatch).then((payload) => {
         dispatch({
             type: STOP_LOADING,
             payload: {}

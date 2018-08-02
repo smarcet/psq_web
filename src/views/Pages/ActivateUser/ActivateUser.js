@@ -1,7 +1,21 @@
 import React, {Component} from 'react';
-import {Container, Row, Col, Card, CardBody, CardFooter, Button, Input, InputGroup, InputGroupAddon, InputGroupText} from 'reactstrap';
+import {
+    Container,
+    Row,
+    Col,
+    Card,
+    CardBody,
+    CardFooter,
+    Button,
+    Input,
+    InputGroup,
+    InputGroupAddon,
+    InputGroupText,
+    FormFeedback
+} from 'reactstrap';
 import swal from "sweetalert2";
 import T from "i18n-react/dist/i18n-react";
+import {EqualToField, FormValidator, MandatoryField, MinSizeField} from "../../../utils/form-validator";
 
 class ActivateUser extends Component {
 
@@ -13,51 +27,49 @@ class ActivateUser extends Component {
                 password_confirmation: '',
                 token: this.props.match.params.token
             },
-            errors: {
-                password_confirmation : false,
-                password: false
-            },
+            validator: new FormValidator(
+                [
+                    new MandatoryField('password', T.translate('Password')),
+                    new MandatoryField('password_confirmation', T.translate('Password Confirmation')),
+                    new EqualToField('password', 'password_confirmation', 'Password', 'Password Confirmation'),
+                    new MinSizeField('password', 8, 'Password'),
+                    new MinSizeField('password_confirmation', 8, 'Password Confirmation')
+                ]
+            )
         };
         this.onActivateAccountClicked = this.onActivateAccountClicked.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
 
-    handleChange(ev, isValid = null) {
-        let formData = {...this.state.formData};
-        let {value, id} = ev.target;
-        let errors = this.state.errors;
-        errors[id] = false;
-
-        if(isValid != null)
-            errors[id] = !isValid(ev.target);
+    handleChange() {
+        let {formData, validator} = this.state;
+        let {value, id} = event.target;
         formData[id] = value;
-        this.setState({...this.state, formData: formData, errors: errors});
+        validator.validate(formData);
+        this.setState({...this.state, formData: formData, validator: validator});
     }
 
-    onActivateAccountClicked(event){
-        if(this.isValidForm())
-            this.props.doActivateUser(this.state.formData).then(() => {
-                swal(
-                    T.translate('Success!'),
-                    T.translate('Your user has been successfully activated!.'),
-                    'success'
-                );
-                this.props.history.push('/')
-            });
+    onActivateAccountClicked(event) {
 
+        let {validator, formData} = this.state;
         event.preventDefault();
-    }
+        if (!validator.isValidData(formData)) {
+            this.setState({...this.state, validator: validator});
+            return false;
+        }
 
-    isValidForm(){
-        let { errors } = this.state;
-        let isValid = true;
-        Object.keys( errors ).forEach( key => {
-            isValid = isValid && !errors[key];
+        this.props.doActivateUser(this.state.formData).then(() => {
+            swal(
+                T.translate('Success!'),
+                T.translate('Your user has been successfully activated!.'),
+                'success'
+            );
+            this.props.history.push('/')
         });
-        return isValid;
     }
 
     render() {
+        let {validator, formData} = this.state;
         return (
             <div className="app flex-row align-items-center">
                 <Container>
@@ -76,15 +88,11 @@ class ActivateUser extends Component {
                                         <Input type="password"
                                                placeholder={T.translate("Password")}
                                                id="password" name="password"
-                                               invalid={this.state.errors.password}
-                                               onChange={
-                                                   evt => this.handleChange(evt, (target) => {
-                                                       let value = target.value.trim();
-                                                       if (value == '') return false;
-                                                       if (value.length <  8 ) return false;
-                                                       return true;
-                                                   })}
+                                               onChange={this.handleChange}
+                                               invalid={validator.isInvalid('password')}
+                                               value={formData.password}
                                         />
+                                        <FormFeedback valid={validator.isValid('password')}><i className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('password')}</FormFeedback>
                                     </InputGroup>
                                     <InputGroup className="mb-4">
                                         <InputGroupAddon addonType="prepend">
@@ -94,19 +102,15 @@ class ActivateUser extends Component {
                                         </InputGroupAddon>
                                         <Input type="password" id="password_confirmation"
                                                name="password_confirmation"
-                                               invalid={this.state.errors.password_confirmation}
                                                placeholder={T.translate("Password Confirmation")}
-                                               onChange={
-                                                   evt => this.handleChange(evt, (target) => {
-                                                       let confirmValue = target.value.trim();;
-                                                       let value = document.getElementById('password').value.trim();
-                                                       if (value == '') return false;
-                                                       if (value != confirmValue) return false;
-                                                       if (value.length <  8 ) return false;
-                                                       return true;
-                                                   })}/>
+                                               onChange={this.handleChange}
+                                               invalid={validator.isInvalid('password_confirmation')}
+                                               value={formData.password_confirmation}
+                                              />
+                                        <FormFeedback valid={validator.isValid('password_confirmation')}><i className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('password_confirmation')}</FormFeedback>
                                     </InputGroup>
-                                    <Button color="success" block onClick={this.onActivateAccountClicked}>{T.translate("Activate Account")}</Button>
+                                    <Button color="primary" className="px-4" block
+                                            onClick={this.onActivateAccountClicked}>{T.translate("Activate Account")}</Button>
                                 </CardBody>
                                 <CardFooter className="p-4">
                                 </CardFooter>

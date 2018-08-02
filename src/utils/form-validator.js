@@ -52,7 +52,6 @@ export class FormValidator {
     }
 }
 
-
 class AbstractFormValidatorRule {
 
     constructor(fieldName, friendlyFieldName = '', customErrorMessage = ''){
