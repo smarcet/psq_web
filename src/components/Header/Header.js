@@ -44,14 +44,19 @@ class Header extends Component {
           <span className="navbar-toggler-icon"></span>
         </NavbarToggler>
         <NavbarBrand href="#"></NavbarBrand>
-        <NavbarToggler className="d-md-down-none" onClick={this.sidebarToggle}>
-          <span className="navbar-toggler-icon"></span>
-        </NavbarToggler>
-        <Nav className="d-md-down-none" navbar>
-          <NavItem className="px-3">
-            <NavLink href="#">Dashboard</NavLink>
-          </NavItem>
-        </Nav>
+          {currentUser.isLoggedUser &&
+          <NavbarToggler className="d-md-down-none" onClick={this.sidebarToggle}>
+              <span className="navbar-toggler-icon"></span>
+          </NavbarToggler>
+          }
+          {currentUser.isLoggedUser &&
+          <Nav className="d-md-down-none" navbar>
+              <NavItem className="px-3">
+                  <NavLink href="#">Dashboard</NavLink>
+              </NavItem>
+          </Nav>
+          }
+
         <Nav className="ml-auto" navbar>
           <HeaderDropdown currentUser={currentUser}/>
         </Nav>

@@ -1,6 +1,5 @@
-import {SET_STREAM_DATA, STREAM_VALIDATED} from "../actions/stream-player-actions";
+import {SET_STREAM_DATA, STREAM_VALIDATED, INVALID_STREAM_LINK} from "../actions/stream-player-actions";
 import {LOGOUT_USER} from "../actions/auth-actions";
-import {VALIDATE} from "../actions/base-actions";
 
 const DEFAULT_STATE = {
     device_id : 0,
@@ -20,10 +19,12 @@ const StreamPlayerReducer = (state = {...DEFAULT_STATE}, action) => {
 
     switch(type){
         case SET_STREAM_DATA:{
-            return {...state, payload}
+            let {exercise, device, user} = payload;
+            return {...state, exercise, device, user};
         }
         break;
-        case VALIDATE:{
+        case INVALID_STREAM_LINK:{
+            console.log('INVALID_STREAM_LINK')
             return {...state, validLink:false}
         }
         case STREAM_VALIDATED:

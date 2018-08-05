@@ -1,0 +1,20 @@
+
+div.player {
+  footer {
+    margin-top: 10px;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  @media only screen and (min-width: 700px) {
+    #videoPlayer {
+      min-width: 680px;
+      min-height: 430px;
+    }
+  }
+
+  .main {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+  }
+}

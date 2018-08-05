@@ -1,38 +1,80 @@
 import React, {Component} from 'react';
-import {Container, Row, Col, Card, CardBody, CardFooter, Button, Input, InputGroup, InputGroupAddon, InputGroupText}
-from 'reactstrap';
-import T from "i18n-react/dist/i18n-react";
+import {
+    Container, Row, Col
+}
+    from 'reactstrap';
 import 'sweetalert2/dist/sweetalert2.css';
-import swal from 'sweetalert2';
-import { connect } from 'react-redux'
-import { validateStream } from '../../../actions/stream-player-actions'
+import {connect} from 'react-redux'
+import {validateStream} from '../../../actions/stream-player-actions'
 import URI from "urijs";
+import Header from '../../../components/Header';
+import Footer from '../../../components/Footer';
+import './stream-player.scss'
+
+const LAUNCH_DELAY = 5 * 1000; // secs
 
 class StreamPlayer extends Component {
 
+
     constructor(props) {
         super(props);
-        this.player = null
-        this.videoElement = null;
+        this.state = {
+            validLink: true,
+            useHLS : false,
+        }
+
+        this.dashPlayer = null;
+        this.hlsPlayer = null;
+        this.video = null;
+
+        this.setVideoRef = element => {
+            this.video = element;
+        };
+
+        this.loadStream = this.loadStream.bind(this);
     }
 
-    componentWillMount(){
-        let {isLoggedUser, isValidGuestUser } = this.props;
-        if(!isLoggedUser && !isValidGuestUser) return;
-        let _this = this;
+    componentWillMount() {
+        console.log("StreamPlayer.componentWillMount");
+    }
 
-        document.addEventListener("DOMContentLoaded", function (event) {
-            _this.videoElement = document.querySelector("#videoPlayer")
-            if (window.MediaSource) {
-                // For good web browsers, use dash.js
-                _this.player = dashjs.MediaPlayer().create();
-                _this.player.initialize(_this.videoElement, null, true);
-                _this.player.setFastSwitchEnabled(true);
+    buildStreamURI(device) {
+        let slug = device.slug;
+        let stream_host = process.env['STREAMING_SERVER_BASE_URL'];
+        if (Hls.isSupported() && this.state.useHLS) {
+            console.log('HLS Supported');
+            return `${stream_host}/hls/${slug}/index.m3u8`;
+        }
+        console.log("DASH Suppported");
+        return `${stream_host}/dash/${slug}/index.mpd`;
+    }
+
+    componentDidMount() {
+        console.log("StreamPlayer.componentDidMount")
+        let {isLoggedUser, isValidGuestUser, history, location} = this.props;
+
+
+        if (!this.state.validLink) {
+            console.log("StreamPlayer.componentDidMount: not valid link return to logout");
+            history.push('/logout');
+            return;
+        }
+
+        if (!isLoggedUser && !isValidGuestUser) {
+            let backUrl = location.pathname;
+            if (backUrl != null && location.search != null && location.search != null) {
+                backUrl += location.search
             }
-        });
+            if (backUrl != null && location.hash != null && location.hash != null) {
+                backUrl += location.hash
+            }
+            console.log("StreamPlayer.componentDidMount: not valid user return to registration");
+            history.push(`/register?BackUrl=${encodeURIComponent(backUrl)}`);
+            return;
+        }
 
-        let url      = URI(window.location.href);
-        let query    = url.search(true);
+        let url = URI(window.location.href);
+        let query = url.search(true);
 
         let {
             device_id,
@@ -48,64 +90,120 @@ class StreamPlayer extends Component {
             user_id,
             exercise_max_duration,
             signature,
-            expires).then(()=>{
-            let slug = this.props.device.slug;
-            let stream_host = process.env['STREAMING_SERVER_BASE_URL'];
-
-            if (window.MediaSource && this.player != null) {
-                this.player.attachSource(`${stream_host}/dash/${slug}/index.mpd`);
-            } else if(this.videoElement != null) {
-                // For Safari on iOS, use HLS
-                this.videoElement.src = `${stream_host}/hls/${slug}/index.m3u8`;
-            }
-        })
+            expires).then((payload) => {
+            window.setTimeout(this.loadStream, LAUNCH_DELAY);
+        });
     }
 
-    render(){
-        let {isLoggedUser, isValidGuestUser, history, location, validLink } = this.props;
+    componentWillReceiveProps(nextProps) {
+        console.log("StreamPlayer.componentWillReceiveProps")
+        this.setState({...this.state, validLink: nextProps.validLink});
+    }
 
-        if(!validLink){
-            history.push('/');
+    componentDidUpdate() {
+        console.log("StreamPlayer.componentDidUpdate")
+        if (!this.state.validLink) {
+            console.log("StreamPlayer.componentDidUpdate: not valid link return to logout");
+            this.props.history.push('/logout');
+            return;
+        }
+    }
+
+    loadStream() {
+        let {device} = this.props;
+        if (device == null) return;
+        this.setupPlayer();
+        this.setPlayerSource(
+            this.buildStreamURI(device)
+        );
+    }
+
+    setupPlayer() {
+        if (this.video == null) return;
+
+        if (Hls.isSupported() && this.state.useHLS) {
+            this.hlsPlayer = new Hls();
+            this.hlsPlayer.attachMedia(this.video);
+            this.hlsPlayer.on(Hls.Events.MANIFEST_PARSED, function () {
+                this.video.play();
+            });
+        }
+
+        this.dashPlayer = dashjs.MediaPlayer().create();
+        this.dashPlayer.initialize(this.video, null, true);
+        this.dashPlayer.setFastSwitchEnabled(true);
+        this.dashPlayer.getDebug().setLogToBrowserConsole(true);
+
+    }
+
+    setPlayerSource(sourceUrl) {
+        if (this.dashPlayer !== null) {
+            this.dashPlayer.attachSource(sourceUrl);
+            this.dashPlayer.play();
+        }
+        else if(this.hlsPlayer != null){
+            this.hlsPlayer.loadSource(sourceUrl);
+        }
+        else {
+            if (this.video == null) return;
+            this.video.src = sourceUrl;
+        }
+    }
+
+    render() {
+        console.log("StreamPlayer.render")
+        let {isLoggedUser, isValidGuestUser, currentUser, device, exercise, user} = this.props;
+
+        if (!this.state.validLink) {
             return null;
         }
 
-        if(!isLoggedUser && !isValidGuestUser){
-            let backUrl = location.pathname;
-            if(backUrl != null && location.search != null && location.search != null){
-                backUrl += location.search
-            }
-            if(backUrl != null && location.hash != null && location.hash != null){
-                backUrl += location.hash
-            }
-
-            history.push(`/register?BackUrl=${encodeURIComponent(backUrl)}`);
-
+        if (!isLoggedUser && !isValidGuestUser) {
             return null;
         }
+
+        if (device == null) return null;
+        if (exercise == null) return null;
+        if (user == null) return null;
+
 
         return (
-            <div className="animated fadeIn">
-                <Row>
-                    <Col xs="12" lg="12">
-                        <h1>{this.props.device.friendly_name} - {this.props.exercise.title} - {this.props.user.first_name}, {this.props.user.last_name}</h1>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xs="12" lg="12">
-                        <video id="videoPlayer" className="rounded img-fluid mx-auto d-block" controls />
-                    </Col>
-                </Row>
+
+            <div className="app player">
+                <Header currentUser={currentUser}/>
+                <div className="app-body">
+                    <main className="main">
+                        <Container fluid>
+                            <div className="animated fadeIn">
+                                <Row>
+                                    <Col xs="12" lg="12">
+                                        <h1>{device.friendly_name} - {exercise.title} - {user.first_name}, {user.last_name}</h1>
+                                        <hr></hr>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col xs="12" lg="12">
+                                        <video className="rounded img-fluid mx-auto d-block" id="videoPlayer"
+                                               ref={this.setVideoRef} controls></video>
+                                    </Col>
+                                </Row>
+                            </div>
+                        </Container>
+                    </main>
+                </div>
+                <Footer/>
             </div>
         )
     }
 }
 
 
-const mapStateToProps = ({StreamPlayerState}) => ({
+const mapStateToProps = ({StreamPlayerState, loggedUserState}) => ({
     exercise: StreamPlayerState.exercise,
     device: StreamPlayerState.device,
     user: StreamPlayerState.user,
-    validLink: StreamPlayerState.validLink
+    validLink: StreamPlayerState.validLink,
+    currentUser: loggedUserState.currentUser,
 });
 
 export default connect(

@@ -13,7 +13,7 @@ class AuthorizedRoute extends React.Component {
 
                 let { location } = this.props;
                 let backUrl = location.pathname;
-                if(backUrl == "/auth/logout")
+                if(backUrl == "/logout")
                     backUrl = null;
                 if(backUrl != null && location.search != null && location.search != null){
                     backUrl += location.search

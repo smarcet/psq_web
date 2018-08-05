@@ -6,7 +6,6 @@ import Sidebar from '../../components/Sidebar/';
 import Breadcrumb from '../../components/Breadcrumb/';
 import Aside from '../../components/Aside/';
 import Footer from '../../components/Footer/';
-import Logout from '../../components/logout';
 import SuperAdminLayout from '../../layouts/superadmin-layout';
 import AdminLayout from '../../layouts/admin-layout';
 import UserLayout from '../../layouts/user-layout';
@@ -26,7 +25,6 @@ class Full extends Component {
             <Breadcrumb/>
             <Container fluid>
               <Switch>
-                <Route exact path="/auth/logout" component={Logout} />
                 <Route path="/auth/super-admin" component={SuperAdminLayout} />
                 <Route path="/auth/admin" component={AdminLayout} />
                 <Route path="/auth/user" component={UserLayout} />

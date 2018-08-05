@@ -73,14 +73,20 @@ class HeaderDropdown extends Component {
             <span className="header-dropdown-user-info">Welcome {this.getUserDetail()}</span>
             <img src={this.props.currentUser.pic_url != '' && this.props.currentUser.pic_url != null ? this.props.currentUser.pic_url : '/img/generic-avatar-icon.png'} className="img-avatar" alt={this.props.currentUser.email}/>
         </DropdownToggle>
-        <DropdownMenu right>
-          <DropdownItem header tag="div" className="text-center"><strong>Account</strong></DropdownItem>
-          <DropdownItem><i className="fa fa-bell-o"></i> News<Badge color="info">42</Badge></DropdownItem>
-          <DropdownItem header tag="div" className="text-center"><strong>Settings</strong></DropdownItem>
-          <DropdownItem><i className="fa fa-user"></i><NavLink to={settingsRoute}>Profile</NavLink></DropdownItem>
-          <DropdownItem divider/>
-          <DropdownItem><i className="fa fa-lock"></i><NavLink to='/auth/logout'>Logout</NavLink></DropdownItem>
-        </DropdownMenu>
+
+          <DropdownMenu right>
+              {this.props.isLoggedUser &&
+              <DropdownItem header tag="div" className="text-center"><strong>Account</strong></DropdownItem>
+              }
+              {this.props.isLoggedUser &&
+              <DropdownItem><i className="fa fa-user"></i><NavLink to={settingsRoute}>Profile</NavLink></DropdownItem>
+              }
+              {this.props.isLoggedUser &&
+              <DropdownItem divider/>
+              }
+              <DropdownItem><i className="fa fa-lock"></i><NavLink to='/logout'>Logout</NavLink></DropdownItem>
+          </DropdownMenu>
+
       </Dropdown>
     );
   }

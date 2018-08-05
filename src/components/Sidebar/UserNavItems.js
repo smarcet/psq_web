@@ -41,7 +41,7 @@ export default {
         },
         {
             name: T.translate("Logout"),
-            url: '/auth/logout',
+            url: '/logout',
             icon: 'icon-logout',
         }
     ]

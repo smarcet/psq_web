@@ -1,10 +1,11 @@
-import {createAction, getRequest, deleteRequest, putRequest, postRequest, stopLoading, VALIDATE} from "./base-actions";
+import {createAction, getRequest, stopLoading} from "./base-actions";
 import {authErrorHandler, START_LOADING, STOP_LOADING} from "./base-actions";
 import swal from "sweetalert2";
 import T from "i18n-react/dist/i18n-react";
 
 export const STREAM_VALIDATED = 'STREAM_VALIDATED';
 export const SET_STREAM_DATA = 'SET_STREAM_DATA';
+export const INVALID_STREAM_LINK = 'INVALID_STREAM_LINK';
 
 export const customErrorHandler = (err, res) => (dispatch) => {
     let code = err.status;
@@ -38,7 +39,7 @@ export const customErrorHandler = (err, res) => (dispatch) => {
             }
             swal("Validation error", msg, "warning");
             dispatch({
-                type: VALIDATE,
+                type: INVALID_STREAM_LINK,
                 payload: {errors: err.response.body}
             });
             break;
@@ -78,5 +79,6 @@ export const validateStream = (
             type: STOP_LOADING,
             payload: {}
         });
+        return payload
     });
 }

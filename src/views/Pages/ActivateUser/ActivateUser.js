@@ -41,7 +41,7 @@ class ActivateUser extends Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
-    handleChange() {
+    handleChange(event) {
         let {formData, validator} = this.state;
         let {value, id} = event.target;
         formData[id] = value;
