@@ -89,7 +89,7 @@ class AdminExams extends Component {
         return devices;
     }
 
-    genFriendlyType(type){
+    getFriendlyType(type){
         if(type == 1 ){
             return T.translate("Regular");
         }
@@ -124,6 +124,7 @@ class AdminExams extends Component {
                                 <Row className="search-container">
                                     <Col xs="12" sm="4" lg="4">
                                         <Input type="text" className="input-search" id="exercise-search"
+                                               onChange={this.handleOnChangeSearch}
                                                name="exercise-search" placeholder={T.translate("Search Exercise")}/>
                                         <i className="fa fa-search filter-search"></i>
                                     </Col>
@@ -173,7 +174,7 @@ class AdminExams extends Component {
                                                         <td>{exercise.id}</td>
                                                         <td>{exercise.title}</td>
                                                         <td>{exercise.max_duration/60} {T.translate("Minutes")}</td>
-                                                        <td>{this.genFriendlyType(exercise.type)}</td>
+                                                        <td>{this.getFriendlyType(exercise.type)}</td>
                                                         <td>{this.getDevices(exercise)}</td>
                                                         <td>{this.getAuthorDisplayName(exercise)}</td>
                                                         <td>
@@ -224,7 +225,6 @@ class AdminExams extends Component {
             </div>);
     }
 }
-
 
 const mapStateToProps = ({adminExercisesState}) => ({
     exercises: adminExercisesState.items,

@@ -12,23 +12,25 @@ import PropsRoute from "./routes/props-route";
 import StreamPlayer from "./views/Pages/StreamPlayer/stream-player";
 import Register from "./views/Pages/Register";
 import Logout from "./components/logout";
+import {TEACHER, STUDENT, SUPERVISOR} from "./constants";
 
 class App extends React.PureComponent {
     render() {
         return (
             <BrowserRouter>
                     <Switch>
-                        <AuthorizedRoute isLoggedUser={this.props.isLoggedUser}
+                        <AuthorizedRoute
                                          path='/auth'
                                          currentUser={this.props.currentUser}
                                          loading={this.props.loading}
-                                         component={Full} />
-                        <Route path="/404" component={Page404} />
-                        <Route exact path="/logout" component={Logout} />
-                        <PropsRoute path="/register" component={Register} isLoggedUser={this.props.isLoggedUser} isValidGuestUser={this.props.isValidGuestUser}/>
-                        <PropsRoute path="/guest/stream" component={StreamPlayer} isLoggedUser={this.props.isLoggedUser} isValidGuestUser={this.props.isValidGuestUser}/>
+                                         component={Full}
+                                         allowedRoles={[SUPERVISOR, TEACHER, STUDENT]}/>
+                        <PropsRoute path="/guest/stream" component={StreamPlayer}/>
+                        <PropsRoute path="/register" component={Register}/>
                         <PropsRoute path="/users/validate/:token" component={ActivateUser} doActivateUser={this.props.doActivateUser}/>
-                        <DefaultRoute isLoggedUser={this.props.isLoggedUser} component={Login} doLogin={this.props.doLogin}/>
+                        <Route exact path="/logout" component={Logout} />
+                        <Route path="/404" component={Page404} />
+                        <DefaultRoute allowedRoles={[SUPERVISOR, TEACHER, STUDENT]} currentUser={this.props.currentUser} component={Login} doLogin={this.props.doLogin}/>
                     </Switch>
             </BrowserRouter>
         );
@@ -36,8 +38,6 @@ class App extends React.PureComponent {
 };
 
 const mapStateToProps = ({ loggedUserState, baseState }) => ({
-    isLoggedUser: loggedUserState.isLoggedUser,
-    isValidGuestUser: loggedUserState.isValidGuestUser,
     currentUser: loggedUserState.currentUser,
     loading: baseState.loading
 });

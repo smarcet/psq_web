@@ -34,6 +34,14 @@ class Register extends Component {
         this.onRegisterGuestUser = this.onRegisterGuestUser.bind(this);
     }
 
+    componentWillMount(){
+        if(this.props.currentUser != null)
+        {
+            console.log("user is already logged")
+            this.props.history.push("/auth");
+        }
+    }
+
     handleChange(event) {
         let {currentGuestRegistration, validator} = this.state;
         let {value, id} = event.target;
@@ -67,6 +75,7 @@ class Register extends Component {
     }
 
     render() {
+
         let {validator, currentGuestRegistration} = this.state;
         return (
             <div className="app flex-row align-items-center">
@@ -141,8 +150,8 @@ class Register extends Component {
 }
 
 
-const mapStateToProps = () => ({
-
+const mapStateToProps = ({ loggedUserState }) => ({
+    currentUser: loggedUserState.currentUser,
 });
 
 export default connect(

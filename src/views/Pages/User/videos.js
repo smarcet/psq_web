@@ -6,84 +6,100 @@ import {
     Card,
     CardHeader,
     CardBody,
-    Table,
-    Pagination,
-    PaginationItem,
-    PaginationLink,
     Button,
-    InputGroup,
-    InputGroupAddon,
     Input,
-    ListGroup, ListGroupItem, ListGroupItemHeading, ListGroupItemText, Media
+    ListGroup, ListGroupItem
 } from 'reactstrap';
-import T from "i18n-react/dist/i18n-react";
+
+import T from 'i18n-react';
+import {connect} from 'react-redux'
+import {DEFAULT_PAGE_SIZE} from "../../../constants";
+import {getVideosByPage} from "../../../actions/User/videos-actions";
+import PaginationContainer from "../../Base/PaginationContainer/PaginationContainer";
+
 
 class UserVideos extends Component {
-    render(){
-        let videos = [
-            {
-                id:1,
-                title: 'Exercise #1',
-                own: true,
-                author: 'Juan Gomez',
-                date : '2018-01-01',
-                time: '10:00 AM',
-                views: 10
-            },
-            {
-                id:2,
-                title: 'Exercise #1',
-                own: false,
-                author: 'Jose Martinez',
-                date : '2018-01-02',
-                time: '12:30 PM',
-                views: 50
-            },
 
-        ];
+    constructor(props) {
+        super(props);
+        this.state = {
+            currentPage: 1,
+        };
+        this.onPageClick = this.onPageClick.bind(this);
+        this.handleOnChangeSearch = this.handleOnChangeSearch.bind(this);
+    }
+
+    componentWillMount() {
+        this.props.getVideosByPage(this.state.currentPage);
+    }
+
+    handleOnChangeSearch(event) {
+        let {value} = event.target;
+        this.setState({...this.state, currentPage: 1});
+        this.props.getVideosByPage(1, DEFAULT_PAGE_SIZE, value);
+    }
+
+    onPageClick(event, pageNumber) {
+        this.setState({...this.state, currentPage: pageNumber});
+        this.props.getVideosByPage(pageNumber);
+        event.preventDefault();
+    }
+
+
+    render(){
+        let {videos, currentUser} = this.props;
         return (
             <div className="animated fadeIn">
                 <Row>
                     <Col xs="12" lg="12">
                         <Card>
                             <CardHeader>
-                                <i className="fa fa-align-justify"></i> {T.translate("Videos")}
+                                <i className="fa fa-align-justify"></i> {T.translate("Video Library")}
                             </CardHeader>
                             <CardBody>
                                 <Row className="search-container">
-                                    <Col xs="12" sm="4" lg="4" >
-                                        <Input type="text" className="input-search" id="input1-group2" name="input1-group2" placeholder="Search on Video Library"/>
+                                    <Col xs="12" sm="4" lg="4">
+                                        <Input type="text" className="input-search" id="video-search"
+                                               onChange={this.handleOnChangeSearch}
+                                               name="vudei-search" placeholder={T.translate("Search Video Library")}/>
                                         <i className="fa fa-search filter-search"></i>
                                     </Col>
-                                    <Col xs="12" sm="4" lg="3" >
-                                       &nbsp;
+                                    <Col xs="12" sm="4" lg="3">
                                     </Col>
                                 </Row>
                                 <Row style={{marginBottom:'10px'}}>
                                     <Col lg="12">
                                         <ListGroup>
                                             { videos.map((video ,i) => {
-
+                                                let { taker, exercise } = video;
+                                                let videos_inner = video.videos;
                                                 return (
                                                     <ListGroupItem key={i} className="justify-content-between">
                                                         <Row>
                                                             <Col xs="12" lg="10">
                                                                 <Row>
                                                                     <Col xs="12" lg="4">
-                                                                        <img title="Play it" className="video-thumbnail" src="/img/video_thumbnail_generic.png" alt={video.title} />
+                                                                        <video className="rounded img-fluid mx-auto d-block" controls>
+                                                                            { videos_inner.map((video_inner, idx) =>
+                                                                                <source src={video_inner.video_url} key={idx} type={video_inner.type}></source>
+                                                                            )}
+                                                                        </video>
                                                                     </Col>
                                                                     <Col xs="12" lg="12">
-                                                                         {video.title}&nbsp;<Badge pill title="views" color="info">{video.views}</Badge>
+                                                                        <b>{T.translate("Title")}</b>:{exercise.title}&nbsp;<Badge pill title="views" color="info">{video.video_views}</Badge>
                                                                     </Col>
                                                                     <Col xs="12" lg="12">
-                                                                       {!video.own && <Badge color="success">Shared By</Badge> }
-                                                                       {!video.own && ' '  }
-                                                                       {video.author}
+                                                                       {taker.id != currentUser.id && <Badge color="success">Shared By</Badge> }
+                                                                       {taker.id == currentUser.id && ' '  }
+                                                                        <b>{T.translate("Author")}</b>: {taker.first_name} {taker.last_name}
+                                                                    </Col>
+                                                                    <Col xs="12" lg="12">
+                                                                        <b>{T.translate("Created")}</b>: {video.created}
                                                                     </Col>
                                                                 </Row>
                                                             </Col>
                                                             <Col xs="12" lg="2">
-                                                                {video.own &&
+                                                                {taker.id == currentUser.id&&
                                                                     <Button outline color="primary"><i
                                                                         className="fa fa-share"></i>&nbsp;share</Button>
                                                                 }
@@ -95,16 +111,12 @@ class UserVideos extends Component {
                                         </ListGroup>
                                     </Col>
                                 </Row>
-                                <Pagination>
-                                    <PaginationItem disabled><PaginationLink previous href="#">Prev</PaginationLink></PaginationItem>
-                                    <PaginationItem active>
-                                        <PaginationLink href="#">1</PaginationLink>
-                                    </PaginationItem>
-                                    <PaginationItem><PaginationLink href="#">2</PaginationLink></PaginationItem>
-                                    <PaginationItem><PaginationLink href="#">3</PaginationLink></PaginationItem>
-                                    <PaginationItem><PaginationLink href="#">4</PaginationLink></PaginationItem>
-                                    <PaginationItem><PaginationLink next href="#">Next</PaginationLink></PaginationItem>
-                                </Pagination>
+                                <PaginationContainer
+                                    count={this.props.videosCount}
+                                    pageSize={DEFAULT_PAGE_SIZE}
+                                    currentPage={this.state.currentPage}
+                                    onPageClick={this.onPageClick}
+                                />
                             </CardBody>
                         </Card>
                     </Col>
@@ -113,4 +125,16 @@ class UserVideos extends Component {
     }
 }
 
-export default UserVideos;
+
+const mapStateToProps = ({userVideosState, loggedUserState}) => ({
+    videos: userVideosState.items,
+    videosCount: userVideosState.count,
+    currentUser: loggedUserState.currentUser
+});
+
+export default connect(
+    mapStateToProps,
+    {
+        getVideosByPage,
+    }
+)(UserVideos);

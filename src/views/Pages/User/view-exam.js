@@ -31,7 +31,7 @@ class UserViewExam extends Component {
                     <Col xs="12" md="12">
                         <Card>
                             <CardHeader>
-                                <strong>View Exam</strong>
+                                <strong>{T.translate("View Exam")}</strong>
                             </CardHeader>
                             <CardBody>
                                 <Form action="" method="post" encType="multipart/form-data" className="form-horizontal">

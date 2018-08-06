@@ -32,6 +32,7 @@ export const doLogin = (history, username, password ) => (dispatch) => {
             `${apiBaseUrl}/users/me?token=${response.token}`,
             authErrorHandler
         )({})(dispatch).then(payload => {
+            console.log(`going to ${backUrl}`);
             if(backUrl != '' && backUrl != null)
                 history.push(backUrl);
         });

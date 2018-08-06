@@ -7,117 +7,153 @@ import {
     CardHeader,
     CardBody,
     Table,
-    Pagination,
-    PaginationItem,
-    PaginationLink,
     Button,
-    InputGroup,
-    InputGroupAddon,
     Input
 } from 'reactstrap';
-import T from "i18n-react/dist/i18n-react";
+
+import T from 'i18n-react';
+import {connect} from 'react-redux'
+import {DEFAULT_PAGE_SIZE} from "../../../constants";
+import {getExercisesByPage} from "../../../actions/User/exercises-actions";
+import PaginationContainer from "../../Base/PaginationContainer/PaginationContainer";
 
 class UserExercises extends Component {
 
-    onClickViewExam(e, exam){
+    constructor(props) {
+        super(props);
+        this.state = {
+            currentPage: 1,
+        };
+        this.onPageClick = this.onPageClick.bind(this);
+        this.handleOnChangeSearch = this.handleOnChangeSearch.bind(this);
+    }
+
+    componentWillMount() {
+        this.props.getExercisesByPage(this.state.currentPage);
+    }
+
+    handleOnChangeSearch(event) {
+        let {value} = event.target;
+        this.setState({...this.state, currentPage: 1});
+        this.props.getExercisesByPage(1, DEFAULT_PAGE_SIZE, value);
+    }
+
+    onPageClick(event, pageNumber) {
+        this.setState({...this.state, currentPage: pageNumber});
+        this.props.getExercisesByPage(pageNumber);
+        event.preventDefault();
+    }
+
+    onClickViewExam(e, exam) {
         this.props.history.push(`/auth/user/exams/${exam.id}`);
         event.preventDefault();
     }
 
-    render(){
-        let exercises = [
-            {
-                id:1,
-                title: 'Exercise #1',
-                desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
-                date : '2018-01-01',
-                time: '10:00 AM',
-                author: "Admin#1",
-                available_devices: "Device#1, Device#2",
-                takes: 0,
-            },
-            {
-                id:2,
-                title: 'Exercise #2',
-                desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
-                date : '2018-01-01',
-                time: '10:00 AM',
-                author: "Admin#1",
-                available_devices: "Device#2",
-                takes: 4,
-            },
-        ];
+    getAuthorDisplayName(exercise) {
+        if (!exercise) return '';
+        if (!exercise.author) return '';
+        return `${exercise.author.first_name}, ${exercise.author.last_name} (${exercise.author.email})`;
+    }
+
+    getDevices(exercise) {
+        let devices = '';
+        for (var device of exercise.allowed_devices) {
+            devices += `${device.friendly_name}, `;
+        }
+        return devices;
+    }
+
+    render() {
+        let {exercises} = this.props;
+
         return (
             <div className="animated fadeIn">
                 <Row>
                     <Col xs="12" lg="12">
                         <Card>
                             <CardHeader>
-                                <i className="fa fa-align-justify"></i> {T.translate("Exercises")}
+                                <i className="fa fa-align-justify"></i> {T.translate("Available Exercises")}
                             </CardHeader>
                             <CardBody>
                                 <Row className="search-container">
-                                    <Col xs="12" sm="4" lg="4" >
-                                        <Input type="text" className="input-search" id="input1-group2" name="input1-group2" placeholder="Search Exercise"/>
+                                    <Col xs="12" sm="4" lg="4">
+                                        <Input type="text" className="input-search" id="exercise-search"
+                                               onChange={this.handleOnChangeSearch}
+                                               name="exercise-search" placeholder={T.translate("Search Exercise")}/>
                                         <i className="fa fa-search filter-search"></i>
                                     </Col>
-                                    <Col xs="12" sm="4" lg="3" >
-                                        &nbsp;
+                                    <Col xs="12" sm="4" lg="3">
                                     </Col>
                                 </Row>
-                                <Table responsive striped>
-                                    <thead>
-                                    <tr>
-                                        <th>{T.translate("Id")}</th>
-                                        <th>{T.translate("Title")}</th>
-                                        <th>{T.translate("Desc.")}</th>
-                                        <th>{T.translate("Author")}</th>
-                                        <th>{T.translate("Devices")}</th>
-                                        <th>{T.translate("Takes")}</th>
-                                        <th>&nbsp;</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
+                                {
 
-                                    { exercises.map((exercise ,i) => {
+                                    exercises.length == 0 &&
+                                    <Row>
+                                        <Col xs="12" sm="12" lg="12">
+                                            <p>{T.translate("List is empty")}</p>
+                                        </Col>
+                                    </Row>
+                                }
 
-                                        return (
-                                            <tr key={exercise.id}>
-                                                <td>{exercise.id}</td>
-                                                <td>{exercise.title}</td>
-                                                <td>{exercise.desc}</td>
-                                                <td>{exercise.author}</td>
-                                                <td>{exercise.available_devices}</td>
-                                                <td>
-                                                    {
-                                                        !exercise.takes &&
-                                                        <Badge color="primary">new</Badge>
-                                                    }
+                                {exercises.length > 0 &&
 
-                                                    {
-                                                        exercise.takes > 0 &&
-                                                        <Badge color="success">Done {exercise.takes} times</Badge>
-                                                    }
-                                                </td>
-                                                <td>
-                                                    <Button onClick={(e) => this.onClickViewExam(e, exercise)} outline color="primary"><i className="fa fa-search"></i>&nbsp;{T.translate("user.exercises.viewButton")}</Button>
-                                                </td>
+                                <Row>
+                                    <Col xs="12" sm="12" lg="12">
+                                        <Table responsive striped>
+                                            <thead>
+                                            <tr>
+                                                <th>{T.translate("Id")}</th>
+                                                <th>{T.translate("Title")}</th>
+                                                <th>{T.translate("Desc.")}</th>
+                                                <th>{T.translate("Author")}</th>
+                                                <th>{T.translate("Devices")}</th>
+                                                <th>{T.translate("Takes")}</th>
+                                                <th>&nbsp;</th>
                                             </tr>
-                                        );
-                                    })}
+                                            </thead>
+                                            <tbody>
 
-                                    </tbody>
-                                </Table>
-                                <Pagination>
-                                    <PaginationItem disabled><PaginationLink previous href="#">Prev</PaginationLink></PaginationItem>
-                                    <PaginationItem active>
-                                        <PaginationLink href="#">1</PaginationLink>
-                                    </PaginationItem>
-                                    <PaginationItem><PaginationLink href="#">2</PaginationLink></PaginationItem>
-                                    <PaginationItem><PaginationLink href="#">3</PaginationLink></PaginationItem>
-                                    <PaginationItem><PaginationLink href="#">4</PaginationLink></PaginationItem>
-                                    <PaginationItem><PaginationLink next href="#">Next</PaginationLink></PaginationItem>
-                                </Pagination>
+                                            {exercises.map((exercise, i) => {
+
+                                                return (
+                                                    <tr key={exercise.id}>
+                                                        <td>{exercise.id}</td>
+                                                        <td>{exercise.title}</td>
+                                                        <td>{exercise.abstract}</td>
+                                                        <td>{this.getAuthorDisplayName(exercise)}</td>
+                                                        <td>{this.getDevices(exercise)}</td>
+                                                        <td>
+                                                            {
+                                                                !exercise.takes &&
+                                                                <Badge color="primary">{T.translate("NEW")}</Badge>
+                                                            }
+
+                                                            {
+                                                                exercise.takes > 0 &&
+                                                                <Badge color="success">{T.translate("Done, {takes} times",{takes:exercise.takes})}</Badge>
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            <Button onClick={(e) => this.onClickViewExam(e, exercise)}
+                                                                    outline color="primary"><i
+                                                                className="fa fa-search"></i>&nbsp;{T.translate("View")}
+                                                            </Button>
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            })}
+
+                                            </tbody>
+                                        </Table>
+                                        <PaginationContainer
+                                            count={this.props.exercisesCount}
+                                            pageSize={DEFAULT_PAGE_SIZE}
+                                            currentPage={this.state.currentPage}
+                                            onPageClick={this.onPageClick}
+                                        />
+                                    </Col>
+                                </Row>
+                                }
                             </CardBody>
                         </Card>
                     </Col>
@@ -126,4 +162,14 @@ class UserExercises extends Component {
     }
 }
 
-export default UserExercises;
+const mapStateToProps = ({userExercisesState}) => ({
+    exercises: userExercisesState.items,
+    exercisesCount: userExercisesState.count,
+});
+
+export default connect(
+    mapStateToProps,
+    {
+        getExercisesByPage,
+    }
+)(UserExercises);

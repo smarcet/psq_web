@@ -105,6 +105,9 @@ class UserEditForm extends Component {
                                                 }
                                                 <option value="2">{T.translate('TEACHER')}</option>
                                                 <option value="1">{T.translate('STUDENT')}</option>
+                                                {config.showRoleSuperAdmin &&
+                                                <option value="0">{T.translate('GUEST')}</option>
+                                                }
                                             </Input>
                                             <FormFeedback valid={validator.isValid('role')}><i className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('role')}</FormFeedback>
                                         </Col>

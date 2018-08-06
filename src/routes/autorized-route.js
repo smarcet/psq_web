@@ -7,31 +7,41 @@ class AuthorizedRoute extends React.Component {
     }
 
     render() {
-        const { component: Component, isLoggedUser, currentUser, loading, ...rest } = this.props;
+        console.log('AuthorizedRoute.render');
+        const { component: Component, currentUser, loading, allowedRoles, ...rest } = this.props;
+        if(currentUser == null){
+            let { location } = this.props;
+            let backUrl = location.pathname;
+            if(backUrl == "/logout")
+                backUrl = null;
+            if(backUrl != null && location.search != null && location.search != null){
+                backUrl += location.search
+            }
+            if(backUrl != null && location.hash != null && location.hash != null){
+                backUrl += location.hash
+            }
+
+            let pathname =  backUrl != null ? `/?BackUrl=${encodeURIComponent(backUrl)}`: '/';
+
+            return (<Redirect
+                to={{
+                    pathname: pathname,
+                    state: { from: location }
+                }}
+            />)
+
+        }
+
+        if(!allowedRoles.includes(currentUser.role)){
+            return null;
+        }
+
         return (
             <Route {...rest} render={ props => {
 
-                let { location } = this.props;
-                let backUrl = location.pathname;
-                if(backUrl == "/logout")
-                    backUrl = null;
-                if(backUrl != null && location.search != null && location.search != null){
-                    backUrl += location.search
-                }
-                if(backUrl != null && location.hash != null && location.hash != null){
-                    backUrl += location.hash
-                }
 
-                let pathname =  backUrl != null ? `/?BackUrl=${encodeURIComponent(backUrl)}`: '/';
+                return  <Component {...props} currentUser={currentUser} loading={loading}/>
 
-                return isLoggedUser
-                    ? <Component {...props} currentUser={currentUser} loading={loading}/>
-                    : <Redirect
-                        to={{
-                            pathname: pathname,
-                            state: { from: location }
-                        }}
-                    />
             }} />
         )
     }

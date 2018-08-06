@@ -16,6 +16,10 @@ export const geExamsByPage = (currentPage = 1, pageSize = DEFAULT_PAGE_SIZE, sea
         page_size : pageSize,
     };
 
+    if(searchTerm != ''){
+        params['search'] = searchTerm;
+    }
+
     getRequest(
         createAction(START_LOADING),
         createAction(RETRIEVED_EXAMS),

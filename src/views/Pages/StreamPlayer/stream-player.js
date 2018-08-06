@@ -10,6 +10,8 @@ import URI from "urijs";
 import Header from '../../../components/Header';
 import Footer from '../../../components/Footer';
 import './stream-player.scss'
+import { withRouter } from 'react-router'
+import {GUEST} from "../../../constants";
 
 const LAUNCH_DELAY = 5 * 1000; // secs
 
@@ -51,16 +53,9 @@ class StreamPlayer extends Component {
 
     componentDidMount() {
         console.log("StreamPlayer.componentDidMount")
-        let {isLoggedUser, isValidGuestUser, history, location} = this.props;
+        let {currentUser, history, location} = this.props;
 
-
-        if (!this.state.validLink) {
-            console.log("StreamPlayer.componentDidMount: not valid link return to logout");
-            history.push('/logout');
-            return;
-        }
-
-        if (!isLoggedUser && !isValidGuestUser) {
+        if (currentUser == null) {
             let backUrl = location.pathname;
             if (backUrl != null && location.search != null && location.search != null) {
                 backUrl += location.search
@@ -70,6 +65,16 @@ class StreamPlayer extends Component {
             }
             console.log("StreamPlayer.componentDidMount: not valid user return to registration");
             history.push(`/register?BackUrl=${encodeURIComponent(backUrl)}`);
+            return;
+        }
+
+        if (!this.state.validLink) {
+            console.log("StreamPlayer.componentDidMount: not valid link return to logout");
+            if(currentUser.role == GUEST) {
+                history.push('/logout');
+                return;
+            }
+            history.push('/auth');
             return;
         }
 
@@ -93,6 +98,7 @@ class StreamPlayer extends Component {
             expires).then((payload) => {
             window.setTimeout(this.loadStream, LAUNCH_DELAY);
         });
+
     }
 
     componentWillReceiveProps(nextProps) {
@@ -103,11 +109,16 @@ class StreamPlayer extends Component {
     componentDidUpdate() {
         console.log("StreamPlayer.componentDidUpdate")
         if (!this.state.validLink) {
-            console.log("StreamPlayer.componentDidUpdate: not valid link return to logout");
-            this.props.history.push('/logout');
-            return;
+            let {currentUser, history} = this.props;
+            console.log("StreamPlayer.componentDidMount: not valid link return to logout");
+            if(currentUser.role == GUEST) {
+                history.push('/logout');
+                return;
+            }
+            history.push('/auth');
         }
     }
+
 
     loadStream() {
         let {device} = this.props;
@@ -152,20 +163,19 @@ class StreamPlayer extends Component {
 
     render() {
         console.log("StreamPlayer.render")
-        let {isLoggedUser, isValidGuestUser, currentUser, device, exercise, user} = this.props;
+        let {currentUser, device, exercise, user} = this.props;
 
-        if (!this.state.validLink) {
+        if (currentUser == null) {
             return null;
         }
 
-        if (!isLoggedUser && !isValidGuestUser) {
+        if (!this.state.validLink) {
             return null;
         }
 
         if (device == null) return null;
         if (exercise == null) return null;
         if (user == null) return null;
-
 
         return (
 
@@ -197,7 +207,6 @@ class StreamPlayer extends Component {
     }
 }
 
-
 const mapStateToProps = ({StreamPlayerState, loggedUserState}) => ({
     exercise: StreamPlayerState.exercise,
     device: StreamPlayerState.device,
@@ -206,9 +215,9 @@ const mapStateToProps = ({StreamPlayerState, loggedUserState}) => ({
     currentUser: loggedUserState.currentUser,
 });
 
-export default connect(
+export default withRouter(connect(
     mapStateToProps,
     {
         validateStream,
     }
-)(StreamPlayer);
+)(StreamPlayer));

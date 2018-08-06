@@ -25,6 +25,8 @@ import adminNewsReducer from "./reducers/Admin/news-reducer";
 import adminEditNewsReducer from "./reducers/Admin/edit-news-reducer";
 import adminDashboardReducer from "./reducers/Admin/dashboard_reducer";
 import StreamPlayerReducer from "./reducers/stream-player-reducer";
+import userExercisesReducer from "./reducers/User/exercises-reducer";
+import userVideosReducer from "./reducers/User/videos-reducer";
 
 // default: localStorage if web, AsyncStorage if react-native
 
@@ -37,13 +39,13 @@ const reducers = persistCombineReducers(config, {
     loggedUserState: loggedUserReducer,
     baseState: baseReducer,
     StreamPlayerState: StreamPlayerReducer,
-    // super admin
+    // super admin ( supervisor)
     superAdminDevicesState: superAdminDevicesReducer,
     superAdminEditDevicesState: superAdminEditDevicesReducer,
     superAdminUsersState: superAdminUsersReducer,
     superAdminEditUserState: superAdminEditUserReducer,
     superAdminDashboardState: superAdminDashboardReducer,
-    // admin
+    // admin ( teacher )
     adminDevicesState: adminDevicesReducer,
     settingsState: SettingsReducer,
     adminEditDevicesState: adminEditDevicesReducer,
@@ -58,6 +60,9 @@ const reducers = persistCombineReducers(config, {
     adminNewsState: adminNewsReducer,
     adminEditNewsState: adminEditNewsReducer,
     adminDashboardState:adminDashboardReducer,
+    // raw user ( student )
+    userExercisesState: userExercisesReducer,
+    userVideosState: userVideosReducer,
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

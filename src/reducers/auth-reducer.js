@@ -14,11 +14,13 @@ const DEFAULT_STATE = {
 const loggedUserReducer = (state = DEFAULT_STATE, action) => {
 
     if (action.type === RECEIVE_AUTH) {
+        console.log('RECEIVE_AUTH');
         let { response } = action.payload;
         window.token = response.token;
         return {...state, token: response.token, decodedToken: jwtDecode(response.token) };
     }
     if(action.type === LOGOUT_USER){
+        console.log('LOGOUT_USER');
         window.accessToken = null;
         return DEFAULT_STATE
     }
@@ -27,6 +29,7 @@ const loggedUserReducer = (state = DEFAULT_STATE, action) => {
         return {...state, isValidGuestUser: true, currentUser: response};
     }
     if(action.type === RECEIVE_USER_INFO){
+        console.log('RECEIVE_USER_INFO');
         let { response } = action.payload;
         return {...state, isLoggedUser:true, currentUser: response};
     }

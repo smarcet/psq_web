@@ -24,7 +24,6 @@ export const getMyUsersByPage = (currentPage = 1, pageSize = DEFAULT_PAGE_SIZE, 
         params['search'] = searchTerm;
     }
 
-
     getRequest(
         createAction(START_LOADING),
         createAction(RETRIEVED_MY_USERS),

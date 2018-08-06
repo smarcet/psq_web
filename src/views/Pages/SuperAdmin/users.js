@@ -15,7 +15,7 @@ import {connect} from "react-redux";
 import PaginationContainer from "../../Base/PaginationContainer/PaginationContainer";
 import swal from "sweetalert2";
 import {getUsersByPage, deleteUser, resendUserVerification} from "../../../actions/users-actions";
-import {DEFAULT_PAGE_SIZE, STUDENT, TEACHER} from "../../../constants";
+import {DEFAULT_PAGE_SIZE, GUEST, STUDENT, TEACHER} from "../../../constants";
 
 class SuperAdminUsers extends Component {
 
@@ -83,6 +83,8 @@ class SuperAdminUsers extends Component {
     }
 
     getFriendlyRole(role){
+        if(role == GUEST)
+            return T.translate('Guest');
         if(role == TEACHER)
             return T.translate('Teacher');
         if(role == STUDENT)

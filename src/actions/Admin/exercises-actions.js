@@ -22,6 +22,10 @@ export const getMyExercisesByPage = (currentPage = 1, pageSize = DEFAULT_PAGE_SI
             page_size: pageSize,
         };
 
+        if(searchTerm != ''){
+            params['search'] = searchTerm;
+        }
+
         getRequest(
             createAction(START_LOADING),
             createAction(RETRIEVED_MY_EXERCISES),
