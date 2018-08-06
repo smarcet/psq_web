@@ -1,23 +1,22 @@
 import React, {Component} from 'react';
-
 import {connect} from 'react-redux'
 import {getVideosByPage, shareVideo} from "../../../actions/videos-actions";
 import {searchUsersExcludeMe} from "../../../actions/users-actions";
 import 'sweetalert2/dist/sweetalert2.css';
+import swal from 'sweetalert2';
 import VideoLibrary from "../../../components/video-library";
 
-class UserVideos extends VideoLibrary {
-
+class AdminVideos extends VideoLibrary {
     constructor(props) {
         super(props);
     }
 }
 
-const mapStateToProps = ({userVideosState, loggedUserState}) => ({
-    videos: userVideosState.items,
-    videosCount: userVideosState.count,
+const mapStateToProps = ({adminVideosState, loggedUserState}) => ({
+    videos: adminVideosState.items,
+    videosCount: adminVideosState.count,
     currentUser: loggedUserState.currentUser,
-    matchedUsers: userVideosState.matchedUsers,
+    matchedUsers: adminVideosState.matchedUsers,
 });
 
 export default connect(
@@ -27,4 +26,4 @@ export default connect(
         searchUsersExcludeMe,
         shareVideo,
     }
-)(UserVideos);
+)(AdminVideos);

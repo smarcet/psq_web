@@ -46,8 +46,14 @@ export default {
 
         },
         {
+            name: T.translate("Video Library"),
+            url: '/auth/admin/videos',
+            icon: 'icon-camrecorder',
+
+        },
+        {
             name: T.translate("Settings"),
-            url: '/auth/super-admin/settings',
+            url: '/auth/admin/settings',
             icon: 'icon-settings',
 
         },

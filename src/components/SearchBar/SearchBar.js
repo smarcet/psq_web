@@ -98,9 +98,12 @@ class SearchBar extends Component {
             secondaryActionName,
             onClickSecondaryAction,
             searchId } = this.props;
+
+        let md1 = useSecondaryAction ? "4" : "6";
+        let md2 = useSecondaryAction ? "3" : "6";
         return(
             <Row className="search-container">
-                <Col xs="12" md="4">
+                <Col xs="12" md={md1}>
                     <ButtonDropdown className="dropdown-add" isOpen={this.state.isOpenDropDown} toggle={() => {
                         this.toggleDropDown();}}>
                         <DropdownToggle>
@@ -116,16 +119,18 @@ class SearchBar extends Component {
                         </DropdownMenu>
                     </ButtonDropdown>
                 </Col>
-                <Col xs="12" md="3">
+                <Col xs="12" md={md2}>
                     <Button onClick={this.onClickPrimaryAction} color="primary" className={primaryActionClass}><i className="fa fa-link"></i>{'\u00A0'} {primaryActionName}</Button>
                 </Col>
+                {useSecondaryAction &&
                 <Col xs="12" sm="4" lg="3">
-                    {   useSecondaryAction &&
-                        <Button onClick={onClickSecondaryAction} className={secondaryActionClass} color="primary">
-                            <i className="fa fa-plus-circle"></i>{'\u00A0'} {secondaryActionName}
-                        </Button>
-                    }
+
+                    <Button onClick={onClickSecondaryAction} className={secondaryActionClass} color="primary">
+                        <i className="fa fa-plus-circle"></i>{'\u00A0'} {secondaryActionName}
+                    </Button>
+
                 </Col>
+                }
             </Row>
         );
     }

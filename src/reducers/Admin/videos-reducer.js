@@ -8,7 +8,7 @@ const DEFAULT_STATE = {
     matchedUsers: [],
 }
 
-const userVideosReducer = (state = DEFAULT_STATE, action) => {
+const adminVideosReducer = (state = DEFAULT_STATE, action) => {
     const { type, payload } = action;
     switch (type) {
         case RETRIEVED_VIDEOS_READ_ONLY: {
@@ -34,4 +34,4 @@ const userVideosReducer = (state = DEFAULT_STATE, action) => {
     }
 }
 
-export default userVideosReducer
+export default adminVideosReducer

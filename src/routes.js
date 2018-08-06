@@ -14,7 +14,7 @@ const routes = {
   '/auth/admin/devices': 'Devices',
   '/auth/admin/user-groups': 'User Groups',
   '/auth/admin/settings'  : 'Settings',
-
+  '/auth/admin/videos'  : 'Video Library',
   '/auth/user/settings'  : 'Settings',
   '/auth/user/exams'  : 'Exams',
   '/auth/user/news'  : 'News',

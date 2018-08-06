@@ -27,6 +27,7 @@ import adminDashboardReducer from "./reducers/Admin/dashboard_reducer";
 import StreamPlayerReducer from "./reducers/stream-player-reducer";
 import userExercisesReducer from "./reducers/User/exercises-reducer";
 import userVideosReducer from "./reducers/User/videos-reducer";
+import adminVideosReducer from "./reducers/Admin/videos-reducer";
 
 // default: localStorage if web, AsyncStorage if react-native
 
@@ -60,6 +61,7 @@ const reducers = persistCombineReducers(config, {
     adminNewsState: adminNewsReducer,
     adminEditNewsState: adminEditNewsReducer,
     adminDashboardState:adminDashboardReducer,
+    adminVideosState: adminVideosReducer,
     // raw user ( student )
     userExercisesState: userExercisesReducer,
     userVideosState: userVideosReducer,

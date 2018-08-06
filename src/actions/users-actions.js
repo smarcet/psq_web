@@ -11,6 +11,7 @@ export const UNLINKED_DEVICE = 'UNLINKED_DEVICE';
 export const LINK_DEVICE = 'LINK_DEVICE';
 export const NEW_USER = 'NEW_USER';
 export const NEW_GUEST_USER = 'NEW_GUEST_USER';
+export const RETRIEVED_USERS_SHARE_SEARCH = 'RETRIEVED_USERS_SHARE_SEARCH';
 
 export const resendUserVerification  = (userId) =>  (dispatch, getState) => {
 
@@ -60,6 +61,36 @@ export const getUsersByPage = (currentPage = 1, pageSize = 5, searchTerm = '', o
         createAction(START_LOADING),
         createAction(RETRIEVED_USERS),
         `${apiBaseUrl}/users`,
+        authErrorHandler,
+    )(params)(dispatch).then((payload) => {
+        dispatch({
+            type: STOP_LOADING,
+            payload: {}
+        });
+    });
+}
+
+export const searchUsersExcludeMe = (top, term) => (dispatch, getState) => {
+    let { loggedUserState } = getState();
+    let { token }           = loggedUserState;
+    let apiBaseUrl          = process.env['API_BASE_URL'];
+
+
+    let params = {
+        token : token,
+        page: 1,
+        page_size : top,
+        ordering  : 'id'
+    };
+
+    if(term != ''){
+        params['search'] = term;
+    }
+
+    getRequest(
+        createAction(START_LOADING),
+        createAction(RETRIEVED_USERS_SHARE_SEARCH),
+        `${apiBaseUrl}/users/me/exclude`,
         authErrorHandler,
     )(params)(dispatch).then((payload) => {
         dispatch({

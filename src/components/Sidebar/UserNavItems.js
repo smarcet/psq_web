@@ -28,7 +28,7 @@ export default {
 
         },
         {
-            name: T.translate("Videos"),
+            name: T.translate("Video Library"),
             url: '/auth/user/videos',
             icon: 'icon-camrecorder',
 

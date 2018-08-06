@@ -14,7 +14,7 @@ import AdminEditDevice from "../views/Pages/Admin/edit-device";
 import AdminEditNewsItem from "../views/Pages/Admin/edit-news";
 import AdminEditUser from "../views/Pages/Admin/edit-user";
 import AdminEditUserGroup from "../views/Pages/Admin/edit-user-group";
-import AdminNewUser from '../views/Pages/Admin/edit-user';
+import AdminVideos from '../views/Pages/Admin/videos';
 
 class AdminLayout extends Component {
     render() {
@@ -38,6 +38,7 @@ class AdminLayout extends Component {
                     <Route path="/auth/admin/user-groups/new" component={AdminEditUserGroup}></Route>
                     <Route path="/auth/admin/user-groups/:group_id" component={AdminEditUserGroup}></Route>
                     <Route path="/auth/admin/user-groups" component={AdminUserGroups}></Route>
+                    <Route path="/auth/admin/videos" component={AdminVideos}></Route>
                     <Route path="/auth/admin/settings" component={UserSettings}></Route>
                     <Redirect from="/auth/admin" to="/auth/admin/dashboard"/>
                 </Switch>
