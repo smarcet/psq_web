@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
-import {getVideosByPage, shareVideo} from "../../../actions/videos-actions";
+import {getVideosByPage, shareVideo, addVideoView} from "../../../actions/videos-actions";
 import {searchUsersExcludeMe} from "../../../actions/users-actions";
 import 'sweetalert2/dist/sweetalert2.css';
 import swal from 'sweetalert2';
@@ -25,5 +25,6 @@ export default connect(
         getVideosByPage,
         searchUsersExcludeMe,
         shareVideo,
+        addVideoView,
     }
 )(AdminVideos);

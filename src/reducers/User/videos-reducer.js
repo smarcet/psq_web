@@ -1,5 +1,5 @@
 import{ LOGOUT_USER } from '../../actions/auth-actions';
-import {RETRIEVED_VIDEOS_READ_ONLY} from "../../actions/videos-actions";
+import {ADD_VIDEO_VIEW, RETRIEVED_VIDEOS_READ_ONLY} from "../../actions/videos-actions";
 import {RETRIEVED_USERS_SHARE_SEARCH} from "../../actions/users-actions";
 
 const DEFAULT_STATE = {
@@ -19,6 +19,16 @@ const userVideosReducer = (state = DEFAULT_STATE, action) => {
             };
         }
             break;
+        case ADD_VIDEO_VIEW:{
+            let { videoId } = payload;
+            return {
+                ...state,
+                items: state.items.map(item => {
+                    if( item.id !== videoId) return item;
+                    return {...item, video_views: item.video_views + 1};
+                }),
+            };
+        }
         case RETRIEVED_USERS_SHARE_SEARCH:{
             return {
                 ...state,

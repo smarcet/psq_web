@@ -42,6 +42,20 @@ class VideoLibrary extends Component {
         this.props.getVideosByPage(this.state.currentPage);
     }
 
+    componentDidMount(){
+        this.addEventHandlers();
+    }
+
+    addEventHandlers(){
+        let videos = document.getElementsByTagName("video");
+        let _this = this;
+        for(var i = 0 ; i < videos.length ; i++){
+            videos[i].addEventListener("play", function(event) {
+                _this.props.addVideoView(parseInt(event.target.dataset.videoId));
+            }, true);
+        }
+    }
+
     handleOnChangeSearch(event) {
         let {value} = event.target;
         this.setState({...this.state, currentPage: 1});
@@ -137,14 +151,18 @@ class VideoLibrary extends Component {
                                                             <Col xs="12" lg="10">
                                                                 <Row>
                                                                     <Col xs="12" lg="4">
-                                                                        <video className="rounded img-fluid mx-auto d-block" controls>
+                                                                        <video data-video-id={video.id} className="rounded img-fluid mx-auto d-block" controls>
                                                                             { videos_inner.map((video_inner, idx) =>
                                                                                 <source src={video_inner.video_url} key={idx} type={video_inner.type}></source>
                                                                             )}
                                                                         </video>
                                                                     </Col>
                                                                     <Col xs="12" lg="12">
-                                                                        <b>{T.translate("Title")}</b>:{exercise.title}&nbsp;<Badge pill title="views" color="info">{video.video_views}</Badge>
+                                                                        <b>{T.translate("Title")}</b>:{exercise.title}&nbsp;
+                                                                        {video.video_views > 0 &&
+                                                                        <Badge pill title="views"
+                                                                               color="info">{video.video_views}</Badge>
+                                                                        }
                                                                     </Col>
                                                                     <Col xs="12" lg="12">
                                                                         {taker.id != currentUser.id && <Badge color="success">{T.translate("Shared By")}</Badge> }
