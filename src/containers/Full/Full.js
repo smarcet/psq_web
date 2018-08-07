@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import {Switch, Route, Redirect} from 'react-router-dom';
 import {Container} from 'reactstrap';
-import Header from '../../components/Header/';
-import Sidebar from '../../components/Sidebar/';
-import Breadcrumb from '../../components/Breadcrumb/';
-import Footer from '../../components/Footer/';
+import Header from '../../components/Header';
+import Sidebar from '../../components/Sidebar';
+import Breadcrumb from '../../components/Breadcrumb';
+import Footer from '../../components/Footer';
 import SuperAdminLayout from '../../layouts/superadmin-layout';
 import AdminLayout from '../../layouts/admin-layout';
 import UserLayout from '../../layouts/user-layout';

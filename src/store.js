@@ -18,7 +18,7 @@ import adminExercisesReducer from "./reducers/Admin/exercises-reducer";
 import adminEditExerciseReducer from "./reducers/Admin/edit-exercise-reducer";
 import adminExamsReducer from "./reducers/Admin/exams-reducer";
 import adminExamReducer from "./reducers/Admin/edit-exam-reducer";
-import superAdminDashboardReducer from "./reducers/superAdmin/dashboard_reducer";
+import superAdminDashboardReducer from "./reducers/superAdmin/dashboard-reducer";
 import adminUserGroupsReducer from "./reducers/Admin/user-groups-reducer";
 import adminEditUserGroupReducer from "./reducers/Admin/edit-user-group-reducer";
 import adminNewsReducer from "./reducers/Admin/news-reducer";
@@ -28,6 +28,9 @@ import StreamPlayerReducer from "./reducers/stream-player-reducer";
 import userExercisesReducer from "./reducers/User/exercises-reducer";
 import userVideosReducer from "./reducers/User/videos-reducer";
 import adminVideosReducer from "./reducers/Admin/videos-reducer";
+import userExerciseViewReducer from "./reducers/User/view-exercise-reducer";
+import userExamsReducer from "./reducers/User/exams-reducer";
+import userDashboardReducer from "./reducers/User/dashboard-reducer";
 
 // default: localStorage if web, AsyncStorage if react-native
 
@@ -65,6 +68,9 @@ const reducers = persistCombineReducers(config, {
     // raw user ( student )
     userExercisesState: userExercisesReducer,
     userVideosState: userVideosReducer,
+    userExerciseViewState: userExerciseViewReducer,
+    userExamsState: userExamsReducer,
+    userDashboardState: userDashboardReducer,
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

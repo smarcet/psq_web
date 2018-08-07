@@ -180,7 +180,6 @@ class SuperAdminDashBoard extends Component {
     }
 }
 
-
 const mapStateToProps = ({superAdminDashboardState}) => ({
     users_per_month: superAdminDashboardState.users_per_month,
     devices_per_month: superAdminDashboardState.devices_per_month,

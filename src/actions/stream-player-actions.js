@@ -15,13 +15,19 @@ export const customErrorHandler = (err, res) => (dispatch) => {
 
     switch (code) {
         case 403:
-            swal("ERROR", T.translate("Not Authorized user"), "warning");
+            swal("ERROR",
+                T.translate("Not Authorized user"),
+                "warning");
             break;
         case 400:
-            swal("ERROR", T.translate("Invalid User"), "warning");
+            swal("ERROR",
+                T.translate("Invalid User"),
+                "warning");
             break;
         case 401:
-            swal("ERROR", T.translate("Not Authenticated User"), "error");
+            swal("ERROR",
+                T.translate("Not Authenticated User"),
+                "error");
             dispatch({
                 type: LOGOUT_USER,
                 payload: {
@@ -31,20 +37,26 @@ export const customErrorHandler = (err, res) => (dispatch) => {
             break;
         case 404:
             msg = err.message;
-            swal("Not Found", msg, "warning");
+            swal(
+                T.translate("Not Found"),
+                msg, "warning");
             break;
         case 412:
             for (var [key, value] of Object.entries(err.response.body)) {
                 msg += '- ' + value + '<br>';
             }
-            swal("Validation error", msg, "warning");
+            swal(
+                T.translate("Validation error"),
+                msg, "warning");
             dispatch({
                 type: INVALID_STREAM_LINK,
                 payload: {errors: err.response.body}
             });
             break;
         default:
-            swal("ERROR", T.translate("Server Error"), "error");
+            swal("ERROR",
+                T.translate("Server Error"),
+                "error");
     }
 }
 

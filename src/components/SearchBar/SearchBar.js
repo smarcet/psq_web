@@ -99,8 +99,8 @@ class SearchBar extends Component {
             onClickSecondaryAction,
             searchId } = this.props;
 
-        let md1 = useSecondaryAction ? "4" : "6";
-        let md2 = useSecondaryAction ? "3" : "6";
+        let md1 = useSecondaryAction ? "4" : "12";
+        let md2 = useSecondaryAction ? "3" : "12";
         return(
             <Row className="search-container">
                 <Col xs="12" md={md1}>

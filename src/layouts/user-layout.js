@@ -8,6 +8,7 @@ import UserVideos from "../views/Pages/User/videos";
 import UserNews from "../views/Pages/User/news";
 import UserViewExam from "../views/Pages/User/view-exam";
 import UserExercises from "../views/Pages/User/exercises";
+import UserViewExercise from "../views/Pages/User/view-exercise";
 
 class UserLayout extends Component {
     render() {
@@ -17,6 +18,7 @@ class UserLayout extends Component {
                     <Route path="/auth/user/dashboard" component={UserDashBoard}></Route>
                     <Route path="/auth/user/exams/:exam_id" component={UserViewExam}></Route>
                     <Route path="/auth/user/exams" component={UserExams}></Route>
+                    <Route path="/auth/user/exercises/:exercise_id" component={UserViewExercise}></Route>
                     <Route path="/auth/user/exercises" component={UserExercises}></Route>
                     <Route path="/auth/user/statistics" component={UserStatistics}></Route>
                     <Route path="/auth/user/videos" component={UserVideos}></Route>

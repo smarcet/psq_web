@@ -1,4 +1,4 @@
-import T from "i18n-react/dist/i18n-react";
+import T from "i18n-react";
 
 let language = (navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage;
 
@@ -13,4 +13,7 @@ if (language.length > 2) {
 
 console.log(`user language is ${language}`);
 
-T.setTexts(require(`./i18n/${language}.json`));
+//T.setTexts(require(`./i18n/${language}.json`));
+T.setTexts(require(`./i18n/es.json`), {
+    notFound: key => `${key}`
+});

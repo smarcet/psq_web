@@ -44,8 +44,8 @@ class UserExercises extends Component {
         event.preventDefault();
     }
 
-    onClickViewExam(e, exam) {
-        this.props.history.push(`/auth/user/exams/${exam.id}`);
+    onClickViewExercise(event, exercise) {
+        this.props.history.push(`/auth/user/exercises/${exercise.id}`);
         event.preventDefault();
     }
 
@@ -79,7 +79,7 @@ class UserExercises extends Component {
                                     <Col xs="12" sm="4" lg="4">
                                         <Input type="text" className="input-search" id="exercise-search"
                                                onChange={this.handleOnChangeSearch}
-                                               name="exercise-search" placeholder={T.translate("Search Exercise")}/>
+                                               name="exercise-search" placeholder={T.translate("Search Exercises")}/>
                                         <i className="fa fa-search filter-search"></i>
                                     </Col>
                                     <Col xs="12" sm="4" lg="3">
@@ -134,7 +134,7 @@ class UserExercises extends Component {
                                                             }
                                                         </td>
                                                         <td>
-                                                            <Button onClick={(e) => this.onClickViewExam(e, exercise)}
+                                                            <Button onClick={(e) => this.onClickViewExercise(e, exercise)}
                                                                     outline color="primary"><i
                                                                 className="fa fa-search"></i>&nbsp;{T.translate("View")}
                                                             </Button>

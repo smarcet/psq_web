@@ -36,6 +36,7 @@ class VideoLibrary extends Component {
         this.handleLinkItem = this.handleLinkItem.bind(this);
         this.getDisplayName = this.getDisplayName.bind(this);
         this.shareVideo = this.shareVideo.bind(this);
+        this.onPlayVideo = this.onPlayVideo.bind(this);
     }
 
     componentWillMount() {
@@ -46,13 +47,29 @@ class VideoLibrary extends Component {
         this.addEventHandlers();
     }
 
+    componentDidUpdate(){
+
+    }
+
+    componentWillUnmount () {
+        this.removeEventHandlers()
+    }
+
     addEventHandlers(){
         let videos = document.getElementsByTagName("video");
-        let _this = this;
+         for(var i = 0 ; i < videos.length ; i++){
+            videos[i].addEventListener("play", this.onPlayVideo, true);
+        }
+    }
+
+    onPlayVideo(event){
+        this.props.addVideoView(parseInt(event.target.dataset.videoId));
+    }
+
+    removeEventHandlers(){
+        let videos = document.getElementsByTagName("video");
         for(var i = 0 ; i < videos.length ; i++){
-            videos[i].addEventListener("play", function(event) {
-                _this.props.addVideoView(parseInt(event.target.dataset.videoId));
-            }, true);
+            videos[i].removeEventListener("play", this.onPlayVideo);
         }
     }
 
@@ -91,6 +108,12 @@ class VideoLibrary extends Component {
                 videoToShare: null,
                 shareModalOpen: false,
             });
+
+            swal(
+                T.translate('Shared!'),
+                T.translate('Your video has been shared.'),
+                'success'
+            );
         })
     }
 
@@ -100,10 +123,11 @@ class VideoLibrary extends Component {
 
     render(){
         let {videos, currentUser, matchedUsers} = this.props;
+        let {videoToShare} = this.state;
         return (
             <div className="animated fadeIn">
                 <Modal isOpen={this.state.shareModalOpen}>
-                    <ModalHeader toggle={this.toggleModalShare}>{T.translate("Share Video")}</ModalHeader>
+                    <ModalHeader toggle={this.toggleModalShare}>{T.translate("Share Video {title}", {title: videoToShare != null ? videoToShare.title : null})}</ModalHeader>
                     <ModalBody>
                         <SearchBar
                             currentItems={matchedUsers}

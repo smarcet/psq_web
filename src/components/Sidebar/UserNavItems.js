@@ -10,7 +10,7 @@ export default {
 
         },
         {
-            name: T.translate("Exercises"),
+            name: T.translate("Available Exercises"),
             url: '/auth/user/exercises',
             icon: 'icon-book-open',
 
