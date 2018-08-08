@@ -9,27 +9,20 @@ import {
     ListGroup,
     ListGroupItem
 } from 'reactstrap';
-import T from "i18n-react/dist/i18n-react";
+import T from 'i18n-react';
+import {connect} from 'react-redux'
+import {getTopNews} from "../../../actions/User/news-actions";
+
 
 class UserNews extends Component {
-    render(){
-        let news = [
-            {
-                id:1,
-                title: 'News #1',
-                desc: 'Lorep ip sum',
-                date: "01/01/2018 10:00 AM",
-                views:3
 
-            },
-            {
-                id:2,
-                title: 'News #2',
-                desc: 'Lorep ip sum',
-                date: "01/01/2018 10:30 AM",
-                views:5
-            },
-        ];
+    componentWillMount() {
+        this.props.getTopNews(10);
+    }
+
+    render(){
+        let {news} = this.props;
+
         return (
             <div className="animated fadeIn">
                 <Row>
@@ -44,13 +37,15 @@ class UserNews extends Component {
 
                                         return (
                                         <ListGroupItem key={i} className="justify-content-between">
-                                            {news_item.title}
-                                            <Badge className="float-right" pill>{news_item.views}</Badge>
+                                            <p>
+                                                <b>{news_item.title}</b>&nbsp;<Badge color="success">{new Date(news_item.created).toLocaleString()}</Badge>
+                                            </p>
+                                            <hr></hr>
+                                            <p>{news_item.body}</p>
                                         </ListGroupItem>
                                         );
                                     })}
                                 </ListGroup>
-
                             </CardBody>
                         </Card>
                     </Col>
@@ -59,4 +54,16 @@ class UserNews extends Component {
     }
 }
 
-export default UserNews;
+
+
+const mapStateToProps = ({userNewsState}) => ({
+    news: userNewsState.items,
+    newsCount: userNewsState.count,
+});
+
+export default connect(
+    mapStateToProps,
+    {
+        getTopNews,
+    }
+)(UserNews);

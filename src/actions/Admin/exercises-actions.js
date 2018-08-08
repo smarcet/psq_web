@@ -9,6 +9,7 @@ export const ADDED_NEW_EXERCISE = 'ADDED_NEW_EXERCISE';
 export const UPDATED_EXERCISE = 'UPDATED_EXERCISE';
 export const DELETED_EXERCISE = 'DELETED_EXERCISE';
 export const RETRIEVED_MY_AVAILABLE_TUTORIALS = 'RETRIEVED_MY_AVAILABLE_TUTORIALS';
+export const SHARED_EXERCISE = 'SHARED_EXERCISE';
 
 export const getMyExercisesByPage = (currentPage = 1, pageSize = DEFAULT_PAGE_SIZE, searchTerm = '', ordering = 'id') =>
     (dispatch, getState) => {
@@ -186,6 +187,34 @@ export const deleteExercise = (exercise) =>  (dispatch, getState) => {
         createAction(START_LOADING),
         createAction(DELETED_EXERCISE)({exerciseId}),
         `${apiBaseUrl}/exercises/${exerciseId}`,
+        {},
+        authErrorHandler,
+    )(params)(dispatch).then((payload) => {
+        dispatch({
+            type: STOP_LOADING,
+            payload: {}
+        });
+    });
+}
+
+export const shareExercise = (exercise, device) => (dispatch, getState) => {
+
+    let {loggedUserState} = getState();
+    let {token} = loggedUserState;
+    let apiBaseUrl = process.env['API_BASE_URL'];
+
+
+    let params = {
+        token: token,
+    };
+
+    let exerciseId = exercise.id;
+    let deviceId = device.id;
+
+    return putRequest(
+        createAction(START_LOADING),
+        createAction(SHARED_EXERCISE)({exerciseId}),
+        `${apiBaseUrl}/exercises/${exerciseId}/devices/${deviceId}`,
         {},
         authErrorHandler,
     )(params)(dispatch).then((payload) => {

@@ -50,14 +50,8 @@ class AdminDevices extends Component {
         this.props.history.push(`/auth/admin/devices/${device.id}`);
     }
 
-    onClickTransferDeviceOwnership(event, device){
-        event.preventDefault();
-    }
-
     render(){
-
-        let { devices, currentUser } = this.props;
-        let currentUserIid = currentUser.id;
+        let { devices } = this.props;
         return (
             <div className="animated fadeIn">
                 <Row>
@@ -91,7 +85,6 @@ class AdminDevices extends Component {
                                         <th>{T.translate("Slots")}</th>
                                         <th>{T.translate("Status")}</th>
                                         <th>&nbsp;</th>
-                                        <th>&nbsp;</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -119,15 +112,6 @@ class AdminDevices extends Component {
                                                 </td>
                                                 <td className="col-button">
                                                     <Button outline color="primary" onClick={(e) => this.onClickEditDevice(e, device)}><i className="fa fa-edit"></i>&nbsp;{T.translate("Edit")}</Button>
-                                                </td>
-                                                <td className="col-button">
-                                                    { ownerId == currentUserIid &&
-                                                        <Button outline color="warning"
-                                                                onClick={(e) => this.onClickTransferDeviceOwnership(e, device)}><i
-                                                            className="fa fa-exchange"></i>&nbsp;{T.translate("Transfer Ownership")}
-                                                        </Button>
-                                                    }
-
                                                 </td>
                                             </tr>
                                         );

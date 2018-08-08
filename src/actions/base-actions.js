@@ -1,4 +1,4 @@
-import T from "i18n-react/dist/i18n-react";
+import T from "i18n-react";
 import request from 'superagent';
 import URI from "urijs";
 let http = request;

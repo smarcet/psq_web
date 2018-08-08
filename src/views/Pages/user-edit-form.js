@@ -14,7 +14,7 @@ import {
     Input,
     FormFeedback
 } from 'reactstrap';
-import T from "i18n-react/dist/i18n-react";
+import T from "i18n-react";
 
 class UserEditForm extends Component {
 

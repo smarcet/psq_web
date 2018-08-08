@@ -8,7 +8,7 @@ import {
     TabContent,
     TabPane
 } from 'reactstrap';
-import T from "i18n-react/dist/i18n-react";
+import T from "i18n-react";
 import {connect} from 'react-redux'
 import {getExerciseById} from '../../../actions/User/exercises-actions';
 import classnames from 'classnames';

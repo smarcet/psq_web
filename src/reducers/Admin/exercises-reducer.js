@@ -1,9 +1,11 @@
 import{ LOGOUT_USER } from '../../actions/auth-actions';
 import {DELETED_EXERCISE, RETRIEVED_MY_EXERCISES} from "../../actions/Admin/exercises-actions";
+import {RETRIEVED_ALL_DEVICES} from "../../actions/Admin/devices-actions";
 
 const DEFAULT_STATE = {
     items: [],
     count: 0,
+    matchedDevices: [],
 }
 
 const adminExercisesReducer = (state = DEFAULT_STATE, action) => {
@@ -26,6 +28,12 @@ const adminExercisesReducer = (state = DEFAULT_STATE, action) => {
             };
         }
             break;
+        case RETRIEVED_ALL_DEVICES:{
+            return {
+                ...state,
+                matchedDevices: action.payload.response.results,
+            };
+        }
         case LOGOUT_USER: {
             return DEFAULT_STATE;
         }

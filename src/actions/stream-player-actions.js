@@ -1,7 +1,7 @@
 import {createAction, getRequest, stopLoading} from "./base-actions";
 import {authErrorHandler, START_LOADING, STOP_LOADING} from "./base-actions";
 import swal from "sweetalert2";
-import T from "i18n-react/dist/i18n-react";
+import T from "i18n-react";
 
 export const STREAM_VALIDATED = 'STREAM_VALIDATED';
 export const SET_STREAM_DATA = 'SET_STREAM_DATA';

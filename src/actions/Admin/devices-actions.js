@@ -11,6 +11,7 @@ export const LINKED_ADMIN_USER_2_DEVICE = 'LINKED_ADMIN_USER_2_DEVICE';
 export const UNLINKED_ADMIN_USER_2_DEVICE = 'UNLINKED_ADMIN_USER_2_DEVICE';
 export const RETRIEVED_ADMIN_USERS = 'RETRIEVED_ADMIN_USERS';
 export const UPDATED_DEVICE = 'UPDATED_DEVICE';
+export const RETRIEVED_ALL_DEVICES = 'RETRIEVED_ALL_DEVICES';
 
 export const getMyDevicesByPage = (currentPage = 1, pageSize = DEFAULT_PAGE_SIZE, searchTerm = '', ordering = 'id') => (dispatch, getState) => {
     let { loggedUserState } = getState();
@@ -35,6 +36,35 @@ export const getMyDevicesByPage = (currentPage = 1, pageSize = DEFAULT_PAGE_SIZE
         });
     });
 }
+
+export const getAllDevicesByPage = (currentPage = 1, pageSize = 10, searchTerm = '') => (dispatch, getState) => {
+    let { loggedUserState } = getState();
+    let { token }           = loggedUserState;
+    let apiBaseUrl          = process.env['API_BASE_URL'];
+
+    let params = {
+        token : token,
+        page: currentPage,
+        page_size : pageSize,
+    };
+
+    if(searchTerm != ''){
+        params['search'] = searchTerm;
+    }
+
+    getRequest(
+        createAction(START_LOADING),
+        createAction(RETRIEVED_ALL_DEVICES),
+        `${apiBaseUrl}/devices`,
+        authErrorHandler,
+    )(params)(dispatch).then((payload) => {
+        dispatch({
+            type: STOP_LOADING,
+            payload: {}
+        });
+    });
+}
+
 
 export const getMyDeviceById = (deviceId) => (dispatch, getState) => {
     let { loggedUserState } = getState();

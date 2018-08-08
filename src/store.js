@@ -31,6 +31,11 @@ import adminVideosReducer from "./reducers/Admin/videos-reducer";
 import userExerciseViewReducer from "./reducers/User/view-exercise-reducer";
 import userExamsReducer from "./reducers/User/exams-reducer";
 import userDashboardReducer from "./reducers/User/dashboard-reducer";
+import userExamViewReducer from "./reducers/User/view-exam-reducer";
+import userNewsReducer from "./reducers/User/news-reducer";
+import T from "i18n-react/dist/i18n-react";
+import {getLanguage, USER_LOCALE_COOKIE_NAME} from "./constants";
+import { bake_cookie, read_cookie, delete_cookie } from 'sfcookies';
 
 // default: localStorage if web, AsyncStorage if react-native
 
@@ -71,6 +76,8 @@ const reducers = persistCombineReducers(config, {
     userExerciseViewState: userExerciseViewReducer,
     userExamsState: userExamsReducer,
     userDashboardState: userDashboardReducer,
+    userExamViewState: userExamViewReducer,
+    userNewsState: userNewsReducer,
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -79,6 +86,15 @@ const store = createStore(reducers, composeEnhancers(applyMiddleware(thunk)));
 
 const onRehydrateComplete = () => {
     // repopulate access token on global access variable
+    let currentUser = store.getState().loggedUserState.currentUser;
+    if(currentUser != null){
+        let language = getLanguage(currentUser.locale);
+        if(language != null){
+            bake_cookie(USER_LOCALE_COOKIE_NAME, language);
+            console.log(`user language is ${language}`);
+            T.setTexts(require(`./i18n/${language}.json`));
+        }
+    }
     window.accessToken = store.getState().loggedUserState.accessToken;
 }
 

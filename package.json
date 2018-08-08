@@ -66,6 +66,7 @@
     "react-bootstrap": "^0.31.5",
     "react-burger-menu": "^2.3.0",
     "react-chartjs-2": "^2.7.0",
+    "react-cookie": "^2.2.0",
     "react-datetime": "^2.14.0",
     "react-dom": "^16.2.0",
     "react-dropzone": "^4.2.9",
@@ -78,6 +79,7 @@
     "react-transition-group": "^2.2.1",
     "reactstrap": "^6.2.0",
     "redux-persist": "^5.9.1",
+    "sfcookies": "^1.0.2",
     "simple-line-icons": "^2.4.1",
     "uglifyjs-webpack-plugin": "^1.2.3",
     "validator": "^9.4.1"
