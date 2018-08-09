@@ -12,6 +12,7 @@ export const LINK_DEVICE = 'LINK_DEVICE';
 export const NEW_USER = 'NEW_USER';
 export const NEW_GUEST_USER = 'NEW_GUEST_USER';
 export const RETRIEVED_USERS_SHARE_SEARCH = 'RETRIEVED_USERS_SHARE_SEARCH';
+export const PASSWORD_RESET_REQUEST_PROCCESSED = 'PASSWORD_RESET_REQUEST_PROCCESSED';
 
 export const resendUserVerification  = (userId) =>  (dispatch, getState) => {
 
@@ -292,6 +293,27 @@ export const registerGuestUser = (guestUser) => (dispatch, getState) => {
         guestUser,
         authErrorHandler,
     )({})(dispatch).then((payload) => {
+        dispatch({
+            type: STOP_LOADING,
+            payload: {}
+        });
+    });
+}
+
+export const resetPasswordRequest = (resetRequest) => (dispatch, getState) => {
+    let {loggedUserState} = getState();
+    let apiBaseUrl = process.env['API_BASE_URL'];
+
+    let params = {
+    };
+
+    return postRequest(
+        createAction(START_LOADING),
+        createAction(PASSWORD_RESET_REQUEST_PROCCESSED),
+        `${apiBaseUrl}/users/reset-password-requests`,
+        resetRequest,
+        authErrorHandler,
+    )(params)(dispatch).then((payload) => {
         dispatch({
             type: STOP_LOADING,
             payload: {}

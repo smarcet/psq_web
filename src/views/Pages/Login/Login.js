@@ -50,6 +50,7 @@ class Login extends Component {
 
     onForgotPasswordClick(event){
         event.preventDefault();
+        this.props.history.push("/password-reset");
     }
 
     render() {

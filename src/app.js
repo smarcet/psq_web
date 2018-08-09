@@ -13,6 +13,8 @@ import StreamPlayer from "./views/Pages/StreamPlayer/stream-player";
 import Register from "./views/Pages/Register";
 import Logout from "./components/logout";
 import {TEACHER, STUDENT, SUPERVISOR} from "./constants";
+import Page500 from "./views/Pages/Page500";
+import ResetPasswordPage from './views/Pages/ResetPasswordPage';
 
 class App extends React.PureComponent {
     render() {
@@ -30,6 +32,8 @@ class App extends React.PureComponent {
                         <PropsRoute path="/users/validate/:token" component={ActivateUser} doActivateUser={this.props.doActivateUser}/>
                         <Route exact path="/logout" component={Logout} />
                         <Route path="/404" component={Page404} />
+                        <Route path="/500" component={Page500} />
+                        <Route path="/password-reset/:token?" component={ResetPasswordPage} />
                         <DefaultRoute allowedRoles={[SUPERVISOR, TEACHER, STUDENT]} currentUser={this.props.currentUser} component={Login} doLogin={this.props.doLogin}/>
                     </Switch>
             </BrowserRouter>
