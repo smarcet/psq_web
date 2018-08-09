@@ -106,6 +106,28 @@ export class MandatoryField extends CustomValidatorRule
     }
 }
 
+export class RegexField extends CustomValidatorRule
+{
+
+    static get DEFAULT_MESSAGE() {
+        return '{field} is not valid';
+    }
+
+    _getErrorMessage(){
+        let errorMessage = super._getErrorMessage();
+        return errorMessage.trim() == '' ? RegexField.DEFAULT_MESSAGE : errorMessage;
+    }
+
+    constructor(regex, fieldName, friendlyFieldName = '', customErrorMessage = ''){
+        super(fieldName, (value) => {
+            var regexAux = RegExp(regex);
+            if(!regexAux.test(value))
+                return new FormValidatorResult(this._fieldName, false, T.translate( this._getErrorMessage(), { field: this._friendlyFieldName}))
+            return new FormValidatorResult(this._fieldName, true);
+        }, friendlyFieldName, customErrorMessage);
+    }
+}
+
 export class GreaterThanField extends CustomValidatorRule
 {
 

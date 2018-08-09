@@ -18,14 +18,15 @@ class UserSettings extends Component {
             currentEditUser: this.props.currentUser,
             validator: new FormValidator(
                 [
-                    new MandatoryField('first_name', 'First Name'),
-                    new MandatoryField('last_name', 'Surname'),
-                    new MandatoryField('email', 'Email'),
-                    new EmailField('email', 'Email'),
-                    new MandatoryField('role', 'Role'),
-                    new EqualToField('password', 'password_confirmation', 'Password', 'Password Confirmation'),
-                    new MinSizeField('password', 8, 'Password'),
-                    new MinSizeField('password_confirmation', 8, 'Password Confirmation')
+                    new MandatoryField('first_name', T.translate('First Name')),
+                    new MandatoryField('last_name',  T.translate('Surname')),
+                    new MandatoryField('email', T.translate('Email')),
+                    new EmailField('email', T.translate('Email')),
+                    new MandatoryField('role', T.translate('Role')),
+                    new EqualToField('password', 'password_confirmation', T.translate('Password'), T.translate('Password Confirmation')),
+                    new MinSizeField('password', 8, T.translate('Password')),
+                    new MinSizeField('password_confirmation', 8, T.translate('Password Confirmation')),
+                    new MandatoryField('locale', T.translate('Locale')),
                 ]
             )
         };

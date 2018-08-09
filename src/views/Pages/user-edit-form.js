@@ -113,6 +113,25 @@ class UserEditForm extends Component {
                                         </Col>
                                     </FormGroup>
                                 }
+                                <FormGroup row>
+                                    <Col md="3">
+                                        <Label htmlFor="locale">{T.translate('Locale')}</Label>
+                                    </Col>
+                                    <Col xs="12" md="9">
+                                        <Input type="select"
+                                               name="locale"
+                                               id="locale"
+                                               value={currentEditUser.locale}
+                                               onChange={handleChange}
+                                               invalid={validator.isInvalid('locale')}>
+                                            <option value="">{T.translate('-- Please select user language --')}</option>
+                                            <option value="1">{T.translate('Spanish')}</option>
+                                            <option value="2">{T.translate('English')}</option>
+                                            }
+                                        </Input>
+                                        <FormFeedback valid={validator.isValid('locale')}><i className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('locale')}</FormFeedback>
+                                    </Col>
+                                </FormGroup>
                                 {config.showPassword &&
                                     <FormGroup row>
                                         <Col md="3">

@@ -20,7 +20,7 @@ import swal from 'sweetalert2';
 import T from "i18n-react/dist/i18n-react";
 import {connect} from 'react-redux'
 import {getDeviceById, updateDevice, getAvailableAdmins} from '../../../actions/superAdmin/devices-actions';
-import {FormValidator, MandatoryField, GreaterThanField} from "../../../utils/form-validator";
+import {FormValidator, MandatoryField, GreaterThanField, RegexField} from "../../../utils/form-validator";
 
 class SuperAdminEditDevice extends Component {
 
@@ -32,6 +32,8 @@ class SuperAdminEditDevice extends Component {
             validator: new FormValidator(
                 [
                     new MandatoryField('friendly_name', T.translate('Friendly Name')),
+                    new MandatoryField('serial', T.translate('Serial')),
+                    new RegexField('^([a-z]|[0-9]|\-)*$','serial', T.translate('Serial')),
                     new MandatoryField('slots', T.translate('Available Slots #')),
                     new GreaterThanField('slots', 0,  T.translate('Available Slots #')),
                 ]
@@ -83,6 +85,7 @@ class SuperAdminEditDevice extends Component {
 
         let {currentEditDevice, validator} = this.state;
         event.preventDefault();
+
         if (!validator.isValidData(currentEditDevice)) {
             this.setState({...this.state, validator: validator});
             return false;
@@ -123,7 +126,7 @@ class SuperAdminEditDevice extends Component {
                             <Form action="" method="post" encType="multipart/form-data" className="form-horizontal">
                                 <FormGroup row>
                                     <Col md="3">
-                                        <Label htmlFor="text-input">{T.translate('Serial #')}</Label>
+                                        <Label htmlFor="serial">{T.translate('Serial #')}</Label>
                                     </Col>
                                     <Col xs="12" md="9">
                                         <Input type="text"
@@ -138,13 +141,13 @@ class SuperAdminEditDevice extends Component {
                                 </FormGroup>
                                 <FormGroup row>
                                     <Col md="3">
-                                        <Label htmlFor="text-input">{T.translate('MAC Address')}</Label>
+                                        <Label htmlFor="mac_address">{T.translate('MAC Address')}</Label>
                                     </Col>
                                     <Col xs="12" md="9">
                                         <Input type="text"
                                                readOnly={true}
                                                id="mac_address"
-                                               value={currentEditDevice.mac_address}
+                                               defaultValue={currentEditDevice.mac_address}
                                                name="mac_address"
                                         />
                                     </Col>

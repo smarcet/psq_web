@@ -44,6 +44,7 @@ export const updateDevice = (device) =>  (dispatch, getState) => {
     if(device.owner != null && typeof device.owner === 'object')
         device.owner = device.owner.id;
 
+
     let deviceId = device.id;
     return putRequest(
         createAction(START_LOADING),
