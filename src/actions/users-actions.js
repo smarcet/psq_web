@@ -320,3 +320,18 @@ export const resetPasswordRequest = (resetRequest) => (dispatch, getState) => {
         });
     });
 }
+
+export const doUserPasswordChange = (formData) => (dispatch, getState) => {
+    let apiBaseUrl = process.env['API_BASE_URL'];
+    return putRequest(
+        null,
+        null,
+        `${apiBaseUrl}/users/reset-password-requests/${formData.token}`,
+        {
+            "password": formData.password
+        },
+        authErrorHandler,
+    )({})(dispatch).then((payload) => {
+
+    });
+}

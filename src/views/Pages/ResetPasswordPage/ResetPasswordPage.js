@@ -7,7 +7,7 @@ import T from "i18n-react/dist/i18n-react";
 import {FormValidator, MandatoryField, EmailField, MinSizeField, EqualToField} from "../../../utils/form-validator";
 import swal from "sweetalert2";
 import {connect} from "react-redux";
-import {resetPasswordRequest} from '../../../actions/users-actions';
+import {resetPasswordRequest, doUserPasswordChange} from '../../../actions/users-actions';
 
 class ResetPasswordPage extends Component {
 
@@ -20,6 +20,7 @@ class ResetPasswordPage extends Component {
             formData: {
                 password: '',
                 password_confirmation: '',
+                token: this.props.match.params.token
             },
             validator: new FormValidator(
                 [
@@ -97,14 +98,14 @@ class ResetPasswordPage extends Component {
             return false;
         }
 
-        /*this.props.doActivateUser(this.state.formData).then(() => {
+        this.props.doUserPasswordChange(this.state.formData).then(() => {
             swal(
                 T.translate('Success!'),
-                T.translate('Your user has been successfully activated!.'),
+                T.translate('Your user password has been changed!.'),
                 'success'
             );
             this.props.history.push('/')
-        });*/
+        });
     }
 
     render() {
@@ -151,6 +152,7 @@ class ResetPasswordPage extends Component {
                                             <FormFeedback valid={validator2.isValid('password_confirmation')}><i className="fa fa-exclamation-triangle"></i>&nbsp;{validator2.getValidationErrorMessage('password_confirmation')}</FormFeedback>
                                         </InputGroup>
                                         <Button color="primary" className="px-4"
+                                                onClick={this.onChangePasswordClicked}
                                                 block>{T.translate("Change Password")}</Button>
                                     </CardBody>
                                 }
@@ -205,5 +207,6 @@ export default connect(
     mapStateToProps,
     {
         resetPasswordRequest,
+        doUserPasswordChange,
     }
 )(ResetPasswordPage);
