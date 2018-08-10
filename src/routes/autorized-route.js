@@ -33,7 +33,11 @@ class AuthorizedRoute extends React.Component {
         }
 
         if(!allowedRoles.includes(currentUser.role)){
-            return null;
+            return (<Redirect
+                to={{
+                    pathname: '/404',
+                }}
+            />)
         }
 
         return (

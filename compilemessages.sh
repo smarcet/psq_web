@@ -7,4 +7,5 @@ find . -type f  -name "*.js" | xargs grep -Eo "T.translate\(\"(.*)\"\)" | cut -d
 echo '{' > $OUTPUT
 grep -Eo ".*" temp.txt | sort | uniq | xargs -I % sh -c 'echo \"%\":\"\",' >> $OUTPUT
 echo '}' >> $OUTPUT
+rm temp.txt
 

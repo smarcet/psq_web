@@ -22,7 +22,11 @@ class DefaultRoute extends React.Component {
                         }}
                     />)
                 }
-                return null;
+                return (<Redirect
+                    to={{
+                        pathname: '/404',
+                    }}
+                />);
 
             }} />
         )

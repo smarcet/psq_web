@@ -2,6 +2,8 @@ import { LOGOUT_USER , RECEIVE_USER_INFO, RECEIVE_AUTH} from '../actions/auth-ac
 import jwtDecode from 'jwt-decode';
 import {UPDATED_MY_USER_INFO, UPDATED_MY_USER_INFO_PIC} from "../actions/settings-actions";
 import {NEW_GUEST_USER} from "../actions/users-actions";
+import { USER_LOCALE_COOKIE_NAME} from "../constants";
+import { delete_cookie } from 'sfcookies';
 
 const DEFAULT_STATE = {
     isLoggedUser: false,
@@ -22,6 +24,7 @@ const loggedUserReducer = (state = DEFAULT_STATE, action) => {
     if(action.type === LOGOUT_USER){
         console.log('LOGOUT_USER');
         window.accessToken = null;
+        delete_cookie(USER_LOCALE_COOKIE_NAME)
         return DEFAULT_STATE
     }
     if(action.type === NEW_GUEST_USER){
@@ -29,7 +32,6 @@ const loggedUserReducer = (state = DEFAULT_STATE, action) => {
         return {...state, isValidGuestUser: true, currentUser: response};
     }
     if(action.type === RECEIVE_USER_INFO){
-        console.log('RECEIVE_USER_INFO');
         let { response } = action.payload;
         return {...state, isLoggedUser:true, currentUser: response};
     }

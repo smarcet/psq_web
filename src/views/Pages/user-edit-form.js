@@ -135,7 +135,7 @@ class UserEditForm extends Component {
                                 {config.showPassword &&
                                     <FormGroup row>
                                         <Col md="3">
-                                            <Button color="link" onClick={this.handleOnClickChangePassword}>{!showChangePassword ? "change password" : "cancel"}</Button>
+                                            <Button color="link" onClick={this.handleOnClickChangePassword}>{!showChangePassword ? T.translate("Change password") : T.translate("Cancel")}</Button>
                                         </Col>
                                         <Col xs="12" md="9">
                                             &nbsp;
@@ -146,27 +146,27 @@ class UserEditForm extends Component {
 
                                 <FormGroup row>
                                     <Col md="3">
-                                        <Label htmlFor="password">Password</Label>
+                                        <Label htmlFor="password">{T.translate("Password")}</Label>
                                     </Col>
                                     <Col xs="12" md="9">
                                         <Input type="password" id="password" name="password"
-                                               placeholder="Password"
+                                               placeholder={T.translate("Password")}
                                                onChange={handleChange}
                                                invalid={validator.isInvalid('password')}
                                         />
-                                        <FormText className="help-block">Please enter a complex password</FormText>
+                                        <FormText className="help-block">{T.translate("Please enter a complex password")}</FormText>
                                         <FormFeedback valid={validator.isValid('password')}><i className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('password')}</FormFeedback>
                                     </Col>
                                     <Col md="3">
-                                        <Label htmlFor="password_confirmation">Confirm Password</Label>
+                                        <Label htmlFor="password_confirmation">{T.translate("Confirm Password")}</Label>
                                     </Col>
                                     <Col xs="12" md="9">
                                         <Input type="password" id="password_confirmation" name="password_confirmation"
-                                               placeholder="Confirm Password"
+                                               placeholder={T.translate("Confirm Password")}
                                                onChange={handleChange}
                                                invalid={validator.isInvalid('password_confirmation')}
                                         />
-                                        <FormText className="help-block">Please re enter new password</FormText>
+                                        <FormText className="help-block">{T.translate("Please re enter new password")}</FormText>
                                         <FormFeedback valid={validator.isValid('password')}><i className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('password')}</FormFeedback>
                                     </Col>
                                 </FormGroup>
@@ -174,7 +174,7 @@ class UserEditForm extends Component {
                                 { config.showBio &&
                                 <FormGroup row>
                                     <Col md="3">
-                                        <Label htmlFor="bio">Bio</Label>
+                                        <Label htmlFor="bio">{T.translate("Bio")}</Label>
                                     </Col>
                                     <Col xs="12" md="9">
                                         <Input type="textarea"
@@ -182,7 +182,7 @@ class UserEditForm extends Component {
                                                name="bio"
                                                id="bio"
                                                rows="9"
-                                               placeholder="Content..."
+                                               placeholder={T.translate("Enter your bio...")}
                                                value={currentEditUser.bio}
                                                invalid={validator.isInvalid('bio')}
                                         />
@@ -193,7 +193,7 @@ class UserEditForm extends Component {
                                 { config.showPic &&
                                 <FormGroup row>
                                     <Col md="3">
-                                        <Label htmlFor="pic">Profile picture</Label>
+                                        <Label htmlFor="pic">{T.translate("Profile picture")}</Label>
                                     </Col>
                                     <Col xs="12" md="9">
                                         {currentEditUser.pic_url != null && currentEditUser.pic_url != '' &&

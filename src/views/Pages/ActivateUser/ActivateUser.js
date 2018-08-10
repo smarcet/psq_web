@@ -29,11 +29,20 @@ class ActivateUser extends Component {
             },
             validator: new FormValidator(
                 [
-                    new MandatoryField('password', T.translate('Password')),
-                    new MandatoryField('password_confirmation', T.translate('Password Confirmation')),
-                    new EqualToField('password', 'password_confirmation', 'Password', 'Password Confirmation'),
-                    new MinSizeField('password', 8, 'Password'),
-                    new MinSizeField('password_confirmation', 8, 'Password Confirmation')
+                    new MandatoryField('password',
+                        T.translate('Password')
+                    ),
+                    new MandatoryField('password_confirmation',
+                        T.translate('Password Confirmation')
+                    ),
+                    new EqualToField('password', 'password_confirmation', T.translate('Password'),
+                        T.translate('Password Confirmation')
+                    ),
+                    new MinSizeField('password', 8, T.translate('Password')
+                    ),
+                    new MinSizeField('password_confirmation', 8,
+                        T.translate('Password Confirmation')
+                    )
                 ]
             )
         };

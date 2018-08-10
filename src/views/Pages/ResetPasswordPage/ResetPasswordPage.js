@@ -30,11 +30,19 @@ class ResetPasswordPage extends Component {
             ),
             validator2: new FormValidator(
                 [
-                    new MandatoryField('password', T.translate('Password')),
-                    new MandatoryField('password_confirmation', T.translate('Password Confirmation')),
-                    new EqualToField('password', 'password_confirmation', 'Password', 'Password Confirmation'),
-                    new MinSizeField('password', 8, 'Password'),
-                    new MinSizeField('password_confirmation', 8, 'Password Confirmation')
+                    new MandatoryField('password', T.translate('Password')
+                    ),
+                    new MandatoryField('password_confirmation', T.translate('Password Confirmation')
+                    ),
+                    new EqualToField('password', 'password_confirmation',
+                        T.translate('Password'),
+                        T.translate('Password Confirmation')),
+                    new MinSizeField('password', 8,
+                        T.translate('Password')
+                    ),
+                    new MinSizeField('password_confirmation', 8,
+                        T.translate('Password Confirmation')
+                    )
                 ]
             ),
             sent: false,
@@ -119,7 +127,7 @@ class ResetPasswordPage extends Component {
                             <Card className="mx-4">
                                 { token != null &&
                                     <CardBody className="p-4">
-                                        <h1>{T.translate("Change password")}</h1>
+                                        <h1>{T.translate("Change Password")}</h1>
                                         <p className="text-muted">{T.translate("Password must contain one lowercase letter, one number, and be at least 8 characters long.")}</p>
                                         <InputGroup className="mb-3">
                                             <InputGroupAddon addonType="prepend">

@@ -23,10 +23,15 @@ class UserSettings extends Component {
                     new MandatoryField('email', T.translate('Email')),
                     new EmailField('email', T.translate('Email')),
                     new MandatoryField('role', T.translate('Role')),
-                    new EqualToField('password', 'password_confirmation', T.translate('Password'), T.translate('Password Confirmation')),
+                    new EqualToField('password', 'password_confirmation',
+                        T.translate('Password'),
+                        T.translate('Password Confirmation')
+                    ),
                     new MinSizeField('password', 8, T.translate('Password')),
-                    new MinSizeField('password_confirmation', 8, T.translate('Password Confirmation')),
-                    new MandatoryField('locale', T.translate('Locale')),
+                    new MinSizeField('password_confirmation', 8, T.translate('Password Confirmation')
+                    ),
+                    new MandatoryField('locale', T.translate('Locale')
+                    ),
                 ]
             )
         };
