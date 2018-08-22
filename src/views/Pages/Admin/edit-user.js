@@ -25,7 +25,8 @@ class AdminEditUser extends Component {
                     new MandatoryField('role', 'Role'),
                     new EqualToField('password', 'password_confirmation'),
                     new MinSizeField('password',8, 'Password'),
-                    new MinSizeField('password_confirmation',8,'Password Confirmation')
+                    new MinSizeField('password_confirmation',8,'Password Confirmation'),
+                    new MandatoryField('locale',  T.translate('Locale')),
                 ]
             )
         };

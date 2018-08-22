@@ -25,7 +25,8 @@ class SuperAdminEditUser extends Component {
                     new MandatoryField('role',  T.translate('Role')),
                     new EqualToField('password', 'password_confirmation'),
                     new MinSizeField('password',8,  T.translate('Password')),
-                    new MinSizeField('password_confirmation',8, T.translate('Password Confirmation'))
+                    new MinSizeField('password_confirmation',8, T.translate('Password Confirmation')),
+                    new MandatoryField('locale',  T.translate('Locale')),
                 ]
             )
         };

@@ -149,6 +149,27 @@ export class GreaterThanField extends CustomValidatorRule
     }
 }
 
+export class LowerOrEqualThanField extends CustomValidatorRule
+{
+
+    static get DEFAULT_MESSAGE() {
+        return '{field} should be lower or equal than {arg1}';
+    }
+
+    _getErrorMessage(){
+        let errorMessage = super._getErrorMessage();
+        return errorMessage.trim() == '' ? LowerOrEqualThanField.DEFAULT_MESSAGE : errorMessage;
+    }
+
+    constructor(fieldName, arg1, friendlyFieldName = '', customErrorMessage = ''){
+        super(fieldName, (value) => {
+            if(parseInt(value) > parseInt(arg1))
+                return new FormValidatorResult(this._fieldName, false, T.translate(this._getErrorMessage(), { field: this._friendlyFieldName, arg1: arg1}))
+            return new FormValidatorResult(this._fieldName, true);
+        }, friendlyFieldName, customErrorMessage);
+    }
+}
+
 export class EmailField extends CustomValidatorRule
 {
 
