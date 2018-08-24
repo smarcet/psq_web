@@ -13,6 +13,12 @@ export const DEFAULT_USER = {
     role: 0,
     pic: null,
     is_active: false,
+    title: '',
+    organization:'',
+    enrollment: '',
+    country: '',
+    state: '',
+    hand:0
 }
 
 const DEFAULT_STATE = {

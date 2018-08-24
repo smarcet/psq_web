@@ -12,6 +12,7 @@ const routes = {
   '/auth/admin/exams': T.translate('Exams'),
   '/auth/admin/exercises': T.translate('Exercises'),
   '/auth/admin/news': T.translate('News'),
+  '/auth/admin/statistics'  : T.translate('Statistics'),
   '/auth/admin/users': T.translate('Users'),
   '/auth/admin/devices': T.translate('Devices'),
   '/auth/admin/user-groups': T.translate('User Groups'),

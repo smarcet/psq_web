@@ -9,6 +9,12 @@ const DEFAULT_USER = {
     last_name: '',
     role: 0,
     bio:'',
+    title: '',
+    organization:'',
+    enrollment: '',
+    country: '',
+    state: '',
+    hand:0
 }
 
 const DEFAULT_STATE = {

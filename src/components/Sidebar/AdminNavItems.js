@@ -40,6 +40,12 @@ export default {
 
         },
         {
+            name: T.translate("Statistics"),
+            url: '/auth/admin/statistics',
+            icon: 'icon-graph',
+
+        },
+        {
             name: T.translate("News"),
             url: '/auth/admin/news',
             icon: 'icon-bell',

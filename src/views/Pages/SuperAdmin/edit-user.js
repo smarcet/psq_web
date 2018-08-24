@@ -9,6 +9,7 @@ import { createNewUser, getUserById, updateUser } from "../../../actions/users-a
 import swal from "sweetalert2";
 import UserEditForm from "../user-edit-form";
 import {FormValidator, EmailField, MandatoryField, EqualToField, MinSizeField} from "../../../utils/form-validator";
+import countries from "../../../utils/countries";
 
 class SuperAdminEditUser extends Component {
 
@@ -27,6 +28,8 @@ class SuperAdminEditUser extends Component {
                     new MinSizeField('password',8,  T.translate('Password')),
                     new MinSizeField('password_confirmation',8, T.translate('Password Confirmation')),
                     new MandatoryField('locale',  T.translate('Locale')),
+                    new MandatoryField('country', T.translate('Country')),
+                    new MandatoryField('state', T.translate('State')),
                 ]
             )
         };
@@ -132,6 +135,7 @@ class SuperAdminEditUser extends Component {
                         onCancel={this.onCancel}
                         handleChange={this.handleChange}
                         validator={validator}
+                        countries={countries}
                         currentEditUser={currentEditUser}/>
                 </Col>
             </Row>

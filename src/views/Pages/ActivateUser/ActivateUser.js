@@ -16,6 +16,8 @@ import {
 import swal from "sweetalert2";
 import T from "i18n-react/dist/i18n-react";
 import {EqualToField, FormValidator, MandatoryField, MinSizeField} from "../../../utils/form-validator";
+import {doUserPasswordChange, resetPasswordRequest} from "../../../actions/users-actions";
+import {connect} from "react-redux";
 
 class ActivateUser extends Component {
 
@@ -48,6 +50,22 @@ class ActivateUser extends Component {
         };
         this.onActivateAccountClicked = this.onActivateAccountClicked.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.handleKeyPress = this.handleKeyPress.bind(this);
+    }
+
+    handleKeyPress(event){
+        if (event.charCode == 13) {
+            this.onActivateAccountClicked(event)
+        }
+    }
+
+    componentWillMount(){
+
+        if(this.props.currentUser != null)
+        {
+            console.log("user is already logged")
+            this.props.history.push("/auth");
+        }
     }
 
     handleChange(event) {
@@ -95,6 +113,7 @@ class ActivateUser extends Component {
                                             </InputGroupText>
                                         </InputGroupAddon>
                                         <Input type="password"
+                                               onKeyPress={this.handleKeyPress}
                                                placeholder={T.translate("Password")}
                                                id="password" name="password"
                                                onChange={this.handleChange}
@@ -111,6 +130,7 @@ class ActivateUser extends Component {
                                         </InputGroupAddon>
                                         <Input type="password" id="password_confirmation"
                                                name="password_confirmation"
+                                               onKeyPress={this.handleKeyPress}
                                                placeholder={T.translate("Password Confirmation")}
                                                onChange={this.handleChange}
                                                invalid={validator.isInvalid('password_confirmation')}
@@ -132,4 +152,14 @@ class ActivateUser extends Component {
     }
 }
 
-export default ActivateUser;
+const mapStateToProps = ({ loggedUserState }) => ({
+    currentUser: loggedUserState.currentUser,
+});
+
+export default connect(
+    mapStateToProps,
+    {
+        resetPasswordRequest,
+        doUserPasswordChange,
+    }
+)(ActivateUser);

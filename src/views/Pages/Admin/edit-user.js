@@ -9,6 +9,7 @@ import swal from "sweetalert2";
 import UserEditForm from "../user-edit-form";
 import {createNewUser, getUserById, updateUser} from '../../../actions/users-actions';
 import {FormValidator, EmailField, MandatoryField, EqualToField, MinSizeField} from "../../../utils/form-validator";
+import countries from "../../../utils/countries";
 
 class AdminEditUser extends Component {
 
@@ -27,6 +28,7 @@ class AdminEditUser extends Component {
                     new MinSizeField('password',8, 'Password'),
                     new MinSizeField('password_confirmation',8,'Password Confirmation'),
                     new MandatoryField('locale',  T.translate('Locale')),
+                    new MandatoryField('country', T.translate('Country')),
                 ]
             )
         };
@@ -123,6 +125,7 @@ class AdminEditUser extends Component {
                         onCancel={this.onCancel}
                         handleChange={this.handleChange}
                         validator={this.state.validator}
+                        countries={countries}
                         currentEditUser={this.state.currentEditUser}/>
                 </Col>
             </Row>

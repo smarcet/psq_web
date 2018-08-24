@@ -1,4 +1,4 @@
-import T from "i18n-react/dist/i18n-react";
+import T from "i18n-react";
 import '../../i18n';
 
 export default {
@@ -21,12 +21,12 @@ export default {
             icon: 'icon-badge',
 
         },
-        /*{
+        {
             name: T.translate("Statistics"),
             url: '/auth/user/statistics',
             icon: 'icon-graph',
 
-        },*/
+        },
         {
             name: T.translate("News"),
             url: '/auth/user/news',

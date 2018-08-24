@@ -9,36 +9,53 @@ import swal from "sweetalert2";
 import {updateMyUserInfo, updateMyUserPic} from "../../actions/settings-actions";
 import {FormValidator, EmailField, MandatoryField, EqualToField, MinSizeField} from "../../utils/form-validator";
 import T from "i18n-react/dist/i18n-react";
+import countries from "../../utils/countries";
 
 class UserSettings extends Component {
 
     constructor(props) {
         super(props);
+        let validationRules = [
+            new MandatoryField('first_name', T.translate('First Name')),
+            new MandatoryField('last_name',  T.translate('Surname')),
+            new MandatoryField('email', T.translate('Email')),
+            new EmailField('email', T.translate('Email')),
+            new MandatoryField('role', T.translate('Role')),
+            new EqualToField('password', 'password_confirmation',
+                T.translate('Password'),
+                T.translate('Password Confirmation')
+            ),
+            new MinSizeField('password', 8, T.translate('Password')),
+            new MinSizeField('password_confirmation', 8, T.translate('Password Confirmation')
+            ),
+            new MandatoryField('locale', T.translate('Locale')
+            ),
+            new MandatoryField('country', T.translate('Country')
+            ),
+        ];
+
+        if( this.props.currentUser.role == 1 || this.props.currentUser.role == 2){
+            validationRules.push(
+                new MandatoryField('title', T.translate('Title')),
+                new MandatoryField('organization', T.translate('Organization')),
+                new MandatoryField('enrollment', T.translate('Enrollment')),
+                new MandatoryField('hand', T.translate('Hand')),
+            )
+        }
         this.state = {
             currentEditUser: this.props.currentUser,
             validator: new FormValidator(
-                [
-                    new MandatoryField('first_name', T.translate('First Name')),
-                    new MandatoryField('last_name',  T.translate('Surname')),
-                    new MandatoryField('email', T.translate('Email')),
-                    new EmailField('email', T.translate('Email')),
-                    new MandatoryField('role', T.translate('Role')),
-                    new EqualToField('password', 'password_confirmation',
-                        T.translate('Password'),
-                        T.translate('Password Confirmation')
-                    ),
-                    new MinSizeField('password', 8, T.translate('Password')),
-                    new MinSizeField('password_confirmation', 8, T.translate('Password Confirmation')
-                    ),
-                    new MandatoryField('locale', T.translate('Locale')
-                    ),
-                ]
+                validationRules
             )
         };
         this.handleChange = this.handleChange.bind(this);
         this.onSaveUser = this.onSaveUser.bind(this);
         this.onCancel = this.onCancel.bind(this);
         this.handleShowPasswordChangeVisibilityChange = this.handleShowPasswordChangeVisibilityChange.bind(this);
+    }
+
+    componentWillMount() {
+
     }
 
     handleShowPasswordChangeVisibilityChange(show) {
@@ -115,7 +132,9 @@ class UserSettings extends Component {
     }
 
     render() {
+        let {currentUser } = this.props;
         let config = {showPassword: true, showBio: true, showPic: true, showEmailChangeWarning: true, canEditEmail : true};
+        config['showSurgeonFields'] = currentUser.role == 1 || currentUser.role == 2;
         return (
             <Row>
                 <Col xs="12" md="12">
@@ -127,6 +146,7 @@ class UserSettings extends Component {
                         validator={this.state.validator}
                         onShowPasswordChangeVisibilityChange={this.handleShowPasswordChangeVisibilityChange}
                         currentEditUser={this.state.currentEditUser}
+                        countries={countries}
                     />
                 </Col>
             </Row>

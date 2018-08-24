@@ -36,7 +36,7 @@ class UserEditForm extends Component {
     }
 
     render(){
-        let { currentEditUser, handleChange, validator, onSave, onCancel, config } = this.props;
+        let { currentEditUser, handleChange, validator, onSave, onCancel, config, countries } = this.props;
         let { showChangePassword } = this.state;
         return(
             <Row>
@@ -87,6 +87,115 @@ class UserEditForm extends Component {
                                         <FormFeedback valid={validator.isValid('email')}><i className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('email')}</FormFeedback>
                                     </Col>
                                 </FormGroup>
+                                <FormGroup row>
+                                    <Col md="3">
+                                        <Label htmlFor="country">{T.translate('Country')}</Label>
+                                    </Col>
+                                    <Col xs="12" md="9">
+                                        <Input type="select"
+                                               name="country"
+                                               id="country"
+                                               value={currentEditUser.country}
+                                               onChange={handleChange}
+                                               invalid={validator.isInvalid('country')}>
+                                            <option value="">{T.translate('-- Please select Country --')}</option>
+                                            {
+                                                countries.map(
+                                                    (country, idx) => {
+
+                                                        return (<option key={idx} value={country['alpha-3']}>{country.name}</option>)
+                                                    }
+                                                )
+                                            }
+
+                                        </Input>
+                                        <FormFeedback valid={validator.isValid('country')}><i className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('country')}</FormFeedback>
+                                    </Col>
+                                </FormGroup>
+                                <FormGroup row>
+                                    <Col md="3">
+                                        <Label htmlFor="state">{T.translate('State')}</Label>
+                                    </Col>
+                                    <Col xs="12" md="9">
+                                        <Input type="text"
+                                               id="state"
+                                               onChange={handleChange}
+                                               invalid={validator.isInvalid('state')}
+                                               name="state" value={currentEditUser.state} placeholder={T.translate('State')}/>
+                                        <FormFeedback valid={validator.isValid('state')}><i className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('state')}</FormFeedback>
+                                    </Col>
+                                </FormGroup>
+                                {config.showSurgeonFields &&
+                                <FormGroup row>
+                                    <Col md="3">
+                                        <Label htmlFor="title">{T.translate('Title')}</Label>
+                                    </Col>
+                                    <Col xs="12" md="9">
+                                        <Input type="text" id="title"
+                                               onChange={handleChange}
+                                               invalid={validator.isInvalid('title')}
+                                               name="title" value={currentEditUser.title}
+                                               placeholder={T.translate('Title')}/>
+                                        <FormFeedback valid={validator.isValid('title')}><i
+                                            className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('title')}
+                                        </FormFeedback>
+                                    </Col>
+                                </FormGroup>
+                                }
+                                {config.showSurgeonFields &&
+                                <FormGroup row>
+                                    <Col md="3">
+                                        <Label htmlFor="enrollment">{T.translate('Enrollment')}</Label>
+                                    </Col>
+                                    <Col xs="12" md="9">
+                                        <Input type="text" id="enrollment"
+                                               onChange={handleChange}
+                                               invalid={validator.isInvalid('enrollment')}
+                                               name="enrollment" value={currentEditUser.enrollment}
+                                               placeholder={T.translate('Enrollment')}/>
+                                        <FormFeedback valid={validator.isValid('enrollment')}><i
+                                            className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('enrollment')}
+                                        </FormFeedback>
+                                    </Col>
+                                </FormGroup>
+                                }
+                                {config.showSurgeonFields &&
+                                <FormGroup row>
+                                    <Col md="3">
+                                        <Label htmlFor="organization">{T.translate('Organization')}</Label>
+                                    </Col>
+                                    <Col xs="12" md="9">
+                                        <Input type="text" id="organization"
+                                               onChange={handleChange}
+                                               invalid={validator.isInvalid('organization')}
+                                               name="organization" value={currentEditUser.organization}
+                                               placeholder={T.translate('Organization')}/>
+                                        <FormFeedback valid={validator.isValid('organization')}><i
+                                            className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('organization')}
+                                        </FormFeedback>
+                                    </Col>
+                                </FormGroup>
+                                }
+                                {config.showSurgeonFields &&
+                                <FormGroup row>
+                                    <Col md="3">
+                                        <Label htmlFor="hand">{T.translate('Hand')}</Label>
+                                    </Col>
+                                    <Col xs="12" md="9">
+                                        <Input type="select"
+                                               name="hand"
+                                               id="hand"
+                                               value={currentEditUser.hand}
+                                               onChange={handleChange}
+                                               invalid={validator.isInvalid('hand')}>
+                                            <option value="">{T.translate('-- Please select Hand --')}</option>
+                                            <option value="2">{T.translate('Left')}</option>
+                                            <option value="1">{T.translate('Right')}</option>
+                                        </Input>
+                                        <FormFeedback valid={validator.isValid('hand')}><i className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('hand')}</FormFeedback>
+                                    </Col>
+                                </FormGroup>
+                                }
                                 { config.showRole &&
                                     <FormGroup row>
                                         <Col md="3">
