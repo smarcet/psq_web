@@ -36,6 +36,7 @@ import userNewsReducer from "./reducers/User/news-reducer";
 import T from "i18n-react/dist/i18n-react";
 import {getLanguage, USER_LOCALE_COOKIE_NAME} from "./constants";
 import { bake_cookie, read_cookie, delete_cookie } from 'sfcookies';
+import statisticsReducer from "./reducers/statistics-reducer";
 
 // default: localStorage if web, AsyncStorage if react-native
 
@@ -78,6 +79,7 @@ const reducers = persistCombineReducers(config, {
     userDashboardState: userDashboardReducer,
     userExamViewState: userExamViewReducer,
     userNewsState: userNewsReducer,
+    statisticsState: statisticsReducer,
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
