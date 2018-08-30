@@ -1,5 +1,5 @@
 import{ LOGOUT_USER } from '../actions/auth-actions';
-import {RETRIEVED_EXERCISE_STATISTIC_DATA} from "../actions/statistics-actions";
+import {CLEAR_EXERCISE_STATISTIC_DATA, RETRIEVED_EXERCISE_STATISTIC_DATA} from "../actions/statistics-actions";
 
 const DEFAULT_STATE = {
     total_instances: 0,
@@ -19,7 +19,7 @@ const statisticsReducer = (state = DEFAULT_STATE, action) => {
             };
         }
             break;
-
+        case CLEAR_EXERCISE_STATISTIC_DATA:
         case LOGOUT_USER: {
             return DEFAULT_STATE;
         }

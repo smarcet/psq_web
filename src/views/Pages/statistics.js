@@ -7,8 +7,9 @@ import T from "i18n-react";
 import '../../scss/statistics.scss';
 import {connect} from "react-redux";
 import {getExercisesByPage} from "../../actions/User/exercises-actions";
-import {getStatisticsForExercise} from "../../actions/statistics-actions";
+import {getStatisticsForExercise, clearStatistics} from "../../actions/statistics-actions";
 import {Line} from 'react-chartjs-2';
+import swal from "sweetalert2";
 
 class UserStatistics extends Component {
 
@@ -23,6 +24,7 @@ class UserStatistics extends Component {
         this.handleChangeEndDate = this.handleChangeEndDate.bind(this);
         this.handleChangeExercise = this.handleChangeExercise.bind(this);
         this.getStatistics = this.getStatistics.bind(this);
+        this.props.clearStatistics();
     }
 
     handleChangeStartDate(date) {
@@ -53,7 +55,14 @@ class UserStatistics extends Component {
         let {exercise, startDate, endDate} = this.state;
         let unixStarDate = startDate.hours(0).minutes(0).seconds(0).milliseconds(0).unix();
         let unixEndDate = endDate.hours(23).minutes(59).seconds(59).milliseconds(999).unix();
-        if(exercise == 0) return;
+        if(exercise == 0){
+            swal(
+                '',
+                T.translate('You must select an exercise'),
+                'warning'
+            );
+            return
+        }
         this.props.getStatisticsForExercise(exercise, unixStarDate, unixEndDate);
     }
 
@@ -67,21 +76,21 @@ class UserStatistics extends Component {
             labels: best_time_per_day.map((item) => item[0]),
             datasets: [
                 {
-                    label: T.translate('Best time per day'),
+                    label: T.translate('Best time per day [seconds]'),
                     fill: false,
                     lineTension: 0.1,
-                    backgroundColor: 'rgba(75,192,192,0.4)',
-                    borderColor: 'rgba(75,192,192,1)',
+                    backgroundColor: 'rgba(255,255,0,1)',
+                    borderColor: 'rgba(255,255,0,1)',
                     borderCapStyle: 'butt',
                     borderDash: [],
                     borderDashOffset: 0.0,
                     borderJoinStyle: 'miter',
-                    pointBorderColor: 'rgba(75,192,192,1)',
-                    pointBackgroundColor: '#fff',
+                    pointBorderColor: 'rgba(255,255,0,1)',
+                    pointBackgroundColor: 'rgba(255,255,0,1)',
                     pointBorderWidth: 1,
                     pointHoverRadius: 5,
-                    pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-                    pointHoverBorderColor: 'rgba(220,220,220,1)',
+                    pointHoverBackgroundColor: 'rgba(255,255,0,1)',
+                    pointHoverBorderColor: 'rgba(255,255,0,1)',
                     pointHoverBorderWidth: 2,
                     pointRadius: 1,
                     pointHitRadius: 10,
@@ -97,18 +106,18 @@ class UserStatistics extends Component {
                         label: T.translate('Instances per day'),
                         fill: false,
                         lineTension: 0.1,
-                        backgroundColor: 'rgba(75,192,192,0.4)',
-                        borderColor: 'rgba(75,192,192,1)',
+                        backgroundColor: 'rgba(255,255,0,1)',
+                        borderColor: 'rgba(255,255,0,1)',
                         borderCapStyle: 'butt',
                         borderDash: [],
                         borderDashOffset: 0.0,
                         borderJoinStyle: 'miter',
-                        pointBorderColor: 'rgba(75,192,192,1)',
-                        pointBackgroundColor: '#fff',
+                        pointBorderColor: 'rgba(255,255,0,1)',
+                        pointBackgroundColor: 'rgba(255,255,0,1)',
                         pointBorderWidth: 1,
                         pointHoverRadius: 5,
-                        pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-                        pointHoverBorderColor: 'rgba(220,220,220,1)',
+                        pointHoverBackgroundColor: 'rgba(255,255,0,1)',
+                        pointHoverBorderColor: 'rgba(255,255,0,1)',
                         pointHoverBorderWidth: 2,
                         pointRadius: 1,
                         pointHitRadius: 10,
@@ -148,7 +157,7 @@ class UserStatistics extends Component {
                         onChange={this.handleChangeEndDate}
                     />
                 </FormGroup>
-                    <Button onClick={this.getStatistics}>{T.translate("Get Statistics")}</Button>
+                    <Button outline color="primary" onClick={this.getStatistics}><i className="fa fa-search"></i>&nbsp;{T.translate("Get Statistics")}</Button>
                 </Form>
                 <Row>
                     <Col>
@@ -163,15 +172,15 @@ class UserStatistics extends Component {
                     </Col>
                 </Row>
                 {total_instances > 0 &&
-                <Row>
+                <Row className="row-statistics">
                     <Col>
-                        <b>{T.translate("Repetitions on Period")}</b>&nbsp;{total_instances}
+                        <b>{T.translate("Repetitions on Period:")}</b>&nbsp;{total_instances}
                     </Col>
                     <Col>
-                        <b>{T.translate("Max Repetition/Day")}</b>&nbsp;{max_instances_per_day}
+                        <b>{T.translate("Max Repetition/Day:")}</b>&nbsp;{max_instances_per_day}
                     </Col>
                     <Col>
-                        <b>{T.translate("Better Time")}</b>&nbsp;{best_time.duration__min}
+                        <b>{T.translate("Best Time (seconds):")}</b>&nbsp;{best_time.duration__min}
                     </Col>
                 </Row>
                 }
@@ -196,5 +205,6 @@ export default connect(
     {
         getExercisesByPage,
         getStatisticsForExercise,
+        clearStatistics,
     }
 )(UserStatistics);

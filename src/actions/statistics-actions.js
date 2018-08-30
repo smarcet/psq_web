@@ -4,6 +4,7 @@ import {
 } from "./base-actions";
 
 export const RETRIEVED_EXERCISE_STATISTIC_DATA = 'RETRIEVED_EXERCISE_STATISTIC_DATA';
+export const CLEAR_EXERCISE_STATISTIC_DATA = 'CLEAR_EXERCISE_STATISTIC_DATA';
 
 export const getStatisticsForExercise = (exercise, startDate, endDate) => (dispatch, getState) => {
     let {loggedUserState} = getState();
@@ -13,6 +14,11 @@ export const getStatisticsForExercise = (exercise, startDate, endDate) => (dispa
     let params = {
         token: token,
     };
+
+    dispatch({
+        type: CLEAR_EXERCISE_STATISTIC_DATA,
+        payload: {}
+    });
 
     return getRequest(
         createAction(START_LOADING),
@@ -24,5 +30,12 @@ export const getStatisticsForExercise = (exercise, startDate, endDate) => (dispa
             type: STOP_LOADING,
             payload: {}
         });
+    });
+}
+
+export const clearStatistics = () => (dispatch) => {
+    dispatch({
+        type: CLEAR_EXERCISE_STATISTIC_DATA,
+        payload: {}
     });
 }
