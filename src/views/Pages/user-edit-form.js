@@ -189,8 +189,8 @@ class UserEditForm extends Component {
                                                onChange={handleChange}
                                                invalid={validator.isInvalid('hand')}>
                                             <option value="">{T.translate('-- Please select Hand --')}</option>
-                                            <option value="2">{T.translate('Left')}</option>
-                                            <option value="1">{T.translate('Right')}</option>
+                                            <option value="1">{T.translate('Left')}</option>
+                                            <option value="2">{T.translate('Right')}</option>
                                         </Input>
                                         <FormFeedback valid={validator.isValid('hand')}><i className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('hand')}</FormFeedback>
                                     </Col>
