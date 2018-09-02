@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {
-  Badge,
   DropdownItem,
   DropdownMenu,
   DropdownToggle,
@@ -8,7 +7,7 @@ import {
 } from 'reactstrap';
 import { NavLink } from 'react-router-dom'
 import {STUDENT, SUPERVISOR, TEACHER} from "../../constants";
-import T from "i18n-react/dist/i18n-react";
+import T from 'i18n-react';
 
 class HeaderDropdown extends Component {
 
@@ -70,7 +69,7 @@ class HeaderDropdown extends Component {
       return (
       <Dropdown nav isOpen={this.state.dropdownOpen} toggle={this.toggle}>
         <DropdownToggle nav>
-            <span className="header-dropdown-user-info">Welcome {this.getUserDetail()}</span>
+            <span className="header-dropdown-user-info">{T.translate("Welcome")} {this.getUserDetail()}</span>
             <img src={this.props.currentUser.pic_url != '' && this.props.currentUser.pic_url != null ? this.props.currentUser.pic_url : '/img/generic-avatar-icon.png'} className="img-avatar" alt={this.props.currentUser.email}/>
         </DropdownToggle>
 
@@ -79,12 +78,16 @@ class HeaderDropdown extends Component {
               <DropdownItem header tag="div" className="text-center"><strong>Account</strong></DropdownItem>
               }
               {this.props.isLoggedUser &&
-              <DropdownItem><i className="fa fa-user"></i><NavLink to={settingsRoute}>Profile</NavLink></DropdownItem>
+              <DropdownItem tag="a">
+                  <i className="fa fa-user"></i><NavLink to={settingsRoute}>Profile</NavLink>
+              </DropdownItem>
               }
               {this.props.isLoggedUser &&
               <DropdownItem divider/>
               }
-              <DropdownItem><i className="fa fa-lock"></i><NavLink to='/logout'>Logout</NavLink></DropdownItem>
+              <DropdownItem tag="a">
+                  <i className="fa fa-lock"></i><NavLink to='/logout'>{T.translate("Logout")}</NavLink>
+              </DropdownItem>
           </DropdownMenu>
 
       </Dropdown>
