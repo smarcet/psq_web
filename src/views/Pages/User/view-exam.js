@@ -103,7 +103,13 @@ class UserViewExam extends Component {
                                             <Label htmlFor="evaluator">{T.translate("Evaluator")}</Label>
                                         </Col>
                                         <Col xs="12" md="9">
-                                            <Input type="text" id="evaluator" name="evaluator" readOnly={true} value={`${evaluator.first_name}  ${evaluator.last_name}`}/>
+                                            { evaluator == null &&
+                                                <Label>{T.translate("N/A")}</Label>
+                                            }
+                                            { evaluator &&
+                                                <Input type="text" id="evaluator" name="evaluator" readOnly={true}
+                                                       value={`${evaluator.first_name}  ${evaluator.last_name}`}/>
+                                            }
                                         </Col>
                                     </FormGroup>
                                     <FormGroup row>
