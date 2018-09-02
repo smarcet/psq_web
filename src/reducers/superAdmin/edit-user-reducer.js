@@ -14,7 +14,7 @@ const DEFAULT_USER = {
     enrollment: '',
     country: '',
     state: '',
-    hand:0
+    hand: 2
 }
 
 const DEFAULT_STATE = {
