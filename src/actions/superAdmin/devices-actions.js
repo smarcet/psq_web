@@ -95,7 +95,7 @@ export const verifyDevice = (deviceId, friendlyName) =>  (dispatch, getState) =>
 
     return putRequest(
         createAction(START_LOADING),
-        createAction(DEVICE_VERIFIED)({deviceId}),
+        createAction(DEVICE_VERIFIED)({deviceId, friendlyName}),
         `${apiBaseUrl}/devices/${deviceId}/verify`,
         {
             friendly_name: friendlyName

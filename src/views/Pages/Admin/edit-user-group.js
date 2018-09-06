@@ -150,6 +150,7 @@ class AdminEditUserGroup extends Component {
                                     </Col>
                                     <Col xs="12" md="9">
                                         <Input type="text" id="name" name="name"
+                                               value={currentEditGroup.name}
                                                onChange={this.handleChange}
                                                invalid={validator.isInvalid('name')}
                                                placeholder={T.translate("Group Name")}/>
@@ -166,8 +167,7 @@ class AdminEditUserGroup extends Component {
                                                id="device"
                                                value={currentEditGroup.device != null ? currentEditGroup.device.id : ''}
                                                onChange={this.handleChange}
-                                               invalid={validator.isInvalid('device')}
-                                        >
+                                               invalid={validator.isInvalid('device')}>
                                             <option value="0">{T.translate('-- Please select a Device --')}</option>
                                             {
                                                    allowedDevices.map((item, idx) =>
@@ -219,7 +219,7 @@ class AdminEditUserGroup extends Component {
                                                         members.map((member, i) => {
 
                                                             return (
-                                                                <tr key={member.id}>
+                                                                <tr key={i}>
                                                                     <td>{member.id}</td>
                                                                     <td>{member.first_name}</td>
                                                                     <td>{member.last_name}</td>

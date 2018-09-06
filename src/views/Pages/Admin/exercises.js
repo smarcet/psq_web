@@ -8,7 +8,7 @@ import {
     Table,
     Button,
     Input,
-    Modal, ModalHeader, ModalBody, ModalFooter
+    Modal, ModalHeader, ModalBody, ModalFooter, Badge
 } from 'reactstrap';
 import swal from "sweetalert2";
 import T from 'i18n-react';
@@ -236,11 +236,17 @@ class AdminExams extends Component {
                                                         <td>{this.getDevices(exercise)}</td>
                                                         <td>{this.getAuthorDisplayName(exercise)}</td>
                                                         <td className="col-button">
+                                                            {! exercise.is_shared &&
                                                             <Button color="primary"
                                                                     onClick={(e) => this.onClickEditExercise(e, exercise)}
                                                                     outline><i
                                                                 className="fa fa-edit"></i>&nbsp;{T.translate("Edit")}
                                                             </Button>
+                                                            }
+                                                            {
+                                                                exercise.is_shared &&
+                                                                <Badge color="success">{T.translate("Shared")}</Badge>
+                                                            }
                                                         </td>
                                                         <td className="col-button">
                                                             <Button color="danger"

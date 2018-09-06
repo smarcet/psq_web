@@ -30,7 +30,7 @@ export const getMyExercisesByPage = (currentPage = 1, pageSize = DEFAULT_PAGE_SI
         getRequest(
             createAction(START_LOADING),
             createAction(RETRIEVED_MY_EXERCISES),
-            `${apiBaseUrl}/admin-users/me/exercises`,
+            `${apiBaseUrl}/exercises`,
             authErrorHandler,
         )(params)(dispatch).then((payload) => {
             dispatch({

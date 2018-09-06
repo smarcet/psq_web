@@ -68,7 +68,11 @@ class UserStatistics extends Component {
 
     render(){
         let {exercises, best_time_per_day, instances_per_day, total_instances,best_time, max_instances_per_day} = this.props;
-        if(exercises == null || exercises.length <= 0) return null;
+        if(exercises == null || exercises.length <= 0) return (<div>
+            <p>
+                <b>{T.translate("Data not available")}</b>
+            </p>
+        </div>);
         let data1 = null;
         let data2 = null;
         if(best_time_per_day && best_time_per_day.length > 0 )

@@ -1,5 +1,5 @@
 import{ LOGOUT_USER } from '../../actions/auth-actions';
-import {RETRIEVED_USER_GROUPS} from "../../actions/Admin/user-groups-actions";
+import {DELETED_USER_GROUP, RETRIEVED_USER_GROUPS} from "../../actions/Admin/user-groups-actions";
 
 const DEFAULT_STATE = {
     items: [],
@@ -14,6 +14,15 @@ const adminUserGroupsReducer = (state = {...DEFAULT_STATE}, action) => {
                 ...state,
                 items: action.payload.response.results,
                 count: action.payload.response.count,
+            };
+        }
+            break;
+        case DELETED_USER_GROUP: {
+            let {groupId} = payload;
+            return {
+                ...state,
+                count: state.count - 1,
+                items: state.items.filter(item => item.id !== groupId),
             };
         }
             break;

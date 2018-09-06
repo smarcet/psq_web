@@ -14,7 +14,8 @@ import 'sweetalert2/dist/sweetalert2.css';
 import {connect} from 'react-redux'
 import PaginationContainer from "../../Base/PaginationContainer/PaginationContainer";
 import {DEFAULT_PAGE_SIZE} from "../../../constants";
-import {getUserGroupsByPage} from "../../../actions/Admin/user-groups-actions";
+import {getUserGroupsByPage, deleteUserGroup} from "../../../actions/Admin/user-groups-actions";
+import swal from "sweetalert2";
 
 class AdminUserGroups extends Component {
 
@@ -31,7 +32,6 @@ class AdminUserGroups extends Component {
     componentWillMount() {
         this.props.getUserGroupsByPage(this.state.currentPage);
     }
-
 
     handleOnChangeSearch(event) {
         let {value} = event.target;
@@ -52,17 +52,18 @@ class AdminUserGroups extends Component {
     onClickDeleteGroup(event, group) {
 
         swal({
-            title: 'Are you sure?',
-            text: 'You will not be able to recover this user group!',
+            title: T.translate('Are you sure?'),
+            text: T.translate('You will not be able to recover this user group!'),
             type: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'No, keep it'
+            confirmButtonText: T.translate('Yes, delete it!'),
+            cancelButtonText: T.translate('No, keep it')
         }).then((result) => {
             if (result.value) {
+                this.props.deleteUserGroup(group);
                 swal(
-                    'Deleted!',
-                    'Your user group has been deleted.',
+                    T.translate('Deleted!'),
+                    T.translate('Your user group has been deleted'),
                     'success'
                 )
             }
@@ -184,5 +185,6 @@ export default connect(
     mapStateToProps,
     {
         getUserGroupsByPage,
+        deleteUserGroup,
     }
 )(AdminUserGroups);

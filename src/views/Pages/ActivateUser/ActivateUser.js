@@ -17,6 +17,7 @@ import swal from "sweetalert2";
 import T from "i18n-react/dist/i18n-react";
 import {EqualToField, FormValidator, MandatoryField, MinSizeField} from "../../../utils/form-validator";
 import {doUserPasswordChange, resetPasswordRequest} from "../../../actions/users-actions";
+import {doLogout} from "../../../actions/auth-actions";
 import {connect} from "react-redux";
 
 class ActivateUser extends Component {
@@ -64,7 +65,7 @@ class ActivateUser extends Component {
         if(this.props.currentUser != null)
         {
             console.log("user is already logged")
-            this.props.history.push("/auth");
+            this.props.doLogout();
         }
     }
 
@@ -161,5 +162,6 @@ export default connect(
     {
         resetPasswordRequest,
         doUserPasswordChange,
+        doLogout,
     }
 )(ActivateUser);

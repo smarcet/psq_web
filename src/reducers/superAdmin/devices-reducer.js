@@ -1,4 +1,4 @@
-import { RETRIEVED_DEVICES, DELETED_DEVICE } from '../../actions/superAdmin/devices-actions';
+import {RETRIEVED_DEVICES, DELETED_DEVICE, DEVICE_VERIFIED} from '../../actions/superAdmin/devices-actions';
 import{ LOGOUT_USER } from '../../actions/auth-actions';
 
 const DEFAULT_STATE = {
@@ -14,6 +14,18 @@ const superAdminDevicesReducer = (state = {...DEFAULT_STATE}, action) => {
                 ...state,
                 items: action.payload.response.results,
                 count: action.payload.response.count,
+            };
+        }
+        break;
+        case DEVICE_VERIFIED:{
+            let { deviceId, friendlyName } = payload;
+            return {
+                ...state,
+                items : state.items.map(item => {
+                    if(item.id == deviceId)
+                        return {...item, friendly_name:friendlyName, is_verified: true}
+                    return item;
+                }),
             };
         }
         break;
