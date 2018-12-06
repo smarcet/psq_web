@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {Card, CardBody, CardFooter} from 'reactstrap';
 import classNames from 'classnames';
 import {mapToCssModules} from 'reactstrap/lib/utils';
+import T from 'i18n-react';
 
 const propTypes = {
   header: PropTypes.string,
@@ -49,7 +50,7 @@ class Widget02 extends Component {
       if (footer) {
         return (
           <CardFooter className="px-3 py-2">
-            <a className="font-weight-bold font-xs btn-block text-muted" href={link}>View More
+            <a className="font-weight-bold font-xs btn-block text-muted" href={link}>{T.translate("View More")}
               <i className="fa fa-angle-right float-right font-lg"></i></a>
           </CardFooter>
         );

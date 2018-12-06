@@ -109,7 +109,7 @@ class ResetPasswordPage extends Component {
         this.props.doUserPasswordChange(this.state.formData).then(() => {
             swal(
                 T.translate('Success!'),
-                T.translate('Your user password has been changed!.'),
+                T.translate('Your user password has been changed!'),
                 'success'
             );
             this.props.history.push('/')
@@ -123,12 +123,12 @@ class ResetPasswordPage extends Component {
             <div className="app flex-row align-items-center">
                 <Container>
                     <Row className="justify-content-center">
-                        <Col md="6">
+                        <Col md="6" xs="12">
                             <Card className="mx-4">
                                 { token != null &&
                                     <CardBody className="p-4">
                                         <h1>{T.translate("Change Password")}</h1>
-                                        <p className="text-muted">{T.translate("Password must contain one lowercase letter, one number, and be at least 8 characters long.")}</p>
+                                        <p className="text-muted">{T.translate("Password must contain one lowercase letter, one number, and be at least 8 characters long")}</p>
                                         <InputGroup className="mb-3">
                                             <InputGroupAddon addonType="prepend">
                                                 <InputGroupText>
@@ -167,7 +167,7 @@ class ResetPasswordPage extends Component {
                                 {token == null && !sent &&
                                 <CardBody className="p-4">
                                     <h1>{T.translate("Reset your password")}</h1>
-                                    <p className="text-muted">{T.translate("Enter your email address and we will send you a link to reset your password.")}</p>
+                                    <p className="text-muted">{T.translate("Enter your email address and we will send you a link to reset your password")}</p>
                                     <InputGroup className="mb-3">
                                         <InputGroupAddon addonType="prepend">
                                             <InputGroupText>@</InputGroupText>
@@ -189,7 +189,7 @@ class ResetPasswordPage extends Component {
                                 {token == null && sent &&
                                 <CardBody className="p-4">
                                     <h1>{T.translate("Reset your password")}</h1>
-                                    <p className="text-muted">{T.translate("Check your email for a link to reset your password. If it doesn’t appear within a few minutes, check your spam folder.")}</p>
+                                    <p className="text-muted">{T.translate("Check your email for a link to reset your password. If it doesn’t appear within a few minutes, check your spam folder")}</p>
                                     <Button color="primary" className="px-4"
                                             onClick={this.onBack}
                                             block>{T.translate("Return to login")}</Button>

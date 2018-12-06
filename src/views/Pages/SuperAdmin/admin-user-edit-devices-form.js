@@ -32,7 +32,7 @@ class SuperAdminAdminUserEditDevicesForm extends Component {
     onUnLinkDeviceClicked(device){
         swal({
             title: T.translate('Are you sure?'),
-            text:  T.translate('you are about to the device from this user'),
+            text:  T.translate('you are about to unlink the device from this user'),
             type: 'warning',
             showCancelButton: true,
             confirmButtonText:  T.translate('Yes, unlink it!'),
@@ -121,7 +121,7 @@ class SuperAdminAdminUserEditDevicesForm extends Component {
                     <Row>
                         <Col md="12">
                             { ownedDevices.length == 0 &&
-                                <p>{T.translate("List is Empty.")}</p>
+                                <p>{T.translate("List is empty")}</p>
                             }
                             { ownedDevices.length > 0 &&
                             <Table responsive striped>

@@ -80,7 +80,7 @@ class UserStatistics extends Component {
             labels: best_time_per_day.map((item) => item[0]),
             datasets: [
                 {
-                    label: T.translate('Best time per day [seconds]'),
+                    label: T.translate('Best time per day (seconds)'),
                     fill: false,
                     lineTension: 0.1,
                     backgroundColor: 'rgba(255,255,0,1)',
@@ -137,7 +137,7 @@ class UserStatistics extends Component {
                 <FormGroup>
                     <Label for="exercise" className="mr-sm-2">{T.translate("Exercise")}&nbsp;</Label>
                     <Input type="select" name="exercise" id="exercise" onChange={this.handleChangeExercise}>
-                        <option value="0">{T.translate("-- Select Exercise -- ")}</option>
+                        <option value="0">{T.translate("-- Select Exercise --")}</option>
                         {
                             exercises.map((exercise, idx) => {
                                 return <option value={exercise.id} key={idx}>{exercise.title}</option>
@@ -171,7 +171,7 @@ class UserStatistics extends Component {
                     </Col>
                     <Col>
                     { data2 != null &&
-                    <Line data={data2}/>
+                        <Line data={data2}/>
                     }
                     </Col>
                 </Row>

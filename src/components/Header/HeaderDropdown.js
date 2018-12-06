@@ -74,19 +74,19 @@ class HeaderDropdown extends Component {
         </DropdownToggle>
 
           <DropdownMenu right>
-              {this.props.isLoggedUser &&
-              <DropdownItem header tag="div" className="text-center"><strong>Account</strong></DropdownItem>
+
+              {this.props.currentUser != null &&
+                  <DropdownItem tag="div">
+                      <i className="fa fa-user"></i>
+                      <NavLink to={settingsRoute}>{T.translate("Settings")}</NavLink>
+                  </DropdownItem>
               }
-              {this.props.isLoggedUser &&
-              <DropdownItem tag="a">
-                  <i className="fa fa-user"></i><NavLink to={settingsRoute}>Profile</NavLink>
-              </DropdownItem>
+              {this.props.currentUser != null &&
+                <DropdownItem divider/>
               }
-              {this.props.isLoggedUser &&
-              <DropdownItem divider/>
-              }
-              <DropdownItem tag="a">
-                  <i className="fa fa-lock"></i><NavLink to='/logout'>{T.translate("Logout")}</NavLink>
+              <DropdownItem tag="div">
+                  <i className="fa fa-lock"></i>
+                  <NavLink to='/logout'>{T.translate("Logout")}</NavLink>
               </DropdownItem>
           </DropdownMenu>
 

@@ -87,7 +87,7 @@ class AdminEditDevice extends Component {
         this.props.updateDevice(this.state.currentEditDevice).then(() => {
             swal(
                 '',
-                T.translate("Your device has been successfully updated!."),
+                T.translate("Your device has been successfully updated!"),
                 'success'
             );
             this.props.history.goBack();
@@ -153,7 +153,7 @@ class AdminEditDevice extends Component {
                 this.props.unLinkUser2Device(this.state.currentEditDevice, user).then(() => {
                     swal(
                         T.translate("Unlinked!"),
-                        T.translate("User has been unlinked from this device."),
+                        T.translate("User has been unlinked from this device"),
                         'success'
                     )
                 });
@@ -175,7 +175,7 @@ class AdminEditDevice extends Component {
                 this.props.unLinkAdminUser2Device(this.state.currentEditDevice, user).then(() => {
                     swal(
                         T.translate("Unlinked!"),
-                        T.translate("User has been unlinked from this device."),
+                        T.translate("User has been unlinked from this device"),
                         'success'
                     )
                 });

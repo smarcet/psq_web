@@ -73,7 +73,7 @@ class AdminExams extends Component {
                 this.props.deleteExercise(exercise).then(() => {
                     swal(
                         T.translate('Deleted!'),
-                        T.translate('Your exercise has been deleted.'),
+                        T.translate('Your exercise has been deleted'),
                         'success'
                     )
                 })
@@ -130,7 +130,7 @@ class AdminExams extends Component {
 
             swal(
                 T.translate('Shared!'),
-                T.translate('Your exercise has been shared.'),
+                T.translate('Your exercise has been shared'),
                 'success'
             );
         })

@@ -67,7 +67,7 @@ class Register extends Component {
         this.props.registerGuestUser(this.state.currentGuestRegistration).then(() => {
             swal(
                 '',
-                T.translate("Your user has been registered."),
+                T.translate("Your user has been registered"),
                 'success'
             );
             this.props.history.goBack();
@@ -108,7 +108,7 @@ class Register extends Component {
                                                onChange={this.handleChange}
                                                invalid={validator.isInvalid('first_name')}
                                                value={currentGuestRegistration.first_name}
-                                               placeholder={T.translate("First name")}/>
+                                               placeholder={T.translate("First Name")}/>
                                         <FormFeedback valid={validator.isValid('first_name')}><i className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('first_name')}</FormFeedback>
                                     </InputGroup>
                                     <InputGroup className="mb-3">

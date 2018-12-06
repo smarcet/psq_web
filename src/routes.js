@@ -1,7 +1,7 @@
 import T from 'i18n-react';
 
 const routes = {
-  '/auth': 'Home',
+  '/auth': T.translate('Home'),
   '/auth/super-admin/dashboard' : T.translate('Dashboard'),
   '/auth/super-admin/devices'   : T.translate('Devices'),
   '/auth/super-admin/devices/new': T.translate('New Device'),

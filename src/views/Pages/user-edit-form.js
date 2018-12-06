@@ -43,7 +43,7 @@ class UserEditForm extends Component {
                 <Col xs="12" md="12">
                     <Card>
                         <CardHeader>
-                            <strong>{ currentEditUser.id > 0 ? `User #${currentEditUser.id}` : T.translate('New User')}</strong>
+                            <strong>{ currentEditUser.id > 0 ? T.translate("User # {user_id}", {user_id: currentEditUser.id})  : T.translate('New User')}</strong>
                         </CardHeader>
                         <CardBody>
                             <Form action="" method="post" encType="multipart/form-data" className="form-horizontal">
@@ -244,7 +244,7 @@ class UserEditForm extends Component {
                                 {config.showPassword &&
                                     <FormGroup row>
                                         <Col md="3">
-                                            <Button color="link" onClick={this.handleOnClickChangePassword}>{!showChangePassword ? T.translate("Change password") : T.translate("Cancel")}</Button>
+                                            <Button color="link" onClick={this.handleOnClickChangePassword}>{!showChangePassword ? T.translate("Change Password") : T.translate("Cancel")}</Button>
                                         </Col>
                                         <Col xs="12" md="9">
                                             &nbsp;

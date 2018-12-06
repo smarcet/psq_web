@@ -205,7 +205,7 @@ class AdminDashBoard extends Component {
             <div className="animated fadeIn">
                 <Row>
                     <Col xs="12" sm="6" lg="6">
-                        <Widget02 header={this.props.users_qty}
+                        <Widget02 header={this.props.users_qty.toString()}
                                   mainText={T.translate("Users")}
                                   icon="fa fa-user"
                                   color="primary"
@@ -213,19 +213,19 @@ class AdminDashBoard extends Component {
                     </Col>
                     <Col xs="12" sm="6" lg="6">
                         <Widget02
-                            header={this.props.user_groups_qty}
+                            header={this.props.user_groups_qty.toString()}
                             mainText={T.translate("User Groups")}
                             icon="fa fa-users" color="primary" footer link="user-groups"/>
                     </Col>
                     <Col xs="12" sm="6" lg="6">
                         <Widget02
-                            header={this.props.devices_qty}
+                            header={this.props.devices_qty.toString()}
                             mainText={T.translate("Devices")}
                             icon="fa fa-video-camera" color="primary" footer link="devices"/>
                     </Col>
                     <Col xs="12" sm="6" lg="6">
                         <Widget02
-                            header={this.props.pending_exams_qty}
+                            header={this.props.pending_exams_qty.toString()}
                             mainText={T.translate("Pending Exams")}
                             icon="fa fa-pencil" color="primary" footer link="exams"/>
                     </Col>

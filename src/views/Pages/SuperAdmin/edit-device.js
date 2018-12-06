@@ -94,7 +94,7 @@ class SuperAdminEditDevice extends Component {
         this.props.updateDevice(this.state.currentEditDevice).then(() => {
             swal(
                 '',
-                T.translate('Your device has been successfully updated!.'),
+                T.translate('Your device has been successfully updated!'),
                 'success'
             );
             this.props.history.goBack();

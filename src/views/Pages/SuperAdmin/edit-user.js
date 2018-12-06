@@ -68,7 +68,7 @@ class SuperAdminEditUser extends Component {
             this.props.updateUser(this.state.currentEditUser).then(() => {
                 swal(
                     '',
-                    T.translate('Your user has been successfully updated!.'),
+                    T.translate('Your user has been successfully updated!'),
                     'success'
                 );
                 this.props.history.goBack();
@@ -79,7 +79,7 @@ class SuperAdminEditUser extends Component {
         this.props.createNewUser(this.state.currentEditUser).then(() => {
             swal(
                 '',
-                T.translate('Your user has been successfully created!.'),
+                T.translate('Your user has been successfully created!'),
                 'success'
             );
             this.props.history.goBack();

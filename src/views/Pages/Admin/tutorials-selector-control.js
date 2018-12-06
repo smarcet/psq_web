@@ -32,7 +32,7 @@ class TutorialsSelectorControl extends Component{
                         )
                     })
                     }
-                    <FormText className="help-block">{T.translate('Please select all allowed tutorials for this exercise.')}</FormText>
+                    <FormText className="help-block">{T.translate('Please select all allowed tutorials for this exercise')}</FormText>
                     <FormFeedback valid={validator.isValid(fieldName)}><i className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage(fieldName)}</FormFeedback>
                 </Col>
 

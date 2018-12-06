@@ -32,20 +32,31 @@ class UserNews extends Component {
                                 <i className="fa fa-align-justify"></i> {T.translate("News")}
                             </CardHeader>
                             <CardBody>
+                                {
+                                    news.length == 0 &&
+                                    <Row>
+                                        <Col xs="12" sm="12" lg="12">
+                                            <p>{T.translate("List is empty")}</p>
+                                        </Col>
+                                    </Row>
+                                }
+                                {news.length > 0 &&
                                 <ListGroup>
-                                    { news.map((news_item ,i) => {
+                                    {news.map((news_item, i) => {
 
                                         return (
-                                        <ListGroupItem key={i} className="justify-content-between">
-                                            <p>
-                                                <b>{news_item.title}</b>&nbsp;<Badge color="success">{new Date(news_item.created).toLocaleString()}</Badge>
-                                            </p>
-                                            <hr></hr>
-                                            <p>{news_item.body}</p>
-                                        </ListGroupItem>
+                                            <ListGroupItem key={i} className="justify-content-between">
+                                                <p>
+                                                    <b>{news_item.title}</b>&nbsp;<Badge
+                                                    color="success">{new Date(news_item.created).toLocaleString()}</Badge>
+                                                </p>
+                                                <hr></hr>
+                                                <p>{news_item.body}</p>
+                                            </ListGroupItem>
                                         );
                                     })}
                                 </ListGroup>
+                                }
                             </CardBody>
                         </Card>
                     </Col>

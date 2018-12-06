@@ -59,14 +59,14 @@ class DeviceEditForm extends Component {
                                 </FormGroup>
                                 <FormGroup row>
                                     <Col md="3">
-                                        <Label htmlFor="slots">{T.translate("Max. Slots #")}</Label>
+                                        <Label htmlFor="slots">{T.translate("Slots #")}</Label>
                                     </Col>
                                     <Col xs="12" md="9">
                                         <Input type="number" id="slots" name="slots"
                                                value={device.slots}
                                                readOnly={true}
                                         />
-                                        <FormText className="help-block">{T.translate("Max. # Users to associate with device")}</FormText>
+                                        <FormText className="help-block">{T.translate("Maximum # Users to associate with device")}</FormText>
                                     </Col>
                                 </FormGroup>
                                 <FormGroup row>

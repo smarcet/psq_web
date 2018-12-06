@@ -101,7 +101,7 @@ class ExerciseEditForm extends Component{
                                 </FormGroup>
                                 <FormGroup row>
                                     <Col md="3">
-                                        <Label htmlFor="max_duration">{T.translate('Max. Duration')}</Label>
+                                        <Label htmlFor="max_duration">{T.translate('Maximum Duration')}</Label>
                                     </Col>
                                     <Col xs="12" md="9">
                                         <Input
@@ -110,7 +110,7 @@ class ExerciseEditForm extends Component{
                                             value={currentEditExercise.max_duration > 0 ? currentEditExercise.max_duration / 60 : ""}
                                             type="number" id="max_duration" name="max_duration"/>
                                         <FormFeedback valid={validator.isValid('max_duration')}><i className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('max_duration')}</FormFeedback>
-                                        <FormText className="help-block">{T.translate('Please set the max. exercise duration in minutes.')}</FormText>
+                                        <FormText className="help-block">{T.translate('Please set the maximum exercise duration in minutes')}</FormText>
                                     </Col>
                                 </FormGroup>
                                 <FormGroup row>
@@ -147,8 +147,8 @@ class ExerciseEditForm extends Component{
                             </Form>
                         </CardBody>
                         <CardFooter>
-                            <Button type="submit" size="sm" color="primary" onClick={onSave}><i className="fa fa-dot-circle-o"></i> Save</Button>{' '}
-                            <Button type="reset" size="sm" color="danger" onClick={onCancel}><i className="fa fa-ban"></i> Cancel</Button>
+                            <Button type="submit" size="sm" color="primary" onClick={onSave}><i className="fa fa-dot-circle-o"></i> {T.translate("Save")}</Button>{' '}
+                            <Button type="reset" size="sm" color="danger" onClick={onCancel}><i className="fa fa-ban"></i> {T.translate("Cancel")}</Button>
                         </CardFooter>
                     </Card>
                 </Col>

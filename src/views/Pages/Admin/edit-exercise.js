@@ -47,7 +47,7 @@ class AdminEditExercise extends Component {
             this.props.updateExercise(this.state.currentEditExercise).then(() => {
                 swal(
                     '',
-                    T.translate("Your exercise has been successfully updated!."),
+                    T.translate("Your exercise has been successfully updated!"),
                     'success'
                 );
                 this.props.history.goBack();
@@ -56,7 +56,7 @@ class AdminEditExercise extends Component {
             this.props.addNewExercise(this.state.currentEditExercise).then(() => {
                 swal(
                     '',
-                    T.translate("Your exercise has been successfully created!."),
+                    T.translate("Your exercise has been successfully created!"),
                     'success'
                 );
                 this.props.history.goBack();

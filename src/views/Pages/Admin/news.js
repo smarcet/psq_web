@@ -59,7 +59,7 @@ class AdminNews extends Component {
                 this.props.deleteNews(newsItem).then(() => {
                     swal(
                         T.translate("Deleted!"),
-                        T.translate("Your news item has been deleted."),
+                        T.translate("Your news item has been deleted"),
                         'success'
                     )
                 });

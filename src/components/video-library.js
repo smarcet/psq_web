@@ -111,7 +111,7 @@ class VideoLibrary extends Component {
 
             swal(
                 T.translate('Shared!'),
-                T.translate('Your video has been shared.'),
+                T.translate('Your video has been shared'),
                 'success'
             );
         })
@@ -165,9 +165,19 @@ class VideoLibrary extends Component {
                                 </Row>
                                 <Row style={{marginBottom:'10px'}}>
                                     <Col lg="12">
-                                        <ListGroup>
-                                            { videos.map((video ,i) => {
-                                                let { taker, exercise } = video;
+
+                                        {
+                                            videos.length == 0 &&
+                                            <Row>
+                                                <Col xs="12" sm="12" lg="12">
+                                                    <p>{T.translate("List is empty")}</p>
+                                                </Col>
+                                            </Row>
+                                        }
+                                        {videos.length > 0 &&
+                                            <ListGroup>
+                                            {videos.map((video, i) => {
+                                                let {taker, exercise} = video;
                                                 let videos_inner = video.videos;
                                                 return (
                                                     <ListGroupItem key={i} className="justify-content-between">
@@ -175,9 +185,13 @@ class VideoLibrary extends Component {
                                                             <Col xs="12" lg="10">
                                                                 <Row>
                                                                     <Col xs="12" lg="4">
-                                                                        <video data-video-id={video.id} className="rounded img-fluid mx-auto d-block" controls>
-                                                                            { videos_inner.map((video_inner, idx) =>
-                                                                                <source src={video_inner.video_url} key={idx} type={video_inner.type}></source>
+                                                                        <video data-video-id={video.id}
+                                                                               className="rounded img-fluid mx-auto d-block"
+                                                                               controls>
+                                                                            {videos_inner.map((video_inner, idx) =>
+                                                                                <source src={video_inner.video_url}
+                                                                                        key={idx}
+                                                                                        type={video_inner.type}></source>
                                                                             )}
                                                                         </video>
                                                                     </Col>
@@ -189,7 +203,8 @@ class VideoLibrary extends Component {
                                                                         }
                                                                     </Col>
                                                                     <Col xs="12" lg="12">
-                                                                        {taker.id != currentUser.id && <Badge color="success">{T.translate("Shared By")}</Badge> }
+                                                                        {taker.id != currentUser.id && <Badge
+                                                                            color="success">{T.translate("Shared By")}</Badge>}
                                                                         {' '}
                                                                         <b>{T.translate("Author")}</b>: {taker.first_name} {taker.last_name}
                                                                     </Col>
@@ -199,8 +214,11 @@ class VideoLibrary extends Component {
                                                                 </Row>
                                                             </Col>
                                                             <Col xs="12" lg="2">
-                                                                {taker.id == currentUser.id&&
-                                                                <Button outline color="primary" onClick={() => this.shareVideo(video)}><i className="fa fa-share"></i>&nbsp;share</Button>
+                                                                {taker.id == currentUser.id &&
+                                                                <Button outline color="primary"
+                                                                        onClick={() => this.shareVideo(video)}><i
+                                                                    className="fa fa-share"></i>&nbsp;{T.translate("Share")}
+                                                                </Button>
                                                                 }
                                                             </Col>
                                                         </Row>
@@ -208,6 +226,7 @@ class VideoLibrary extends Component {
                                                 );
                                             })}
                                         </ListGroup>
+                                        }
                                     </Col>
                                 </Row>
                                 <PaginationContainer

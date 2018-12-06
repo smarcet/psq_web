@@ -59,7 +59,7 @@ class AdminUsers extends Component {
     onClickReSendVerification(event, user) {
         this.props.resendUserVerification(user.id).then(() => swal(
             T.translate('Success!'),
-            T.translate('Your user has been notified.'),
+            T.translate('Your user has been notified'),
             'success'
         ))
     }
@@ -76,7 +76,7 @@ class AdminUsers extends Component {
             if (result.value) {
                 this.props.deleteUser(user.id, user.role).then(() => swal(
                     T.translate('Deleted!'),
-                    T.translate('Your user has been deleted.'),
+                    T.translate('Your user has been deleted'),
                     'success'
                 ));
 

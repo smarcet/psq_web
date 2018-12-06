@@ -89,7 +89,7 @@ class ActivateUser extends Component {
         this.props.doActivateUser(this.state.formData).then(() => {
             swal(
                 T.translate('Success!'),
-                T.translate('Your user has been successfully activated!.'),
+                T.translate('Your user has been successfully activated!'),
                 'success'
             );
             this.props.history.push('/')

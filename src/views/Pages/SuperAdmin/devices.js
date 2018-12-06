@@ -77,7 +77,7 @@ class SuperAdminDevices extends Component {
             if (result.value) {
                 this.props.deleteDevice(device.id).then(() =>  swal(
                     T.translate('Deleted!'),
-                    T.translate('Your device has been deleted.'),
+                    T.translate('Your device has been deleted'),
                     'success'
                 ))
             }

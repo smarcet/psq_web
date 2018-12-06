@@ -211,7 +211,7 @@ class AdmimEvaluateExam extends Component {
                                                    value={currentEditExam.notes}
                                                    invalid={validator.isInvalid('notes')}
                                                    onChange={this.handleChange}
-                                                   placeholder={T.translate("Leave your evaluation notes ...")}/>
+                                                   placeholder={T.translate("Leave your evaluation notes")}/>
                                             <FormFeedback valid={validator.isValid('notes')}><i className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('notes')}</FormFeedback>
                                         </Col>
                                     </FormGroup>
