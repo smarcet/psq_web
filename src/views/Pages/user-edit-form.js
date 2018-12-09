@@ -291,7 +291,7 @@ class UserEditForm extends Component {
                                                name="bio"
                                                id="bio"
                                                rows="9"
-                                               placeholder={T.translate("Enter your bio...")}
+                                               placeholder={T.translate("Enter your bio")}
                                                value={currentEditUser.bio}
                                                invalid={validator.isInvalid('bio')}
                                         />

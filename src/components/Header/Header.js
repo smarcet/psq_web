@@ -1,12 +1,10 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import {
   Nav,
   NavbarBrand,
   NavbarToggler,
   NavItem,
-  NavLink,
-  Badge
+  NavLink
 } from 'reactstrap';
 import HeaderDropdown from './HeaderDropdown';
 
@@ -37,6 +35,7 @@ class Header extends Component {
   }
 
   render() {
+    console.log("Header.render");
     let { currentUser } = this.props;
     return (
       <header className="app-header navbar">

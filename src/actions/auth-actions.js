@@ -43,8 +43,9 @@ export const doLogin = (history, username, password ) => (dispatch) => {
                 T.setTexts(require(`../i18n/${language}.json`));
             }
             console.log(`going to ${backUrl}`);
-            if(backUrl != '' && backUrl != null)
+            if(backUrl != '' && backUrl != null) {
                 history.push(backUrl);
+            }
         });
     });
 

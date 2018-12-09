@@ -10,12 +10,13 @@ import SidebarForm from './../SidebarForm';
 import SidebarHeader from './../SidebarHeader';
 import SidebarMinimizer from './../SidebarMinimizer';
 import {SUPERVISOR, TEACHER} from "../../constants";
+import T from "i18n-react/dist/i18n-react";
+import '../../i18n';
 
 class Sidebar extends Component {
 
   constructor(props) {
     super(props);
-
     this.handleClick = this.handleClick.bind(this);
     this.activeRoute = this.activeRoute.bind(this);
     this.hideMobile = this.hideMobile.bind(this);
@@ -30,7 +31,6 @@ class Sidebar extends Component {
   activeRoute(routeName, props) {
     // return this.props.location.pathname.indexOf(routeName) > -1 ? 'nav-item nav-dropdown open' : 'nav-item nav-dropdown';
     return props.location.pathname.indexOf(routeName) > -1 ? 'nav-item nav-dropdown open' : 'nav-item nav-dropdown';
-
   }
 
   hideMobile() {
@@ -46,7 +46,7 @@ class Sidebar extends Component {
 
 
   render() {
-
+    console.log("Sidebar.render");
     const props = this.props;
 
     // badge addon to NavItem
@@ -107,11 +107,11 @@ class Sidebar extends Component {
         <NavItem key={key} className={classes.item}>
           { isExternal(url) ?
             <RsNavLink href={url} className={classes.link} active>
-              <i className={classes.icon}></i>{item.name}{badge(item.badge)}
+              <i className={classes.icon}></i>{T.translate(item.name)}{badge(item.badge)}
             </RsNavLink>
             :
             <NavLink to={url} className={classes.link} activeClassName="active" onClick={this.hideMobile}>
-              <i className={classes.icon}></i>{item.name}{badge(item.badge)}
+              <i className={classes.icon}></i>{T.translate(item.name)}{badge(item.badge)}
             </NavLink>
           }
         </NavItem>
