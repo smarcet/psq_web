@@ -22,7 +22,7 @@ export const getExercisesByPage = (currentPage = 1, pageSize = DEFAULT_PAGE_SIZE
             params['search'] = searchTerm;
         }
 
-        getRequest(
+        return getRequest(
             createAction(START_LOADING),
             createAction(RETRIEVED_EXERCISES_READ_ONLY),
             `${apiBaseUrl}/exercises`,

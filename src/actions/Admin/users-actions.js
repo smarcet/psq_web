@@ -3,6 +3,7 @@ import {authErrorHandler, START_LOADING, STOP_LOADING} from "../base-actions";
 import {DEFAULT_PAGE_SIZE} from "../../constants";
 
 export const RETRIEVED_MY_USERS = 'RETRIEVED_MY_USERS';
+export const RETRIEVED_ALLOWED_MY_USERS=  'RETRIEVED_ALLOWED_MY_USERS';
 
 export const getMyUsersByPage = (currentPage = 1, pageSize = DEFAULT_PAGE_SIZE, searchTerm = '', ordering = '') => (dispatch, getState) => {
     let { loggedUserState } = getState();
@@ -28,6 +29,39 @@ export const getMyUsersByPage = (currentPage = 1, pageSize = DEFAULT_PAGE_SIZE, 
         createAction(START_LOADING),
         createAction(RETRIEVED_MY_USERS),
         `${apiBaseUrl}/users/created-by/me`,
+        authErrorHandler,
+    )(params)(dispatch).then((payload) => {
+        dispatch({
+            type: STOP_LOADING,
+            payload: {}
+        });
+    });
+}
+
+export const getMyAllowedUsersByPage = (currentPage = 1, pageSize = DEFAULT_PAGE_SIZE, searchTerm = '', ordering = '') => (dispatch, getState) => {
+    let { loggedUserState } = getState();
+    let { token }           = loggedUserState;
+    let apiBaseUrl          = process.env['API_BASE_URL'];
+
+    if(ordering == ''){
+        ordering = 'id';
+    }
+
+    let params = {
+        token : token,
+        page: currentPage,
+        page_size : pageSize,
+        ordering  : ordering
+    };
+
+    if(searchTerm != ''){
+        params['search'] = searchTerm;
+    }
+
+    getRequest(
+        createAction(START_LOADING),
+        createAction(RETRIEVED_ALLOWED_MY_USERS),
+        `${apiBaseUrl}/admin-users/me/users`,
         authErrorHandler,
     )(params)(dispatch).then((payload) => {
         dispatch({

@@ -132,7 +132,7 @@ export const searchAllowedUsers = (searchTerm, pageSize) =>  (dispatch, getState
     getRequest(
         createAction(START_LOADING),
         createAction(RETRIEVED_USER_GROUPS_ALLOWED_USERS),
-        `${apiBaseUrl}/users/created-by/me`,
+        `${apiBaseUrl}/admin-users/me/users`,
         authErrorHandler,
     )(params)(dispatch).then((payload) => {
         dispatch({

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Input, FormGroup, Form, Button, Label, Row, Col} from 'reactstrap';
 import DatePicker from 'react-datepicker';
+import {TEACHER} from "../../constants";
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 import T from "i18n-react";
@@ -8,6 +9,7 @@ import '../../scss/statistics.scss';
 import {connect} from "react-redux";
 import {getExercisesByPage} from "../../actions/User/exercises-actions";
 import {getStatisticsForExercise, clearStatistics} from "../../actions/statistics-actions";
+import {getMyAllowedUsersByPage} from '../../actions/Admin/users-actions';
 import {Line} from 'react-chartjs-2';
 import swal from "sweetalert2";
 
@@ -19,10 +21,12 @@ class UserStatistics extends Component {
             startDate: moment(),
             endDate: moment(),
             exercise: 0,
+            user : 0
         };
         this.handleChangeStartDate = this.handleChangeStartDate.bind(this);
         this.handleChangeEndDate = this.handleChangeEndDate.bind(this);
         this.handleChangeExercise = this.handleChangeExercise.bind(this);
+        this.handleChangeUser = this.handleChangeUser.bind(this);
         this.getStatistics = this.getStatistics.bind(this);
         this.props.clearStatistics();
     }
@@ -41,8 +45,18 @@ class UserStatistics extends Component {
         });
     }
 
+    handleChangeUser(event){
+        let {value} = event.target;
+
+        this.setState({
+            user: value
+        });
+    }
+
     componentWillMount() {
-        this.props.getExercisesByPage(1, 9999999999);
+        this.props.getExercisesByPage(1, 9999999999).then(()=>{
+            this.props.getMyAllowedUsersByPage(1, 9999999999);
+        });
     }
 
     handleChangeEndDate(date) {
@@ -52,7 +66,7 @@ class UserStatistics extends Component {
     }
 
     getStatistics(){
-        let {exercise, startDate, endDate} = this.state;
+        let {exercise, startDate, endDate, user} = this.state;
         let unixStarDate = startDate.hours(0).minutes(0).seconds(0).milliseconds(0).unix();
         let unixEndDate = endDate.hours(23).minutes(59).seconds(59).milliseconds(999).unix();
         if(exercise == 0){
@@ -63,16 +77,33 @@ class UserStatistics extends Component {
             );
             return
         }
-        this.props.getStatisticsForExercise(exercise, unixStarDate, unixEndDate);
+        if(user == 0){
+            swal(
+                '',
+                T.translate('You must select an user'),
+                'warning'
+            );
+            return
+        }
+        this.props.getStatisticsForExercise(exercise, user, unixStarDate, unixEndDate);
     }
 
     render(){
-        let {exercises, best_time_per_day, instances_per_day, total_instances,best_time, max_instances_per_day} = this.props;
+        let {exercises,
+            allowed_users,
+            best_time_per_day,
+            instances_per_day,
+            total_instances,
+            best_time,
+            max_instances_per_day,
+            currentUser} = this.props;
+
         if(exercises == null || exercises.length <= 0) return (<div>
             <p>
                 <b>{T.translate("Data not available")}</b>
             </p>
         </div>);
+
         let data1 = null;
         let data2 = null;
         if(best_time_per_day && best_time_per_day.length > 0 )
@@ -145,6 +176,20 @@ class UserStatistics extends Component {
                         }
                     </Input>
                 </FormGroup>
+                    { currentUser.role == TEACHER &&
+                        <FormGroup className="user-container">
+                            <Label for="user" className="mr-sm-2">{T.translate("User")}&nbsp;</Label>
+                            <Input type="select" name="user" id="user" onChange={this.handleChangeUser}>
+                                <option value="0">{T.translate("-- Select an User --")}</option>
+                                <option value={currentUser.id}>{T.translate("Me")}</option>
+                                {
+                                    allowed_users.map((user, idx) => {
+                                        return <option value={user.id} key={idx}>{user.first_name+" ,"+user.last_name}</option>
+                                    })
+                                }
+                            </Input>
+                        </FormGroup>
+                    }
                 <FormGroup>
                     <Label for="startDate" className="mr-sm-2">{T.translate("From")}&nbsp;</Label>
                     <DatePicker
@@ -202,12 +247,14 @@ const mapStateToProps = ({loggedUserState, userExercisesState, statisticsState})
     best_time: statisticsState.best_time,
     best_time_per_day: statisticsState.best_time_per_day,
     instances_per_day: statisticsState.instances_per_day,
+    allowed_users: statisticsState.allowed_users,
 });
 
 export default connect(
     mapStateToProps,
     {
         getExercisesByPage,
+        getMyAllowedUsersByPage,
         getStatisticsForExercise,
         clearStatistics,
     }

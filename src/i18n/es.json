@@ -287,5 +287,9 @@
    "Maximum # Users to associate with device": "# Usuarios  associados a este dispositivo",
    "Repetitions on Period:": "Repeticiones en el Periodo:",
    "Max Repetition/Day:":"Max Repeticiones/Dia:",
-   "Best Time (seconds):":"Mejor Tiempo (segundos):"
+   "Best Time (seconds):":"Mejor Tiempo (segundos):",
+   "User": "Usuario",
+   "-- Select an User --": "-- Seleccione Usuario --",
+   "Me": "Yo",
+   "You must select an user": "Debe seleccionar un usuario"
 }

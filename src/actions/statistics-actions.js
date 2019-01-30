@@ -6,7 +6,7 @@ import {
 export const RETRIEVED_EXERCISE_STATISTIC_DATA = 'RETRIEVED_EXERCISE_STATISTIC_DATA';
 export const CLEAR_EXERCISE_STATISTIC_DATA = 'CLEAR_EXERCISE_STATISTIC_DATA';
 
-export const getStatisticsForExercise = (exercise, startDate, endDate) => (dispatch, getState) => {
+export const getStatisticsForExercise = (exercise, user, startDate, endDate) => (dispatch, getState) => {
     let {loggedUserState} = getState();
     let {token} = loggedUserState;
     let apiBaseUrl = process.env['API_BASE_URL'];
@@ -23,7 +23,7 @@ export const getStatisticsForExercise = (exercise, startDate, endDate) => (dispa
     return getRequest(
         createAction(START_LOADING),
         createAction(RETRIEVED_EXERCISE_STATISTIC_DATA),
-        `${apiBaseUrl}/exercises/${exercise}/statistics/${startDate}/${endDate}`,
+        `${apiBaseUrl}/exercises/${exercise}/users-statistics/${user}/${startDate}/${endDate}`,
         authErrorHandler,
     )(params)(dispatch).then((payload) => {
         dispatch({
