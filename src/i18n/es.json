@@ -185,7 +185,7 @@
    "Serial Number":"Nro. de Serie",
    "Server Error":"Error de Servidor",
    "Session expired":"Sesion expirada!",
-   "Settings":"Seteos",
+   "Settings":"Configuracion",
    "Share":"Compartir",
    "Share Exercise":"Compartir ejercicio",
    "Share exercise":"Compartir ejercicio",
@@ -291,5 +291,11 @@
    "User": "Usuario",
    "-- Select an User --": "-- Seleccione Usuario --",
    "Me": "Yo",
-   "You must select an user": "Debe seleccionar un usuario"
+   "You must select an user": "Debe seleccionar un usuario",
+   "{field} is mandatory" : "{field} es obligatorio",
+   "{field} is not valid": "{field} no es valido",
+   "{field} should be greater than {arg1}" : "{field} debe ser mayor que {arg1}",
+   "{field} should be lower or equal than {arg1}" : "{field} debe ser menor o igual que {arg1}",
+   "{field} should a equals to {field2}" : "{field} debe ser igual a {field2}",
+   "{field} have a minimum length of {min_len}": "{field} debe tener una longitud de {min_len}"
 }

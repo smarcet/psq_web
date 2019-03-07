@@ -12,6 +12,7 @@ export const UNLINKED_ADMIN_USER_2_DEVICE = 'UNLINKED_ADMIN_USER_2_DEVICE';
 export const RETRIEVED_ADMIN_USERS = 'RETRIEVED_ADMIN_USERS';
 export const UPDATED_DEVICE = 'UPDATED_DEVICE';
 export const RETRIEVED_ALL_DEVICES = 'RETRIEVED_ALL_DEVICES';
+export const CLEAN_ADMIN_USERS = 'CLEAN_ADMIN_USERS';
 
 export const getMyDevicesByPage = (currentPage = 1, pageSize = DEFAULT_PAGE_SIZE, searchTerm = '', ordering = 'id') => (dispatch, getState) => {
     let { loggedUserState } = getState();
@@ -209,6 +210,14 @@ export const searchAdminUsers = (searchTerm = '', naxResults = 5) => (dispatch, 
     let { loggedUserState } = getState();
     let { token }           = loggedUserState;
     let apiBaseUrl          = process.env['API_BASE_URL'];
+
+    if(searchTerm == ''){
+        dispatch({
+            type: CLEAN_ADMIN_USERS,
+            payload: {}
+        });
+        return;
+    }
 
     let params = {
         token : token,

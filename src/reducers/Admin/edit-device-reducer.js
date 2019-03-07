@@ -7,7 +7,8 @@ import {
     UNLINKED_USER_2_DEVICE,
     RETRIEVED_ADMIN_USERS,
     LINKED_ADMIN_USER_2_DEVICE,
-    UNLINKED_ADMIN_USER_2_DEVICE
+    UNLINKED_ADMIN_USER_2_DEVICE,
+    CLEAN_ADMIN_USERS
 } from "../../actions/Admin/devices-actions";
 
 export const DEFAULT_DEVICE = {
@@ -50,6 +51,12 @@ const adminEditDevicesReducer = (state = DEFAULT_STATE, action) => {
             return {
                 ...state,
                 matchedDeviceAdminUsers: action.payload.response.results,
+            };
+        }
+        case CLEAN_ADMIN_USERS : {
+            return {
+                ...state,
+                matchedDeviceAdminUsers: [],
             };
         }
         case LINKED_USER_2_DEVICE:{

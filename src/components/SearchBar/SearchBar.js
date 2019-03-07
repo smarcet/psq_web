@@ -26,6 +26,27 @@ class SearchBar extends Component {
         this.onSelectedItem = this.onSelectedItem.bind(this);
         this.onChangeSearchInput = this.onChangeSearchInput.bind(this);
         this.onClickPrimaryAction = this.onClickPrimaryAction.bind(this);
+        this.lostFocus = this.lostFocus.bind(this);
+        this.gotFocus  = this.gotFocus.bind(this);
+
+    }
+
+    lostFocus(event){
+        window.setTimeout(() => {
+            if(this.state.isOpenDropDown)
+                this.setState({ ...this.state,
+                    isOpenDropDown: false
+                });
+        }, 300);
+    }
+
+    gotFocus(){
+        if(this.props.currentItems == null || this.props.currentItems.length == 0){
+            return;
+        }
+        this.setState({ ...this.state,
+            isOpenDropDown: true
+        });
     }
 
     toggleDropDown() {
@@ -34,7 +55,6 @@ class SearchBar extends Component {
             return;
         }
         if(this.props.currentItems != null || this.props.currentItems.length == 0){
-
             return;
         }
         this.setState({ ...this.state,
@@ -73,14 +93,24 @@ class SearchBar extends Component {
         });
     }
 
-    onChangeSearchInput(event){
-
-        let { value } = event.target;
-        let isOpenDropDown = false;
-        this.props.handleChangeSearchTerm(value);
-        if(this.props.currentItems != null && this.props.currentItems.length > 0){
-            isOpenDropDown = true;
+    componentDidUpdate(prevProps, prevState, snapshot){
+        if(this.props.currentItems.length > 0 && prevProps.currentItems.length !=  this.props.currentItems.length){
+            this.setState({ ...this.state,
+                isOpenDropDown: true,
+            });
         }
+    }
+
+    onChangeSearchInput(event){
+        let { value } = event.target;
+        let { isOpenDropDown } = this.state;
+
+        this.props.handleChangeSearchTerm(value);
+
+        if(value == ''){
+            isOpenDropDown = false;
+        }
+
         this.setState({ ...this.state,
             currentSelectedDevice: null,
             isOpenDropDown: isOpenDropDown,
@@ -108,8 +138,14 @@ class SearchBar extends Component {
                         this.toggleDropDown();}}>
                         <DropdownToggle>
                         </DropdownToggle>
-                        <Input type="text" onChange={this.onChangeSearchInput} id={`search_term_${searchId}`} name={`search_term_${searchId}`} placeholder={searchPlaceHolder}/>
-                        <DropdownMenu right>
+                        <Input type="text" onChange={this.onChangeSearchInput}
+                               id={`search_term_${searchId}`}
+                               name={`search_term_${searchId}`}
+                               placeholder={searchPlaceHolder}
+                               onBlur={this.lostFocus}
+                               onFocus={this.gotFocus}
+                        />
+                        <DropdownMenu>
                             { currentItems.map((item, i) => {
 
                                 return (

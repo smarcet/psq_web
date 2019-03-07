@@ -12,6 +12,7 @@ import {getStatisticsForExercise, clearStatistics} from "../../actions/statistic
 import {getMyAllowedUsersByPage} from '../../actions/Admin/users-actions';
 import {Line} from 'react-chartjs-2';
 import swal from "sweetalert2";
+import es from 'date-fns/locale/es';
 
 class UserStatistics extends Component {
 
@@ -164,21 +165,22 @@ class UserStatistics extends Component {
 
         return (
             <div className="animated fadeIn">
-                <Form inline>
-                <FormGroup>
-                    <Label for="exercise" className="mr-sm-2">{T.translate("Exercise")}&nbsp;</Label>
-                    <Input type="select" name="exercise" id="exercise" onChange={this.handleChangeExercise}>
-                        <option value="0">{T.translate("-- Select Exercise --")}</option>
-                        {
-                            exercises.map((exercise, idx) => {
-                                return <option value={exercise.id} key={idx}>{exercise.title}</option>
-                            })
-                        }
-                    </Input>
-                </FormGroup>
-                    { currentUser.role == TEACHER &&
-                        <FormGroup className="user-container">
-                            <Label for="user" className="mr-sm-2">{T.translate("User")}&nbsp;</Label>
+
+               <Row className="statistics-search-form">
+                <Col xs="12" md="2" lg="3">
+                        <Input type="select" name="exercise" id="exercise" onChange={this.handleChangeExercise}>
+                            <option value="0">{T.translate("-- Select Exercise --")}</option>
+                            {
+                                exercises.map((exercise, idx) => {
+                                    return <option value={exercise.id} key={idx}>{exercise.title}</option>
+                                })
+                            }
+                        </Input>
+
+                </Col>
+
+                   { currentUser.role == TEACHER &&
+                        <Col xs="12" md="2" lg="3">
                             <Input type="select" name="user" id="user" onChange={this.handleChangeUser}>
                                 <option value="0">{T.translate("-- Select an User --")}</option>
                                 <option value={currentUser.id}>{T.translate("Me")}</option>
@@ -188,26 +190,30 @@ class UserStatistics extends Component {
                                     })
                                 }
                             </Input>
-                        </FormGroup>
+                        </Col>
                     }
-                <FormGroup>
-                    <Label for="startDate" className="mr-sm-2">{T.translate("From")}&nbsp;</Label>
-                    <DatePicker
-                        name='startDate'
-                        selected={this.state.startDate}
-                        onChange={this.handleChangeStartDate}
-                    />
-                </FormGroup>
-                <FormGroup>
-                    <Label for="endDate" className="mr-sm-2">{T.translate("To")}&nbsp;</Label>
-                    <DatePicker
-                        name='endDate'
-                        selected={this.state.endDate}
-                        onChange={this.handleChangeEndDate}
-                    />
-                </FormGroup>
-                    <Button outline color="primary" onClick={this.getStatistics}><i className="fa fa-search"></i>&nbsp;{T.translate("Get Statistics")}</Button>
-                </Form>
+                   <Col xs="12" md="2" lg="2">
+                            <DatePicker
+                                dateFormat="DD/MM/Y"
+                                name='startDate'
+                                locale="es"
+                                selected={this.state.startDate}
+                                onChange={this.handleChangeStartDate}
+                            />
+                   </Col>
+                   <Col xs="12" md="2" lg="2">
+                            <DatePicker
+                                name='endDate'
+                                dateFormat="DD/MM/Y"
+                                locale="es"
+                                selected={this.state.endDate}
+                                onChange={this.handleChangeEndDate}
+                            />
+                   </Col>
+                   <Col xs="12" md="2" lg="2">
+                        <Button outline color="primary" onClick={this.getStatistics}><i className="fa fa-search"></i>&nbsp;{T.translate("Search")}</Button>
+                   </Col>
+               </Row>
                 <Row>
                     <Col>
                     { data1 != null &&
