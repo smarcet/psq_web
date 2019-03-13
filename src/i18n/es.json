@@ -306,5 +306,9 @@
    "Advance": "Avance",
    "Days": "Dia",
    "Instances #": "Instancias #",
-   "Seconds" : "Segundos"
+   "Seconds" : "Segundos",
+   "Practice Days": "Dias de Practica",
+   "Daily Repetitions": "Repeticiones Diarias",
+   "Please set the minimun daily repetitions": "Por favor especifique el minimo de repeticiones diarias",
+   "Please set the minimun of practice days": "Por favor especifique el minimo de dias de practica"
 }

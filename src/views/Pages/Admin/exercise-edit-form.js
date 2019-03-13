@@ -124,7 +124,7 @@ class ExerciseEditForm extends Component{
                                             value={currentEditExercise.daily_repetitions}
                                             type="number" id="daily_repetitions" name="daily_repetitions"/>
                                         <FormFeedback valid={validator.isValid('daily_repetitions')}><i className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('daily_repetitions')}</FormFeedback>
-                                        <FormText className="help-block">{T.translate('Please set the maximum exercise duration in minutes')}</FormText>
+                                        <FormText className="help-block">{T.translate('Please set the minimun daily repetitions')}</FormText>
                                     </Col>
                                 </FormGroup>
                                 <FormGroup row>
@@ -138,7 +138,7 @@ class ExerciseEditForm extends Component{
                                             value={currentEditExercise.practice_days}
                                             type="number" id="practice_days" name="practice_days"/>
                                         <FormFeedback valid={validator.isValid('practice_days')}><i className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('practice_days')}</FormFeedback>
-                                        <FormText className="help-block">{T.translate('Please set the maximum exercise duration in minutes')}</FormText>
+                                        <FormText className="help-block">{T.translate('Please set the minimun of practice days')}</FormText>
                                     </Col>
                                 </FormGroup>
                                 <FormGroup row>
