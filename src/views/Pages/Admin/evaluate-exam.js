@@ -95,7 +95,7 @@ class AdmimEvaluateExam extends Component {
                 this.props.approveExam(this.state.currentEditExam).then(() => {
                     swal(
                         T.translate('Approved!'),
-                        T.translate('Exam has been Approved.'),
+                        T.translate('Exam has been Approved'),
                         'success'
                     );
                     this.props.history.push("/auth/admin/exams");
@@ -127,7 +127,7 @@ class AdmimEvaluateExam extends Component {
                 this.props.rejectExam(this.state.currentEditExam).then(() => {
                     swal(
                         T.translate('Rejected!'),
-                        T.translate('Exam has been rejected.'),
+                        T.translate('Exam has been rejected'),
                         'success'
                     )
                     this.props.history.push("/auth/admin/exams");
