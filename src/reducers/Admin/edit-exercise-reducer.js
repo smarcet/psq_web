@@ -13,6 +13,8 @@ export const DEFAULT_EXERCISE = {
     author: 0,
     allowed_devices: [],
     allowed_tutorials: [],
+    daily_repetitions: 0,
+    practice_days: 0
 }
 
 const DEFAULT_STATE = {

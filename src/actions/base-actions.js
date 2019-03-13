@@ -296,6 +296,55 @@ export const authErrorHandler = (err, res) => (dispatch) => {
     }
 }
 
+export const authBasicErrorHandler = (err, res) => (dispatch) => {
+    let code = err.status;
+    dispatch(stopLoading());
+
+    let msg = '';
+
+    switch (code) {
+        case 403:
+            swal("ERROR",
+                T.translate("Not Authorized user"),
+                "warning");
+            break;
+        case 400:
+            swal("ERROR",
+                T.translate("Invalid User"),
+                "warning");
+            break;
+        case 401:
+            swal("ERROR",
+                T.translate("Not Authenticated User"),
+                "error");
+            dispatch({
+                type: LOGOUT_USER,
+                payload: {
+                    persistStore: true
+                }
+            });
+            break;
+        case 412:
+            for (var [key, value] of Object.entries(err.response.body)) {
+                msg += '- ' + value + '<br>';
+            }
+            swal(
+                T.translate("Validation error")
+                , msg, "warning");
+            dispatch({
+                type: VALIDATE,
+                payload: {errors: err.response.body}
+            });
+            break;
+        case 404:
+            break;
+        default:
+            swal("ERROR",
+                T.translate("Server Error"),
+                "error");
+    }
+}
+
 export const fetchErrorHandler = (response) => {
     let code = response.status;
     let msg = response.statusText;

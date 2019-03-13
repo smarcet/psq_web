@@ -46,21 +46,7 @@ class SuperAdminDevices extends Component {
     }
 
     onClickVerifyDevice(event, device){
-        swal({
-            title: T.translate('Enter a Friendly name for device'),
-            input: 'text',
-            inputAttributes: {
-                autocapitalize: 'off'
-            },
-            showCancelButton: true,
-            confirmButtonText: T.translate('Verify It!'),
-            showLoaderOnConfirm: true,
-            preConfirm: (friendlyName) => {
-                this.props.verifyDevice(device.id, friendlyName).then(() => {});
-            },
-            allowOutsideClick: () => !swal.isLoading()
-        });
-
+        this.props.history.push(`/auth/super-admin/devices/${device.id}`);
         event.preventDefault();
     }
 
@@ -142,12 +128,13 @@ class SuperAdminDevices extends Component {
                                                     }
                                                 </td>
                                                 <td className="col-button">
-                                                    <Button outline color="primary" onClick={(e) => this.onClickEditDevice(e, device)}><i className="fa fa-edit"></i>&nbsp;{T.translate("Edit")}</Button>{' '}
-                                                </td>
-                                                <td className="col-button">
-                                                    <Button outline color="danger" onClick={(e) => this.onClickDeleteDevice(e, device)}><i className="fa fa-trash"></i>&nbsp;{T.translate("Delete")}</Button>{' '}
-                                                </td>
-                                                <td className="col-button">
+                                                    {
+                                                        device.is_verified &&
+                                                        <Button outline color="primary"
+                                                                onClick={(e) => this.onClickEditDevice(e, device)}><i
+                                                            className="fa fa-edit"></i>&nbsp;{T.translate("Edit")}
+                                                        </Button>
+                                                    }
                                                     {
                                                         !device.is_verified &&
                                                         <Button outline color="primary"
@@ -155,6 +142,9 @@ class SuperAdminDevices extends Component {
                                                             className="fa fa-edit"></i>&nbsp;{T.translate("Verify It")}
                                                         </Button>
                                                     }
+                                                </td>
+                                                <td className="col-button">
+                                                    <Button outline color="danger" onClick={(e) => this.onClickDeleteDevice(e, device)}><i className="fa fa-trash"></i>&nbsp;{T.translate("Delete")}</Button>{' '}
                                                 </td>
                                             </tr>
                                         );

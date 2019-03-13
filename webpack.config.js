@@ -1,8 +1,7 @@
 const path              = require('path');
 const webpack           = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const UglifyJSPlugin    = require('uglifyjs-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const                 _ = require('lodash');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
@@ -19,12 +18,11 @@ var dotenvConfig = require('dotenv').config(
 console.log(dotenvConfig);
 
 var plugins = [
-    new ExtractTextPlugin({ filename: 'css/[name].css' }),
-    new webpack.optimize.CommonsChunkPlugin({
-        name: 'common',
-        filename: '__common__.js',
-        //chunks: ["main", "utils"],
-        deepChildren: true
+    new MiniCssExtractPlugin({
+        // Options similar to the same options in webpackOptions.output
+        // both options are optional
+        filename: "[name].css",
+        chunkFilename: "[id].css"
     }),
     // https://github.com/jantimon/html-webpack-plugin
     new HtmlWebpackPlugin(
@@ -47,19 +45,18 @@ var plugins = [
 ];
 
 var productionPlugins = [
-    new UglifyJSPlugin(),
-    new webpack.DefinePlugin({
-        'process.env': {
-            'NODE_ENV': JSON.stringify('production')
-        }
-    })
+
 ];
 
-var devPlugins = [];
+var devPlugins = [
+    new webpack.HotModuleReplacementPlugin()
+];
 
 function styleLoader(loaders) {
+
     if (PRODUCTION)
-        return ExtractTextPlugin.extract({ fallback: 'style-loader', use: loaders });
+        return [MiniCssExtractPlugin.loader, ...loaders];
+
     return [ 'style-loader', ...loaders ];
 }
 
@@ -78,14 +75,9 @@ function postCSSLoader() {
     }
 }
 
-module.exports = {
+const config = {
     entry: {
         'index': './src/index.js',
-    },
-    devtool: "source-map",
-    devServer: {
-        contentBase: './dist',
-        historyApiFallback: true
     },
     output: {
         filename: '[name].js',
@@ -94,7 +86,13 @@ module.exports = {
     },
     module: {
         rules: [
-            { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" },
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: "babel-loader",
+                }
+            },
             {
                 test: /\.css$/,
                 exclude: /\.module\.css$/,
@@ -125,14 +123,35 @@ module.exports = {
             {
                 test: /\.svg/,
                 use: "file-loader?name=svg/[name].[ext]!svgo-loader"
-            },
-            {
-                test: /\.json/,
-                use: "json-loader"
             }
         ]
     },
     plugins: PRODUCTION
         ? plugins.concat(productionPlugins)
         : plugins.concat(devPlugins),
+};
+
+
+module.exports = (env, argv) => {
+    let mode = argv.mode;
+    console.log(`mode is ${mode}`);
+    if(mode === undefined) {
+        console.log("setting mode to development ...");
+        mode = 'development';
+    }
+    config.mode = mode;
+
+    if (mode === 'development') {
+        config.devtool = 'source-map';
+        config.devServer = {
+            contentBase: './dist',
+                historyApiFallback: true
+        };
+    }
+
+    if (mode === 'production') {
+        //...
+    }
+
+    return config;
 };

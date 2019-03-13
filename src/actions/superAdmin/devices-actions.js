@@ -83,23 +83,23 @@ export const deleteDevice  = (deviceId) => (dispatch, getState) => {
     });
 }
 
-export const verifyDevice = (deviceId, friendlyName) =>  (dispatch, getState) => {
+export const verifyDevice = (device) =>  (dispatch, getState) => {
     let { loggedUserState } = getState();
     let { token }           = loggedUserState;
     let apiBaseUrl          = process.env['API_BASE_URL'];
-
 
     let params = {
         token : token,
     };
 
+    let deviceId = device.id;
+    let friendlyName = device.friendly_name;
+
     return putRequest(
         createAction(START_LOADING),
         createAction(DEVICE_VERIFIED)({deviceId, friendlyName}),
         `${apiBaseUrl}/devices/${deviceId}/verify`,
-        {
-            friendly_name: friendlyName
-        },
+        device,
         authErrorHandler,
     )(params)(dispatch).then((payload) => {
         dispatch({

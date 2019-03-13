@@ -105,7 +105,7 @@ class ActivateUser extends Component {
                         <Col md="6">
                             <Card className="mx-4">
                                 <CardBody className="p-4">
-                                    <h1>User Activation</h1>
+                                    <h1>{T.translate("User Activation")}</h1>
                                     <p className="text-muted">{T.translate('Activate your account')}</p>
                                     <InputGroup className="mb-3">
                                         <InputGroupAddon addonType="prepend">

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Input, FormGroup, Form, Button, Label, Row, Col} from 'reactstrap';
+import {Input, Button, Row, Col, Table} from 'reactstrap';
 import DatePicker from 'react-datepicker';
 import {TEACHER} from "../../constants";
 import moment from 'moment';
@@ -13,6 +13,8 @@ import {getMyAllowedUsersByPage} from '../../actions/Admin/users-actions';
 import {Line} from 'react-chartjs-2';
 import swal from "sweetalert2";
 import es from 'date-fns/locale/es';
+import Select from 'react-select';
+import 'react-select/dist/react-select.css';
 
 class UserStatistics extends Component {
 
@@ -22,18 +24,21 @@ class UserStatistics extends Component {
             startDate: moment(),
             endDate: moment(),
             exercise: 0,
-            user : 0
+            users : null
         };
         this.handleChangeStartDate = this.handleChangeStartDate.bind(this);
         this.handleChangeEndDate = this.handleChangeEndDate.bind(this);
         this.handleChangeExercise = this.handleChangeExercise.bind(this);
         this.handleChangeUser = this.handleChangeUser.bind(this);
         this.getStatistics = this.getStatistics.bind(this);
+        this.getUserOptions = this.getUserOptions.bind(this);
+        this.randomRGBA = this.randomRGBA.bind(this);
         this.props.clearStatistics();
     }
 
     handleChangeStartDate(date) {
         this.setState({
+            ...this.state,
             startDate: date
         });
     }
@@ -42,19 +47,21 @@ class UserStatistics extends Component {
         let {value} = event.target;
 
         this.setState({
+            ...this.state,
             exercise: value
         });
     }
 
-    handleChangeUser(event){
-        let {value} = event.target;
-
+    handleChangeUser(selectedOptions){
         this.setState({
-            user: value
+            ...this.state,
+            users: selectedOptions
         });
     }
 
     componentWillMount() {
+        let { currentUser } = this.props;
+        if(currentUser.role != TEACHER ) return;
         this.props.getExercisesByPage(1, 9999999999).then(()=>{
             this.props.getMyAllowedUsersByPage(1, 9999999999);
         });
@@ -62,14 +69,16 @@ class UserStatistics extends Component {
 
     handleChangeEndDate(date) {
         this.setState({
+            ...this.state,
             endDate: date
         });
     }
 
-    getStatistics(){
-        let {exercise, startDate, endDate, user} = this.state;
+    async getStatistics(){
+        let {exercise, startDate, endDate, users} = this.state;
         let unixStarDate = startDate.hours(0).minutes(0).seconds(0).milliseconds(0).unix();
         let unixEndDate = endDate.hours(23).minutes(59).seconds(59).milliseconds(999).unix();
+        let { currentUser } = this.props;
         if(exercise == 0){
             swal(
                 '',
@@ -78,26 +87,56 @@ class UserStatistics extends Component {
             );
             return
         }
-        if(user == 0){
-            swal(
-                '',
-                T.translate('You must select an user'),
-                'warning'
-            );
-            return
+        if(users == null || users.length == 0){
+            if(currentUser.role == TEACHER) {
+                swal(
+                    '',
+                    T.translate('You must select an user'),
+                    'warning'
+                );
+                return
+            }
+            users = [ { value: currentUser.id}]
         }
-        this.props.getStatisticsForExercise(exercise, user, unixStarDate, unixEndDate);
+        let finalArray = users.map(async(userDTO) => { // map instead of forEach
+            return await this.props.getStatisticsForExercise(exercise, userDTO.value, unixStarDate, unixEndDate);
+        });
+        await Promise.all(finalArray).then((values) =>
+        {
+            console.log(values);
+        }).catch(function(err) {
+            console.log(err.message); // some coding error in handling happened
+        });
+    }
+
+    randomRGBA() {
+        var o = Math.round, r = Math.random, s = 255;
+        return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + r().toFixed(1) + ')';
+    }
+
+    getUserOptions(){
+
+        let {
+            allowed_users,
+            currentUser,
+        } = this.props;
+
+        let options = [
+            { value: currentUser.id , label: T.translate("Me")},
+        ];
+
+        allowed_users = allowed_users.map((user, idx) => {
+            return { value: user.id , label: user.first_name+" ,"+user.last_name};
+        })
+
+        return [... options, ... allowed_users];
     }
 
     render(){
         let {exercises,
-            allowed_users,
-            best_time_per_day,
-            instances_per_day,
-            total_instances,
-            best_time,
-            max_instances_per_day,
-            currentUser} = this.props;
+            currentUser,
+            dataset
+        } = this.props;
 
         if(exercises == null || exercises.length <= 0) return (<div>
             <p>
@@ -105,64 +144,69 @@ class UserStatistics extends Component {
             </p>
         </div>);
 
-        let data1 = null;
-        let data2 = null;
-        if(best_time_per_day && best_time_per_day.length > 0 )
-        data1 = {
-            labels: best_time_per_day.map((item) => item[0]),
-            datasets: [
-                {
-                    label: T.translate('Best time per day (seconds)'),
-                    fill: false,
-                    lineTension: 0.1,
-                    backgroundColor: 'rgba(255,255,0,1)',
-                    borderColor: 'rgba(255,255,0,1)',
-                    borderCapStyle: 'butt',
-                    borderDash: [],
-                    borderDashOffset: 0.0,
-                    borderJoinStyle: 'miter',
-                    pointBorderColor: 'rgba(255,255,0,1)',
-                    pointBackgroundColor: 'rgba(255,255,0,1)',
-                    pointBorderWidth: 1,
-                    pointHoverRadius: 5,
-                    pointHoverBackgroundColor: 'rgba(255,255,0,1)',
-                    pointHoverBorderColor: 'rgba(255,255,0,1)',
-                    pointHoverBorderWidth: 2,
-                    pointRadius: 1,
-                    pointHitRadius: 10,
-                    data: best_time_per_day.map((item) => item[1]),
-                }
-            ]
+        let data1 = {
+            datasets: []
         };
-        if(instances_per_day && instances_per_day.length > 0 )
-            data2 = {
-                labels: instances_per_day.map((item) => item[0]),
-                datasets: [
-                    {
-                        label: T.translate('Instances per day'),
+        let data2 =  {
+
+            datasets: []
+        };
+
+        if(dataset.length > 0) {
+
+            dataset.forEach((entry) => {
+                if (entry.best_time_per_day && entry.best_time_per_day.length > 0)
+                    data1.labels = entry.range;
+                    var color = this.randomRGBA();
+                    data1.datasets.push({
+                        label: entry.user_fullname,
                         fill: false,
                         lineTension: 0.1,
-                        backgroundColor: 'rgba(255,255,0,1)',
-                        borderColor: 'rgba(255,255,0,1)',
+                        backgroundColor: color,
+                        borderColor: color,
                         borderCapStyle: 'butt',
                         borderDash: [],
                         borderDashOffset: 0.0,
                         borderJoinStyle: 'miter',
-                        pointBorderColor: 'rgba(255,255,0,1)',
-                        pointBackgroundColor: 'rgba(255,255,0,1)',
+                        pointBorderColor: color,
+                        pointBackgroundColor: color,
                         pointBorderWidth: 1,
                         pointHoverRadius: 5,
-                        pointHoverBackgroundColor: 'rgba(255,255,0,1)',
-                        pointHoverBorderColor: 'rgba(255,255,0,1)',
+                        pointHoverBackgroundColor: color,
+                        pointHoverBorderColor: color,
                         pointHoverBorderWidth: 2,
-                        pointRadius: 1,
+                        pointRadius: 3,
                         pointHitRadius: 10,
-                        data: instances_per_day.map((item) => item[1]),
-                    }
-                ]
-            };
 
+                        data: entry.best_time_per_day.map((item) => { return { x:item[0], y:item[1]};} ),
+                    });
 
+                if (entry.instances_per_day && entry.instances_per_day.length > 0)
+                    var color2 = this.randomRGBA();
+                    data2.labels = entry.range;
+                    data2.datasets.push({
+                        label:entry.user_fullname,
+                        fill: false,
+                        lineTension: 0.1,
+                        backgroundColor: color2,
+                        borderColor: color2,
+                        borderCapStyle: 'butt',
+                        borderDash: [],
+                        borderDashOffset: 0.0,
+                        borderJoinStyle: 'miter',
+                        pointBorderColor: color2,
+                        pointBackgroundColor: color2,
+                        pointBorderWidth: 1,
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: color2,
+                        pointHoverBorderColor: color2,
+                        pointHoverBorderWidth: 2,
+                        pointRadius: 3,
+                        pointHitRadius: 10,
+                        data: entry.instances_per_day.map((item) => { return { x:item[0], y:item[1] }; }),
+                    });
+            })
+        }
         return (
             <div className="animated fadeIn">
 
@@ -176,20 +220,20 @@ class UserStatistics extends Component {
                                 })
                             }
                         </Input>
-
                 </Col>
 
                    { currentUser.role == TEACHER &&
                         <Col xs="12" md="2" lg="3">
-                            <Input type="select" name="user" id="user" onChange={this.handleChangeUser}>
-                                <option value="0">{T.translate("-- Select an User --")}</option>
-                                <option value={currentUser.id}>{T.translate("Me")}</option>
-                                {
-                                    allowed_users.map((user, idx) => {
-                                        return <option value={user.id} key={idx}>{user.first_name+" ,"+user.last_name}</option>
-                                    })
-                                }
-                            </Input>
+                            <div>
+                            <Select
+                                multi
+                                name="user"
+                                options={this.getUserOptions()}
+                                placeholder={T.translate("-- Select an User --")}
+                                onChange={this.handleChangeUser}
+                                value={this.state.users}
+                            />
+                            </div>
                         </Col>
                     }
                    <Col xs="12" md="2" lg="2">
@@ -216,29 +260,109 @@ class UserStatistics extends Component {
                </Row>
                 <Row>
                     <Col>
-                    { data1 != null &&
-                        <Line data={data1}/>
+                    { data1 != null && data1.datasets.length > 0 &&
+                        <div>
+                            <Line data={data1}
+                                  options={{
+                                      title: {
+                                          display: true,
+                                          text: T.translate('Best time per day (seconds)'),
+                                          fontSize: 25
+                                      },
+                                      scales: {
+                                          xAxes: [{
+                                              scaleLabel: {
+                                                  display: true,
+                                                  labelString: T.translate('Day'),
+                                                  fontSize: 10
+                                              },
+                                              type: 'time',
+                                              time: {
+                                                  unit: 'day',
+                                                  displayFormats: {
+                                                      day: 'MMM D'
+                                                  }
+                                              }
+                                          }],
+                                          yAxes: [{
+                                              scaleLabel: {
+                                                  display: true,
+                                                  labelString: T.translate('Seconds'),
+                                                  fontSize: 10
+                                              }
+                                          }]
+                                      }
+                                  }}
+                            />
+                        </div>
                     }
                     </Col>
                     <Col>
-                    { data2 != null &&
-                        <Line data={data2}/>
+                    { data2 != null && data2.datasets.length > 0 &&
+                        <div>
+                            <Line data={data2}
+                                  options={{
+                                      title: {
+                                          display: true,
+                                          text: T.translate('Instances per day'),
+                                          fontSize: 25
+                                      },
+                                      scales: {
+                                          xAxes: [{
+                                              scaleLabel: {
+                                                  display: true,
+                                                  labelString: T.translate('Day'),
+                                                  fontSize: 10
+                                              },
+                                              type: 'time',
+                                              time: {
+                                                  unit: 'day',
+                                                  displayFormats: {
+                                                      day: 'MMM D'
+                                                  }
+                                              }
+                                          }],
+                                          yAxes: [{
+                                              scaleLabel: {
+                                                  display: true,
+                                                  labelString: T.translate('Instances #'),
+                                                  fontSize: 10
+                                              }
+                                          }]
+                                      }
+                                  }}
+                            />
+                        </div>
                     }
                     </Col>
                 </Row>
-                {total_instances > 0 &&
-                <Row className="row-statistics">
-                    <Col>
-                        <b>{T.translate("Repetitions on Period:")}</b>&nbsp;{total_instances}
-                    </Col>
-                    <Col>
-                        <b>{T.translate("Max Repetition/Day:")}</b>&nbsp;{max_instances_per_day}
-                    </Col>
-                    <Col>
-                        <b>{T.translate("Best Time (seconds):")}</b>&nbsp;{best_time.duration__min}
-                    </Col>
-                </Row>
+                <Table striped>
+                <tbody>
+                {
+                    dataset.map((entry, idx) => {
+                        return(
+                        <tr scope="row" key={idx}>
+                            <td>
+                                <b>{T.translate("User")}:</b>&nbsp;{entry.user_fullname}
+                            </td>
+                            <td>
+                                <b>{T.translate("Repetitions on Period")}:</b>&nbsp;{entry.total_instances}
+                            </td>
+                            <td>
+                                <b>{T.translate("Max Repetition/Day")}:</b>&nbsp;{entry.max_instances_per_day}
+                            </td>
+                            <td>
+                                <b>{T.translate("Best Time (seconds)")}:</b>&nbsp;{entry.best_time.duration__min}
+                            </td>
+                            <td>
+                                <b>{T.translate("Advance")}:</b>&nbsp;{entry.advanced}&nbsp;%
+                            </td>
+                        </tr>
+                        );
+                    })
                 }
+                    </tbody>
+                </Table>
             </div>
         );
     }
@@ -248,12 +372,8 @@ class UserStatistics extends Component {
 const mapStateToProps = ({loggedUserState, userExercisesState, statisticsState}) => ({
     currentUser: loggedUserState.currentUser,
     exercises : userExercisesState.items,
-    total_instances: statisticsState.total_instances,
-    max_instances_per_day: statisticsState.max_instances_per_day,
-    best_time: statisticsState.best_time,
-    best_time_per_day: statisticsState.best_time_per_day,
-    instances_per_day: statisticsState.instances_per_day,
     allowed_users: statisticsState.allowed_users,
+    dataset: statisticsState.dataset
 });
 
 export default connect(

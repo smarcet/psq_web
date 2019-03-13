@@ -3,12 +3,8 @@ import {CLEAR_EXERCISE_STATISTIC_DATA, RETRIEVED_EXERCISE_STATISTIC_DATA} from "
 import {RETRIEVED_ALLOWED_MY_USERS} from "../actions/Admin/users-actions";
 
 const DEFAULT_STATE = {
-    total_instances: 0,
-    max_instances_per_day: 0,
-    best_time: 0,
-    best_time_per_day: [],
-    instances_per_day: [],
     allowed_users: [],
+    dataset: [],
 }
 
 const statisticsReducer = (state = DEFAULT_STATE, action) => {
@@ -17,7 +13,7 @@ const statisticsReducer = (state = DEFAULT_STATE, action) => {
         case RETRIEVED_EXERCISE_STATISTIC_DATA: {
             return {
                 ...state,
-                ...payload.response,
+                dataset: [...state.dataset, {...payload.response}],
             };
         }
             break;

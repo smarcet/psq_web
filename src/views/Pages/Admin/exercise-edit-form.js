@@ -115,6 +115,34 @@ class ExerciseEditForm extends Component{
                                 </FormGroup>
                                 <FormGroup row>
                                     <Col md="3">
+                                        <Label htmlFor="daily_repetitions">{T.translate('Daily Repetitions')}</Label>
+                                    </Col>
+                                    <Col xs="12" md="9">
+                                        <Input
+                                            onChange={handleChange}
+                                            invalid={validator.isInvalid('daily_repetitions')}
+                                            value={currentEditExercise.daily_repetitions}
+                                            type="number" id="daily_repetitions" name="daily_repetitions"/>
+                                        <FormFeedback valid={validator.isValid('daily_repetitions')}><i className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('daily_repetitions')}</FormFeedback>
+                                        <FormText className="help-block">{T.translate('Please set the maximum exercise duration in minutes')}</FormText>
+                                    </Col>
+                                </FormGroup>
+                                <FormGroup row>
+                                    <Col md="3">
+                                        <Label htmlFor="practice_days">{T.translate('Practice Days')}</Label>
+                                    </Col>
+                                    <Col xs="12" md="9">
+                                        <Input
+                                            onChange={handleChange}
+                                            invalid={validator.isInvalid('practice_days')}
+                                            value={currentEditExercise.practice_days}
+                                            type="number" id="practice_days" name="practice_days"/>
+                                        <FormFeedback valid={validator.isValid('practice_days')}><i className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('practice_days')}</FormFeedback>
+                                        <FormText className="help-block">{T.translate('Please set the maximum exercise duration in minutes')}</FormText>
+                                    </Col>
+                                </FormGroup>
+                                <FormGroup row>
+                                    <Col md="3">
                                         <Label htmlFor="select">{T.translate("Allowed Devices")}</Label>
                                     </Col>
                                     <Col xs="12" md="9">

@@ -19,7 +19,7 @@ import 'sweetalert2/dist/sweetalert2.css';
 import swal from 'sweetalert2';
 import T from "i18n-react/dist/i18n-react";
 import {connect} from 'react-redux'
-import {getDeviceById, updateDevice, getAvailableAdmins} from '../../../actions/superAdmin/devices-actions';
+import {getDeviceById, updateDevice, getAvailableAdmins, verifyDevice} from '../../../actions/superAdmin/devices-actions';
 import {FormValidator, MandatoryField, GreaterThanField, RegexField} from "../../../utils/form-validator";
 
 class SuperAdminEditDevice extends Component {
@@ -103,6 +103,28 @@ class SuperAdminEditDevice extends Component {
         event.preventDefault();
     }
 
+    onVerifyDevice(event) {
+
+        let {currentEditDevice, validator} = this.state;
+        event.preventDefault();
+
+        if (!validator.isValidData(currentEditDevice)) {
+            this.setState({...this.state, validator: validator});
+            return false;
+        }
+
+        this.props.verifyDevice(this.state.currentEditDevice).then(() => {
+            swal(
+                '',
+                T.translate('Your device has been successfully Verified!'),
+                'success'
+            );
+            this.props.history.goBack();
+        });
+
+        event.preventDefault();
+    }
+
     onCancelEdit(event) {
         this.props.history.goBack();
         event.preventDefault();
@@ -176,7 +198,7 @@ class SuperAdminEditDevice extends Component {
                                                invalid={validator.isInvalid('slots')}
                                                placeholder={T.translate('Available Slots #')}
                                                onChange={this.handleChange}/>
-                                        <FormText className="help-block">Please enter available slots #</FormText>
+                                        <FormText className="help-block">{T.translate("Please enter available slots #")}</FormText>
                                         <FormFeedback valid={validator.isValid('slots')}><i className="fa fa-exclamation-triangle"></i>&nbsp;{validator.getValidationErrorMessage('slots')}</FormFeedback>
                                     </Col>
                                 </FormGroup>
@@ -202,25 +224,37 @@ class SuperAdminEditDevice extends Component {
                                         </Input>
                                     </Col>
                                 </FormGroup>
-                                <FormGroup row>
-                                    <Col md="3">
-                                        <Label>{T.translate('Is Enable?')}</Label>
-                                    </Col>
-                                    <Col md="9">
-                                        <FormGroup check inline>
-                                            <Input className="form-check-input"
-                                                   type="checkbox"
-                                                   checked={currentEditDevice.is_active}
-                                                   id="is_active" name="is_active"
-                                                   onChange={this.handleChange}/>
-                                        </FormGroup>
-                                    </Col>
-                                </FormGroup>
+                                {
+                                    currentEditDevice.is_verified &&
+                                    <FormGroup row>
+                                        <Col md="3">
+                                            <Label>{T.translate('Is Enable?')}</Label>
+                                        </Col>
+                                        <Col md="9">
+                                            <FormGroup check inline>
+                                                <Input className="form-check-input"
+                                                       type="checkbox"
+                                                       checked={currentEditDevice.is_active}
+                                                       id="is_active" name="is_active"
+                                                       onChange={this.handleChange}/>
+                                            </FormGroup>
+                                        </Col>
+                                    </FormGroup>
+                                }
                             </Form>
                         </CardBody>
                         <CardFooter>
-                            <Button type="submit" size="sm" color="primary" onClick={(e) => this.onSaveDevice(e)}><i
-                                className="fa fa-dot-circle-o"></i>&nbsp;{T.translate('Save')}</Button>{' '}
+                            {
+                                currentEditDevice.is_verified &&
+                                <Button type="submit" size="sm" color="primary" onClick={(e) => this.onSaveDevice(e)}><i
+                                className="fa fa-dot-circle-o"></i>&nbsp;{T.translate('Save')}</Button>
+                            }
+                            {
+                                !currentEditDevice.is_verified &&
+                                <Button type="submit" size="sm" color="primary" onClick={(e) => this.onVerifyDevice(e)}><i
+                                    className="fa fa-dot-circle-o"></i>&nbsp;{T.translate('Verify It')}</Button>
+                            }
+                            {' '}
                             <Button type="reset" size="sm" color="danger" onClick={(e) => this.onCancelEdit(e)}><i
                                 className="fa fa-ban"></i>&nbsp;{T.translate('Cancel')}</Button>
                         </CardFooter>
@@ -242,5 +276,6 @@ export default connect(
         getDeviceById,
         updateDevice,
         getAvailableAdmins,
+        verifyDevice
     }
 )(SuperAdminEditDevice);

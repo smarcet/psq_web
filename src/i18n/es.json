@@ -285,9 +285,9 @@
    "Share Video {title}": "Compartir Video {title}",
    "Exams Feedback": "Respuesta a los examenes",
    "Maximum # Users to associate with device": "# Usuarios  associados a este dispositivo",
-   "Repetitions on Period:": "Repeticiones en el Periodo:",
-   "Max Repetition/Day:":"Max Repeticiones/Dia:",
-   "Best Time (seconds):":"Mejor Tiempo (segundos):",
+   "Repetitions on Period": "Repeticiones en el Periodo",
+   "Max Repetition/Day":"Max Repeticiones/Dia",
+   "Best Time (seconds)":"Mejor Tiempo (segundos)",
    "User": "Usuario",
    "-- Select an User --": "-- Seleccione Usuario --",
    "Me": "Yo",
@@ -297,5 +297,14 @@
    "{field} should be greater than {arg1}" : "{field} debe ser mayor que {arg1}",
    "{field} should be lower or equal than {arg1}" : "{field} debe ser menor o igual que {arg1}",
    "{field} should a equals to {field2}" : "{field} debe ser igual a {field2}",
-   "{field} have a minimum length of {min_len}": "{field} debe tener una longitud de {min_len}"
+   "{field} have a minimum length of {min_len}": "{field} debe tener una longitud de {min_len}",
+   "Search": "Buscar",
+   "Available Slots #": "# Slots Disponibles",
+   "Please enter available slots #": "Por favor ingrese la cant. de slots disponibles",
+   "Your device has been successfully Verified!": "Su Dispositivo ha sido verificado exitosamente!",
+   "User Activation": "Activacion de Usuario",
+   "Advance": "Avance",
+   "Day": "Dia",
+  "Instances #": "Instancias #",
+  "Seconds" : "Segundos"
 }
