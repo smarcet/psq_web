@@ -28,7 +28,7 @@ class AdmimEvaluateExam extends Component {
             currentEditExam: { ... this.props.currentEditExam },
             validator: new FormValidator(
                 [
-                    new MandatoryField('notes', 'Notes'),
+                    new MandatoryField('notes', T.translate('Notes')),
                 ]
             )
         };
