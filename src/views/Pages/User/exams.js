@@ -129,15 +129,15 @@ class UserExams extends Component {
                                                         <td>
                                                             {
                                                                 !exam.evaluator &&
-                                                                <Badge color="secondary">Pending</Badge>
+                                                                <Badge color="secondary">{T.translate("Pending")}</Badge>
                                                             }
                                                             {
                                                                 exam.evaluator && !exam.approved &&
-                                                                <Badge color="danger">Not Approved</Badge>
+                                                                <Badge color="danger">{T.translate("Not Approved")}</Badge>
                                                             }
                                                             {
                                                                 exam.evaluator && exam.approved &&
-                                                                <Badge color="success">Approved</Badge>
+                                                                <Badge color="success">{T.translate("Approved")}</Badge>
                                                             }
                                                         </td>
                                                         <td>{exam.notes}</td>

@@ -273,7 +273,7 @@ class UserStatistics extends Component {
                                           xAxes: [{
                                               scaleLabel: {
                                                   display: true,
-                                                  labelString: T.translate('Day'),
+                                                  labelString: T.translate('Days'),
                                                   fontSize: 10
                                               },
                                               type: 'time',
@@ -311,7 +311,7 @@ class UserStatistics extends Component {
                                           xAxes: [{
                                               scaleLabel: {
                                                   display: true,
-                                                  labelString: T.translate('Day'),
+                                                  labelString: T.translate('Days'),
                                                   fontSize: 10
                                               },
                                               type: 'time',

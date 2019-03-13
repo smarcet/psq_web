@@ -20,8 +20,8 @@
    "Allowed Devices":"Dispositivos Permitidos",
    "Allowed Tutorials":"Tutoriales Permitidos",
    "Approve":"Aprobar",
-   "Approved":"Aprobado",
-   "Approved!":"Aprobado!",
+   "Approved":"Observado",
+   "Approved!":"Observado!",
    "April":"Abril",
    "Are you sure?":"Esta ud seguro?",
    "August":"Agosto",
@@ -304,7 +304,7 @@
    "Your device has been successfully Verified!": "Su Dispositivo ha sido verificado exitosamente!",
    "User Activation": "Activacion de Usuario",
    "Advance": "Avance",
-   "Day": "Dia",
-  "Instances #": "Instancias #",
-  "Seconds" : "Segundos"
+   "Days": "Dia",
+   "Instances #": "Instancias #",
+   "Seconds" : "Segundos"
 }
