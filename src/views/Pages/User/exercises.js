@@ -136,7 +136,7 @@ class UserExercises extends Component {
                                                         <td>
                                                             <Button onClick={(e) => this.onClickViewExercise(e, exercise)}
                                                                     outline color="primary"><i
-                                                                className="fa fa-search"></i>&nbsp;{T.translate("View")}
+                                                                className="fa fa-search"></i>
                                                             </Button>
                                                         </td>
                                                     </tr>
