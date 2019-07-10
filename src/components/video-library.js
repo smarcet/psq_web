@@ -178,6 +178,7 @@ class VideoLibrary extends Component {
                                             <ListGroup>
                                             {videos.map((video, i) => {
                                                 let {taker, exercise} = video;
+                                                if(exercise == null) return;
                                                 let videos_inner = video.videos;
                                                 return (
                                                     <ListGroupItem key={i} className="justify-content-between">
