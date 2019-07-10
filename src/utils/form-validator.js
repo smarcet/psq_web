@@ -193,6 +193,28 @@ export class EmailField extends CustomValidatorRule
     }
 }
 
+export class IntegerField extends CustomValidatorRule
+{
+
+    static get DEFAULT_MESSAGE() {
+        return '{field} should a valid integer';
+    }
+
+    _getErrorMessage(){
+        let errorMessage = super._getErrorMessage();
+        return errorMessage.trim() == '' ? IntegerField.DEFAULT_MESSAGE : errorMessage;
+    }
+
+    constructor(fieldName, friendlyFieldName = '', customErrorMessage = ''){
+        super(fieldName, (value) => {
+            let res = Number.isInteger(value);
+            if(!res)
+                return new FormValidatorResult(this._fieldName, false, T.translate(this._getErrorMessage(), { field: this._friendlyFieldName}))
+            return new FormValidatorResult(this._fieldName, true);
+        }, friendlyFieldName, customErrorMessage);
+    }
+}
+
 export class EqualToField extends CustomValidatorRule
 {
 

@@ -40,15 +40,15 @@ class StreamPlayer extends Component {
         console.log("StreamPlayer.componentWillMount");
     }
 
-    buildStreamURI(device) {
-        let slug = device.slug;
+    buildStreamURI(device, broadcasting) {
+        let slug = `${device.slug}_${broadcasting.start_at}`;
         let stream_host = process.env['STREAMING_SERVER_BASE_URL'];
         if (Hls.isSupported() && this.state.useHLS) {
             console.log('HLS Supported');
-            return `${stream_host}/hls/${slug}/index.m3u8`;
+            return `${stream_host}/hls/${slug}.m3u8`;
         }
         console.log("DASH Suppported");
-        return `${stream_host}/dash/${slug}/index.mpd`;
+        return `${stream_host}/dash/${slug}.mpd`;
     }
 
     componentDidMount() {
@@ -90,7 +90,9 @@ class StreamPlayer extends Component {
             expires
         } = query;
 
-        this.props.validateStream(device_id,
+        this.props.validateStream
+        (
+            device_id,
             exercise_id,
             user_id,
             exercise_max_duration,
@@ -121,11 +123,12 @@ class StreamPlayer extends Component {
 
 
     loadStream() {
-        let {device} = this.props;
+        let {device, broadcasting} = this.props;
         if (device == null) return;
+        if (broadcasting == null) return;
         this.setupPlayer();
         this.setPlayerSource(
-            this.buildStreamURI(device)
+            this.buildStreamURI(device, broadcasting)
         );
     }
 
@@ -211,6 +214,7 @@ const mapStateToProps = ({StreamPlayerState, loggedUserState}) => ({
     exercise: StreamPlayerState.exercise,
     device: StreamPlayerState.device,
     user: StreamPlayerState.user,
+    broadcasting: StreamPlayerState.broadcasting,
     validLink: StreamPlayerState.validLink,
     currentUser: loggedUserState.currentUser,
 });

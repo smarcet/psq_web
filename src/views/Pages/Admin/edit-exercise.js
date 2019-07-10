@@ -7,7 +7,7 @@ import {
     getMyExerciseById, updateExercise, addNewExercise, getMyAvailableDevices,
     getMyAvailableTutorials
 } from "../../../actions/Admin/exercises-actions";
-import {FormValidator, GreaterThanField, LowerOrEqualThanField, MandatoryField} from "../../../utils/form-validator";
+import {FormValidator, GreaterThanField, LowerOrEqualThanField, MandatoryField, IntegerField} from "../../../utils/form-validator";
 
 class AdminEditExercise extends Component {
 
@@ -23,6 +23,7 @@ class AdminEditExercise extends Component {
                     new MandatoryField('max_duration', 'Max. Duration'),
                     new GreaterThanField('max_duration', 0, 'Max. Duration'),
                     new LowerOrEqualThanField('max_duration', 120 * 60 , 'Max. Duration'),
+                    new IntegerField('max_duration', 'Max. Duration'),
                     new MandatoryField('type', 'Type'),
                     new MandatoryField('practice_days', 'Practice Days'),
                     new MandatoryField('daily_repetitions', 'Daily Repetitions'),

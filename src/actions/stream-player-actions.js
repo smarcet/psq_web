@@ -68,6 +68,7 @@ export const validateStream = (
     signature,
     expires
 ) =>  (dispatch, getState) => {
+
     let apiBaseUrl = process.env['API_BASE_URL'];
 
     let params = {

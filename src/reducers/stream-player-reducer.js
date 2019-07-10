@@ -12,6 +12,7 @@ const DEFAULT_STATE = {
     device: null,
     user: null,
     validLink: true,
+    broadcasting: null,
 }
 
 const StreamPlayerReducer = (state = {...DEFAULT_STATE}, action) => {
@@ -32,6 +33,7 @@ const StreamPlayerReducer = (state = {...DEFAULT_STATE}, action) => {
                 exercise: payload.response.exercise,
                 device: payload.response.device,
                 user: payload.response.user,
+                broadcasting: payload.response.broadcasting,
                 validLink: true,
             }
             break;
