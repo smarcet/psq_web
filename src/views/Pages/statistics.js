@@ -103,15 +103,26 @@ class UserStatistics extends Component {
         });
         await Promise.all(finalArray).then((values) =>
         {
-            console.log(values);
-        }).catch(function(err) {
-            console.log(err.message); // some coding error in handling happened
+            //console.log(values);
+        }).catch(function(res) {
+            if(res.err.status == 404){
+                swal(
+                    '',
+                    T.translate('Data not available'),
+                    'warning'
+                );
+            }
         });
     }
 
     randomRGBA() {
-        var o = Math.round, r = Math.random, s = 255;
-        return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + r().toFixed(1) + ')';
+        //var o = Math.round, r = Math.random, s = 255;
+        var letters = '0123456789ABCDEF'.split('');
+        var color = '#';
+        for (var i = 0; i < 6; i++) {
+            color += letters[Math.round(Math.random() * 10)];
+        }
+        return 'rgba(' + letters[Math.round(Math.random() * 10)] + letters[Math.round(Math.random() * 10)]+ ',' + letters[Math.round(Math.random() * 10)]+letters[Math.round(Math.random() * 10)] + ',' + letters[Math.round(Math.random() * 10)]+letters[Math.round(Math.random() * 10)] + ',1';
     }
 
     getUserOptions(){
