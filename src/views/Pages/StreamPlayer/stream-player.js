@@ -42,13 +42,16 @@ class StreamPlayer extends Component {
 
     buildStreamURI(device, broadcasting) {
         let slug = `${device.slug}_${broadcasting.start_at}`;
+        console.log()
         let stream_host = process.env['STREAMING_SERVER_BASE_URL'];
         if (Hls.isSupported() && this.state.useHLS) {
-            console.log('HLS Supported');
-            return `${stream_host}/hls/${slug}.m3u8`;
+            let url = `${stream_host}/hls/${slug}.m3u8`;
+            console.log('HLS Supported url '+url);
+            return url;
         }
-        console.log("DASH Suppported");
-        return `${stream_host}/dash/${slug}.mpd`;
+        let url = `${stream_host}/dash/${slug}.mpd`;
+        console.log("DASH Suppported url "+url);
+        return url;
     }
 
     componentDidMount() {
@@ -145,9 +148,8 @@ class StreamPlayer extends Component {
 
         this.dashPlayer = dashjs.MediaPlayer().create();
         this.dashPlayer.initialize(this.video, null, true);
-        this.dashPlayer.setFastSwitchEnabled(true);
-        this.dashPlayer.getDebug().setLogToBrowserConsole(true);
-
+        //this.dashPlayer.setFastSwitchEnabled(true);
+        //this.dashPlayer.getDebug().setLogToBrowserConsole(true);
     }
 
     setPlayerSource(sourceUrl) {
@@ -196,7 +198,7 @@ class StreamPlayer extends Component {
                                 </Row>
                                 <Row>
                                     <Col xs="12" lg="12">
-                                        <video className="rounded img-fluid mx-auto d-block" id="videoPlayer"
+                                        <video autoplay className="rounded img-fluid mx-auto d-block" id="videoPlayer"
                                                ref={this.setVideoRef} controls></video>
                                     </Col>
                                 </Row>
